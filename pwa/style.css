@@ -1,0 +1,170 @@
+:root {
+    --primary-color: #6200ee;
+    --background-color: #ffffff;
+    --surface-color: #f5f5f5;
+    --text-color: #000000;
+    --text-secondary: #666666;
+    --font-heading: 'Noto Serif Devanagari', serif;
+    --font-body: 'Noto Serif Devanagari', serif;
+    --font-ui: 'Noto Sans Devanagari', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #bb86fc;
+        --background-color: #121212;
+        --surface-color: #1e1e1e;
+        --text-color: #ffffff;
+        --text-secondary: #aaaaaa;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: var(--surface-color);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-family: var(--font-ui);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Search Bar */
+#search-container {
+    padding: 1rem;
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--text-secondary);
+}
+
+#search-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--text-secondary);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+}
+
+/* Song List */
+#song-list {
+    list-style: none;
+    padding: 0 1rem 1rem;
+}
+
+.song-item {
+    background-color: var(--surface-color);
+    margin-top: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.song-item:active {
+    transform: scale(0.98);
+}
+
+.song-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.song-meta {
+    font-family: var(--font-ui);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Song Detail View */
+#song-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+#song-detail.active {
+    transform: translateX(0);
+}
+
+.detail-header {
+    padding: 1rem;
+    background-color: var(--surface-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-family: var(--font-ui);
+}
+
+#detail-content {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+#detail-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+#detail-lyrics {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    white-space: pre-wrap; /* Preserves newlines */
+    line-height: 1.8;
+}
+
+.verse-num {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}

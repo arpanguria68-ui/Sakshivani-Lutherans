@@ -1,0 +1,207 @@
+Manifest-Version: 1.0
+Created-By: 1.0 (Android)
+
+Name: res/layout-v17/activity_splash_screen2.xml
+SHA1-Digest: 4zl46X1s4AMQWQK+82XYYS/7JQ0=
+
+Name: assets/font/WACBI___ - Copy.PFB
+SHA1-Digest: 8jtt9ZpQuP6clY77v+ox3gS7dwM=
+
+Name: assets/font/WACBI___.PFB
+SHA1-Digest: 8jtt9ZpQuP6clY77v+ox3gS7dwM=
+
+Name: assets/font/WACBI___.PFM
+SHA1-Digest: h7QqcsOpdr1ylD1SHQqaTdq0BBE=
+
+Name: assets/font/CHANAKYI - Copy.PFM
+SHA1-Digest: PEBZhz43FqNI14M79Z5BKqwhadE=
+
+Name: res/layout/activity_splash_screen2.xml
+SHA1-Digest: CT0UXvKchoT1XJob0dqOj3Y97rI=
+
+Name: assets/font/WACBI___ - Copy.PFM
+SHA1-Digest: h7QqcsOpdr1ylD1SHQqaTdq0BBE=
+
+Name: res/layout/activity_displaysong.xml
+SHA1-Digest: RlUvxy5Wt8KvujwafI5Co+RjVdM=
+
+Name: assets/font/CHANAKBX.PFB
+SHA1-Digest: h88q7ZDcNxEX6f/FR5+B7O/u1z8=
+
+Name: assets/font/CHANAKBX.PFM
+SHA1-Digest: RMt/hwd4+4r1ijZMLUyXKCjk7pM=
+
+Name: assets/font/CHANAKYI - Copy.PFB
+SHA1-Digest: 13PDEjCDbLVG53KhM/3sjxR/gQ8=
+
+Name: res/drawable/my_border.xml
+SHA1-Digest: QI8p8JPAQCAHiEshEURC4GrIQg0=
+
+Name: res/layout/activity_song_category.xml
+SHA1-Digest: X5iUaXY4DZS84lGvfnPalB0pBTc=
+
+Name: res/drawable/form.xml
+SHA1-Digest: T/ArkatMHY8Px9+uSCfCkKdHxvc=
+
+Name: assets/font/WACB____.PFM
+SHA1-Digest: YBDUZqdIJgcy7sd4aAMTngnUyYY=
+
+Name: assets/Sakshivani_db.db
+SHA1-Digest: ootXTTcRgL93MJs4YWBCZhsT6dU=
+
+Name: assets/font/CHANAKIX.PFM
+SHA1-Digest: 6gZoOjab0xSzeWZ15My39l0oJGA=
+
+Name: assets/font/chanakya_0 - Copy.pfm
+SHA1-Digest: uhk78f4PSiDJYEir2CHJJOR1bQc=
+
+Name: res/drawable/icon_launcher.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: res/layout/listcell.xml
+SHA1-Digest: qTXzqDLpTeTTXiVgdxRx6iCebbQ=
+
+Name: assets/font/WALKCN__ 3.TTF
+SHA1-Digest: DpX7apDMpFfd+iFULiA/OPSXbjQ=
+
+Name: resources.arsc
+SHA1-Digest: FWMOLLIQ+1CoDTwGZumq7ugMy0w=
+
+Name: assets/font/CHANAKYI.PFB
+SHA1-Digest: 13PDEjCDbLVG53KhM/3sjxR/gQ8=
+
+Name: res/drawable/titlebar.xml
+SHA1-Digest: D1buxouM6qZsELrWzzwdFam32j8=
+
+Name: AndroidManifest.xml
+SHA1-Digest: 0f6Sp6vvKtzHrDIRgsSiXDgyZ2w=
+
+Name: assets/font/BF143HIN.TTF
+SHA1-Digest: LUMiOYxloAyiyGmlRav8zJ/HVGQ=
+
+Name: res/layout/activity_display_data.xml
+SHA1-Digest: gFPsjxUU9C5NJJUp4MHphgz1jWI=
+
+Name: assets/font/WACB____ - Copy.PFB
+SHA1-Digest: yIyVJbMRYJ4RW82iF0gp+e0tSqM=
+
+Name: assets/font/CHANAKIX - Copy.PFM
+SHA1-Digest: 6gZoOjab0xSzeWZ15My39l0oJGA=
+
+Name: res/drawable/row.xml
+SHA1-Digest: m7QflCSC46u8KSjekVgDF5m4T2I=
+
+Name: assets/font/CHANAKBI.PFB
+SHA1-Digest: ZYLZgy3kvKAwiqFy2shDAMpQ6BQ=
+
+Name: assets/font/CHANAKIX - Copy.PFB
+SHA1-Digest: lOwCYVW7OuJ42x99lKOq0vcPW60=
+
+Name: assets/font/WACB____.PFB
+SHA1-Digest: yIyVJbMRYJ4RW82iF0gp+e0tSqM=
+
+Name: assets/font/WACNI___.PFB
+SHA1-Digest: XMXzOME48jMtc6WqFfpT19dZmz4=
+
+Name: assets/font/WACB____ - Copy.PFM
+SHA1-Digest: YBDUZqdIJgcy7sd4aAMTngnUyYY=
+
+Name: res/layout-v22/activity_displaysong.xml
+SHA1-Digest: PVGHRDe/IqY2c2/Geo7vZk6Kdq8=
+
+Name: assets/font/CHANAKIX.PFB
+SHA1-Digest: lOwCYVW7OuJ42x99lKOq0vcPW60=
+
+Name: res/drawable/button.xml
+SHA1-Digest: wyReeSYU5IhbzOkqvis7mHe5tKQ=
+
+Name: res/drawable-xhdpi-v4/icon_launcher.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: assets/font/chanakya_0.PFB
+SHA1-Digest: lIgvI4g/TzsTHcG2j1xPr7YI1ik=
+
+Name: assets/font/CHANAKYB.PFM
+SHA1-Digest: fbJFeQ3hQSzQ4kDaVm8nDDwLiwE=
+
+Name: assets/font/WACN____ - Copy.PFB
+SHA1-Digest: qAMAiSeChKuXj3YbrfDVIOTyOo4=
+
+Name: assets/font/WACNI___ - Copy.PFB
+SHA1-Digest: XMXzOME48jMtc6WqFfpT19dZmz4=
+
+Name: res/drawable-mdpi-v4/icon_launcher.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: assets/font/WACNI___.PFM
+SHA1-Digest: dJ+/n5Qk+rzUK/RMkF/n+KFyUbA=
+
+Name: assets/font/WACN____.PFB
+SHA1-Digest: qAMAiSeChKuXj3YbrfDVIOTyOo4=
+
+Name: res/layout/activity_main.xml
+SHA1-Digest: LTwAqmAFzw596hzxbiekS7WqIl8=
+
+Name: assets/font/chanakya_0.pfm
+SHA1-Digest: uhk78f4PSiDJYEir2CHJJOR1bQc=
+
+Name: assets/font/WACN____ - Copy.PFM
+SHA1-Digest: yBw0HpT09MCqrg7nlnulED5hNfM=
+
+Name: assets/font/CHANAKYB.PFB
+SHA1-Digest: M1aI3NKDZD0YIEoCVrs+JV8Vc3I=
+
+Name: assets/font/CHANAKBI - Copy.PFM
+SHA1-Digest: g4LtS15PUjBMxIBcBk+CLhBAbEo=
+
+Name: assets/font/CHANAKYB - Copy.PFB
+SHA1-Digest: M1aI3NKDZD0YIEoCVrs+JV8Vc3I=
+
+Name: assets/font/WALKCN__ 3 - Copy.TTF
+SHA1-Digest: DpX7apDMpFfd+iFULiA/OPSXbjQ=
+
+Name: res/drawable/sapppn.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: res/drawable-hdpi-v4/icon_launcher.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: assets/font/CHANAKBX - Copy.PFM
+SHA1-Digest: RMt/hwd4+4r1ijZMLUyXKCjk7pM=
+
+Name: res/drawable-xxhdpi-v4/icon_launcher.png
+SHA1-Digest: qr01zCvMvAG1vmfi5vKKi7XpKx8=
+
+Name: assets/font/WACNI___ - Copy.PFM
+SHA1-Digest: dJ+/n5Qk+rzUK/RMkF/n+KFyUbA=
+
+Name: assets/font/CHANAKYI.PFM
+SHA1-Digest: PEBZhz43FqNI14M79Z5BKqwhadE=
+
+Name: assets/font/WACN____.PFM
+SHA1-Digest: yBw0HpT09MCqrg7nlnulED5hNfM=
+
+Name: assets/font/CHANAKYB - Copy.PFM
+SHA1-Digest: fbJFeQ3hQSzQ4kDaVm8nDDwLiwE=
+
+Name: assets/font/CHANAKBI - Copy.PFB
+SHA1-Digest: ZYLZgy3kvKAwiqFy2shDAMpQ6BQ=
+
+Name: assets/font/chanakya_0 - Copy.PFB
+SHA1-Digest: lIgvI4g/TzsTHcG2j1xPr7YI1ik=
+
+Name: res/drawable/loading.xml
+SHA1-Digest: wxnR8fM160RviQXaz33aB+DPrSU=
+
+Name: res/layout/splash_screen.xml
+SHA1-Digest: Qy1IW1bCcEbZNxtqetC4SqXnFBY=
+
+Name: classes.dex
+SHA1-Digest: gM+CX8pqF6ZllGsi1/kmuBP2WSE=
+
+Name: assets/font/CHANAKBI.PFM
+SHA1-Digest: g4LtS15PUjBMxIBcBk+CLhBAbEo=
+
+Name: assets/font/CHANAKBX - Copy.PFB
+SHA1-Digest: h88q7ZDcNxEX6f/FR5+B7O/u1z8=
+

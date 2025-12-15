@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakshi Vani</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6200ee">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts: Noto Serif Devanagari (Lyrics/Title) & Noto Sans Devanagari (UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <h1>Sakshi Vani</h1>
+        <nav style="margin-top: 10px;">
+            <a href="index.html"
+                style="color: white; text-decoration: none; padding: 8px 15px; margin: 0 5px; background: rgba(255,255,255,0.2); border-radius: 20px;">गीत
+                (Songs)</a>
+            <a href="catechism.html"
+                style="color: white; text-decoration: none; padding: 8px 15px; margin: 0 5px; background: rgba(255,255,255,0.2); border-radius: 20px;">धर्मशिक्षा
+                (Catechism)</a>
+        </nav>
+    </header>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search songs / गीत खोजें...">
+    </div>
+
+    <ul id="song-list">
+        <!-- Songs will be populated here -->
+    </ul>
+
+    <!-- Song Detail View (Modal/Page) -->
+    <div id="song-detail">
+        <div class="detail-header">
+            <button id="back-btn" class="back-btn">&#8592;</button>
+            <h1 style="flex:1; font-size:1.1rem; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">Song
+                Detail</h1>
+        </div>
+        <div id="detail-content">
+            <h2 id="detail-title"></h2>
+            <div id="detail-lyrics"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

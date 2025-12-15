@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Clear Cache - Sakshi Vani</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sakshi Vani PWA - Cache Clearer</h1>
+    <p>Click the button below to clear all old cache and load the latest version (v10):</p>
+
+    <button onclick="clearAllCache()">Clear Cache & Reload v10</button>
+
+    <div id="status"></div>
+
+    <script>
+        async function clearAllCache() {
+            const status = document.getElementById('status');
+            status.textContent = 'Clearing cache...';
+            status.className = '';
+
+            try {
+                // Unregister all service workers
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (let registration of registrations) {
+                    await registration.unregister();
+                }
+
+                // Delete all caches
+                const cacheNames = await caches.keys();
+                for (let name of cacheNames) {
+                    await caches.delete(name);
+                }
+
+                status.textContent = '✓ Cache cleared successfully! Reloading...';
+                status.className = 'success';
+
+                // Wait 1 second then redirect to main app
+                setTimeout(() => {
+                    window.location.href = './index.html';
+                }, 1000);
+
+            } catch (error) {
+                status.textContent = '✗ Error: ' + error.message;
+                status.className = 'error';
+            }
+        }
+    </script>
+</body>
+
+</html>

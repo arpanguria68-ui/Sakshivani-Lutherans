@@ -1,0 +1,41 @@
+HOW TO CLEAR BROWSER CACHE FOR SAKSHI VANI PWA
+===============================================
+
+The UI is showing old cached data. Here's how to force it to load the latest v8 version:
+
+METHOD 1: Hard Refresh (Easiest)
+---------------------------------
+1. Open http://localhost:3000/ in your browser
+2. Press CTRL + SHIFT + R (Windows/Linux) or CMD + SHIFT + R (Mac)
+3. Wait for page to reload
+4. Check if issues are fixed
+
+METHOD 2: Clear Site Data (Most Effective)
+-------------------------------------------
+1. Open http://localhost:3000/
+2. Press F12 to open Developer Tools
+3. Go to "Application" tab (Chrome) or "Storage" tab (Firefox)
+4. In the left sidebar, find "Service Workers"
+5. Click "Unregister" next to the service worker
+6. In the left sidebar, find "Cache Storage"
+7. Right-click on "sakshivani-v1" through "sakshivani-v7" and delete each
+8. Close Developer Tools
+9. Refresh the page (F5 or Ctrl+R)
+
+METHOD 3: JavaScript Console (Quick)
+------------------------------------
+1. Open http://localhost:3000/
+2. Press F12 to open Developer Tools
+3. Go to "Console" tab
+4. Paste this code and press Enter:
+
+caches.keys().then(function(names) {
+    for (let name of names) caches.delete(name);
+}).then(function() { location.reload(true); });
+
+5. Page will automatically reload with fresh data
+
+After clearing cache, you should see:
+- Song 10 title: "ध्न है परमेश्वर ः हे भाईयों ध्न्यवाद उसका गाओ" (correct)
+- All bracket ']' symbols replaced with commas ','
+- All matra issues fixed

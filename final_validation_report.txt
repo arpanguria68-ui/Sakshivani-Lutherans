@@ -1,0 +1,288 @@
+================================================================================
+FINAL COMPREHENSIVE VALIDATION REPORT
+================================================================================
+
+Total songs: 353
+Clean songs: 211
+Songs with issues: 142
+
+
+ISSUES BY PATTERN:
+--------------------------------------------------------------------------------
+floating_aa_standalone         : 150
+i_after_conjunct_wrong         : 63
+legacy_glyphs                  : 40
+
+
+DETAILED ISSUES (First 30 songs):
+--------------------------------------------------------------------------------
+
+❌ Song 4: ईश्वर की ओर हे सारी पृथ्वी
+  Pattern: i_after_conjunct_wrong
+  Match: 'प्ति'
+  Context: ...णड जो उसके हाथ से तृप्ति पाते हैं॥ 3- फाटक म...
+
+
+❌ Song 6: धन्यवाद परमेश्वर को
+  Pattern: i_after_conjunct_wrong
+  Match: 'द्धि'
+  Context: ...य॥ 2- सब कुछ अपनी बुद्धि से सिरजा है परमेश्व...
+
+
+❌ Song 8: ईश्वर के गुण सब हैं अगाह
+  Pattern: floating_aa_standalone
+  Match: 'ा '
+  Context: ...मय। 5- विश्वास से बढ़ा अपना हाथ मांग पाप की...
+
+
+❌ Song 9: अब मन और मुँह और हाथ ईश्वर की ओर उठाओ
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ी ओर उठाओ और उसका बड़ा प्रेम और उत्तम कार्...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ेम और उत्तम कार्य बढ़ाओ। वह हम पर कृपावान ...
+
+
+❌ Song 12: पवित्र, पवित्र पवित्र सर्वशकितमान ईश,
+  Pattern: i_after_conjunct_wrong
+  Match: 'ष्टि'
+  Context: ...वशकितमान ईश, सारी सृष्टि तेरे नाम की स्तुति ...
+
+
+❌ Song 14: ‘‘देख, प्रभु आता है’’
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ु आता है’’ अंधेरा बड़ा है। और आधी रात की न...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...िद्रा में सब जगत् पड़ा है॥ 4- ‘‘देख, प्रभु...
+
+
+❌ Song 20: गड़ेरिये जब रात समय
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ं लिपटा हुआ है और पड़ा चरणी में॥ 5- जब यूं...
+
+
+❌ Song 21: तारे सब चमकते
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...्टिकर्ता चरणी में पड़ा॥ 3- जन्मा वह उद्धार...
+
+
+❌ Song 23: मैं कैसे तुझे भेंटू और ग्राहृा हूँ किस प्रकार।
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...तुझे भेंटू और ग्राहृा हूँ किस प्रकार। 1- ...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...तुझे भेंटू और ग्राहृा हूँ किस प्रकार। हे ...
+
+  Pattern: i_after_conjunct_wrong
+  Match: 'द्धि'
+  Context: ...ु तू ही आपा ज्ञान बुद्धि मुझे लाल। तब जो कुछ...
+
+
+❌ Song 25: लो स्वर्ग पर से मैं आता हूँ
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ि पाल में पुआल पर पड़ा बिछौना तेरा क्या कड़...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ... बिछौना तेरा क्या कड़ा॥ 10- जो जगत् होता क...
+
+
+❌ Song 33: हम तेरी ओर ललकारते
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...के लिये तू घास पर पड़ा था कि पिता से जो प्...
+
+
+❌ Song 34: हे लड़को अब चलो सब करते हुलास
+  Pattern: floating_aa_standalone
+  Match: 'ा '
+  Context: ...ात॥ 2- पुआल पर है पड़ा एक बालक अनूप वह सुन्...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...श्चात तू उठावेगा पीड़ा विशेश॥ 4- यह सब तू ...
+
+
+❌ Song 36: अब आओ आनन्दमय
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...मोह हमारा वह नंगा पड़ा चरनी में और सूर्य स...
+
+
+❌ Song 37: पूर्व देश के ज्योतिशी
+  Pattern: i_after_conjunct_wrong
+  Match: 'ष्टि'
+  Context: ...े थे, हे दीनदयाल। सृष्टि भर का राजा मान किया...
+
+
+❌ Song 38: ज्योतिमान तारे, चल आगे हमारे,
+  Pattern: i_after_conjunct_wrong
+  Match: 'त्रि'
+  Context: ...यात्राी इस आशीशमय रात्रि यीशु से भेंटें जो ज...
+
+  Pattern: i_after_conjunct_wrong
+  Match: 'ष्टि'
+  Context: ... त्रण। 2- हे सारी सृष्टि, कर यीशु पर दृशिट, ...
+
+  Pattern: i_after_conjunct_wrong
+  Match: 'त्रि'
+  Context: ...यात्राी इस आशीशमय रात्रि, यीशु से भेंटें, जो...
+
+
+❌ Song 39: तीनों राजा
+  Pattern: floating_aa_standalone
+  Match: ' ा'
+  Context: ...अदभतू तारा, तारा शभु ा तारा ज्योतिमान जो प...
+
+
+❌ Song 40: एक मेम्ना बिना दोश अपराध्
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ठा लाज अमित। घाव कोड़ा डर मार क्रूश और मृत...
+
+
+❌ Song 43: यीशु मेरे जीवन दाता
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ी लों॥ 3- चोट की पीड़ा भई तुझे हुआ है तू द...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ाज ओ ठट्ठा तुझ पर पड़ा निन्दा किई तुझे से ...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा '
+  Context: ... त्रणी प्रिय सहा पीड़ा अकथनीय लाखों स्तुति ...
+
+
+❌ Song 45: आह! गलगथा पर आओ
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ... पर पड़े और थूक जो पड़ा था। हर घाव जो तुझे ...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा
+'
+  Context: ...5- जो बोझ पखान से बड़ा अब तेरे प्राण पर पड़ा...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ... अब तेरे प्राण पर पड़ा कि मुझ से स्राप पार...
+
+
+❌ Song 46: हे प्रीतम यीशु तू ने क्या ही किया
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ा कारण आह! तुझ पर पड़ा मेरे पाप का ताड़न। म...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...दया जिससे तू इसी पीड़ा मार्ग पर आया। मैं ज...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...द्रव और न मृत की पीड़ाओं से मन मेरा डरे॥ 1...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...लकता मुकुट सिर पर खड़ा रहूँ। तब पूर्णता से...
+
+
+❌ Song 51: नित हो मेरे प्राण का घर, गलगथा की चोटी पर।
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...र संताप मेरे बदले पड़ा था। 2- वहाँ क्रिस्त...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...- जब लग क्रूश पास खड़ा हूँ, मैं प्रमोद से ...
+
+
+❌ Song 53: यीशु ने दिया अपना प्राण
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ा महान वह मृत की पीड़ा भोग के मरा पर धन्यम...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ... उसके मृत से मारा पड़ा॥ 4- हे प्रीतम यीशु ...
+
+
+❌ Song 54: तेरा दुख हे यीशु कौन बिसारे
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ण। कि तू अत्यन्त पीड़ा कशट ओ दुख से कीना म...
+
+
+❌ Song 57: धन्य प्रभु यीशु
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ... गुणमय। जो सनातन पीड़ा हम से टालती है। 4- ...
+
+
+❌ Song 58: कहाँ मसीह का तेज और मान,
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ी मृत्यु ही पर अब बड़ाई करूं जन्म भर। निछा...
+
+
+❌ Song 60: आज यीशु क्रिस्त जी उठा है।
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...स्त यीशु कब्र में पड़ा। पर मृत न उसको रख स...
+
+
+❌ Song 62: जयवन्त होके स्वर्ग पर चढ़ा
+  Pattern: floating_aa_standalone
+  Match: 'ा
+'
+  Context: ...्त होके स्वर्ग पर चढ़ा 1- जयवन्त होके स्वर्...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...्त होके स्वर्ग पर चढ़ा मेरा प्रभु यीशु क्र...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ा। मृत का सामर्थ तोड़ा है-2॥ 2- व्यर्थ शैत...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...थ हुआ क्षय। तुझको पड़ा लाज से हारना उसी से...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...शय होके स्वर्ग पर चढ़ा हुआ ईश्वर पास मध्यस...
+
+
+❌ Song 63: पुनरुत्थान की सुन्दर भोर को
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...्रणी मृत्यु बन्ध तोड़ा है। और हमको अधर्म प...
+
+
+❌ Song 64: जय जय जय जय क्रिस्त
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...मृत्यु का सामर्थ तोड़ा है। पाप और शैतान पर...
+
+
+❌ Song 68: जय हाँ जय सनातन जय
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...ा था जब यीशु उससे लड़ा। बल छल से उस पर आता...
+
+  Pattern: floating_aa_standalone
+  Match: 'ा'
+  Context: ...िस्त यीशु मृत में पड़ा था पर देख फिर जीवित...
+

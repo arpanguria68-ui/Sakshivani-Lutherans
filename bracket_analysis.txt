@@ -1,0 +1,124 @@
+Analyzing raw Chanakya text for ']' character source
+================================================================================
+
+
+Song 1: gYysyw;kg /u Lrqfr t;
+Raw hex: 312d206759797379773b6b67202f75204c7271667220743b0a625a276f6a206669726b20646b7320746b73206c6e3b0a6a6b543b206c6f5a466b6b202f655a206c7320646a726b410a72772067532067656b6a6b2074686f7520756b466b0a67652072736a6b203b276b2076677e796b6e206473206c6b466b0a66757220786b6f736120677320747820486bd96b6b5a0a746b786b73206a6b786b730a6c716a206665796b766b732078712e6b786b466b20786b766b735d0a747873276f6a20646b0a746b732067
+Contains ']': True
+First 200 chars: "1- gYysyw;kg /u Lrqfr t;\nbZ'oj firk dks tks ln;\njkT; loZFkk /eZ ls djrkA\nrw gS gekjk thou ukFk\nge rsjk ;'k vg~ykn ds lkFk\nfur xkosa gs tx HkÙkkZ\ntkxks jkxks\nlqj feykvks xq.kxkFk xkvks]\ntxs'oj dk\ntks g"
+--------------------------------------------------------------------------------
+
+Song 12: ifo=k] ifo=k ifo=k loZ'kfDreku bZ'k]
+Raw hex: 312d2069666f3d6b5d2069666f3d6b2069666f3d6b206c6f5a276b664472656b7520625a276b5d0a697a6b7225646b7920646b732072736a682066757220766b6a6b2f756b20676b737268206753410a69666f3d6b5d2069666f3d6b5d2069666f3d6b5d206e3b6b7920276b664472656b7520625a276b5d0a72687520657361202c6420625a276f6a20696a65202f553b203d6b3b410a322d2069666f3d6b5d2069666f3d6b5d2069666f3d6b5d204c72716672206c6172782e6b20786b72730a76697573207669
+Contains ']': True
+First 200 chars: "1- ifo=k] ifo=k ifo=k loZ'kfDreku bZ'k]\nizkr%dky dks rsjh fur vkjk/uk gksrh gSA\nifo=k] ifo=k] ifo=k] n;ky 'kfDreku bZ'k]\nrhu esa ,d bZ'oj ije /U; =k;A\n2- ifo=k] ifo=k] ifo=k] Lrqfr larx.k xkrs\nvius vi"
+--------------------------------------------------------------------------------
+
+Song 13:  ijes'oj dks ije /ke esa /u
+Raw hex: 312d20696a6573276f6a20646b7320696a65202f6b6520657361202f750a766b536a206960466f6820696a206471276b7920766b536a20657571223b6b73612065736120697a6c5575726b20676b736f730a6765204c7271667220646a2072713e73206c6a6b6772732067536120697a2e6b6b6520646a727320675361410a6765204c7271667220646a202f553b6f6b6e206e73727320675361410a72736a7320634d2b732065676b72652064732066793b730a625a276f6a204c6f785a6f6b6c68206a6b746b20
+Contains ']': True
+First 200 chars: '1- ijes\'oj dks ije /ke esa /u\nvkSj i`Foh ij dq\'ky vkSj euq";ksa esa izlUurk gksos\nge Lrqfr dj rq>s ljkgrs gSa iz.kke djrs gSaA\nge Lrqfr dj /U;okn nsrs gSaA\nrsjs cM+s egkre ds fy;s\nbZ\'oj LoxZoklh jktk '
+--------------------------------------------------------------------------------
+
+Song 14: ^^ns[k] izHkq vkrk gS**
+Raw hex: 312d205e5e6e735b6b5d20697a486b7120766b726b2067532a2a0a6c71752069673a206468206971646b6a410a67732065736a7320486b6b625a20746b78726b206a670a766b536a206d42647320676b732072533b6b6a41410a322d205e5e6e735b6b5d20697a486b7120766b726b2067532a2a0a646b5375206c736f64206c6b736f73786b410a6c616c6b6a20647320796b737820726b73206c6b73206a6773610a7277206c6b7320647320676b6a73786b41410a332d205e5e6e735b6b5d20697a486b712076
+Contains ']': True
+First 200 chars: '1- ^^ns[k] izHkq vkrk gS**\nlqu ig: dh iqdkjA\ngs esjs HkkbZ tkxrk jg\nvkSj mBds gks rS;kjAA\n2- ^^ns[k] izHkq vkrk gS**\ndkSu lsod lksosxkA\nlalkj ds yksx rks lks jgsa\nrw lks ds gkjsxkAA\n3- ^^ns[k] izHkq v'
+--------------------------------------------------------------------------------
+
+Song 19:  vkt ,d ckyd tUek gS
+Raw hex: 312d20766b74202c6420636b7964207455656b2067530a746b73206c616c6b6a20646b206a6b746b2067530a7669757320696b6c206371796b726b2067530a6c6b6a7320746b7220647320796b73786b736120646b7341410a646b736a736a736a6c20252058796b73666a3b6b5d2058796b73666a3b6b5d2058796b73666a3b6b5d2058796b73666a3b6b0a6275202c446c7379666c6c204d73766b734120320a322d20766b2f68206a6b7220784d2b73666a3b730a3e71614d206468206a7b6b6b20646a727320
+Contains ']': True
+First 200 chars: '1- vkt ,d ckyd tUek gS\ntks lalkj dk jktk gS\nvius ikl cqykrk gS\nlkjs tkr ds yksxksa dksAA\ndksjsjsjl % Xyksfj;k] Xyksfj;k] Xyksfj;k] Xyksfj;k\nbu ,Dlsyfll MsvksA 2\n2- vk/h jkr xM+sfj;s\n>qaM dh j{kk djrs '
+--------------------------------------------------------------------------------
+
+Song 20: xM+sfj;s tc jkr le;
+Raw hex: 312d20784d2b73666a3b73207463206a6b72206c653b0a3e71614d206a7b6b6b20646a727320466b73410a2c64206e777220766320766b3b6b206d756473206368700a6c6b466b20634d2b7320666f486b6f20647341410a322d203f6b636a6b766b732065725d206d6c75732064676b0a65536120646a757320646b7320697a706b6a410a766320766b3b6b206777a1206c6320796b73786b736120646b730a766b75556e20646b206c656b706b6a0a332d20727145676b6a732066792c20766b7420647320666e
+Contains ']': True
+First 200 chars: '1- xM+sfj;s tc jkr le;\n>qaM j{kk djrs FksA\n,d nwr vc vk;k muds chp\nlkFk cM+s foHko dsAA\n2- ?kcjkvks er] mlus dgk\neSa djus dks izpkjA\nvc vk;k gw¡ lc yksxksa dks\nvkuUn dk lekpkj\n3- rqEgkjs fy, vkt ds fn'
+--------------------------------------------------------------------------------
+
+Song 22: lqu nwr lHkk xkrh gS
+Raw hex: 312d206c7175206e7772206c486b6b20786b72682067530a5e5e636b7964206a6b746b20665b6b7a4c7220646820743b410a747820657361206471276b7920766b536a206665796b690a625a276f6a207b6b656b20646a726b20696b692a2a41410a6773206c6320746b7220647320796b7378206d426b730a6c63206e77726b7361206c7320666579647320786b766b73410a646a6b73206d6c6473206c617820697a706b6a0a6d52695575206771766b20726b6a2e6b676b6a0a6c7175206e7772206c486b6b20
+Contains ']': True
+First 200 chars: "1- lqu nwr lHkk xkrh gS\n^^ckyd jktk f[kzLr dh t;A\ntx esa dq'ky vkSj feyki\nbZ'oj {kek djrk iki**AA\ngs lc tkr ds yksx mBks\nlc nwrksa ls feyds xkvksA\ndjks mlds lax izpkj\nmRiUu gqvk rkj.kgkj\nlqu nwr lHkk "
+--------------------------------------------------------------------------------
+
+Song 29: ikl vkvks fo'okfl;ksa] vkuUn djrs vkvks
+Raw hex: 312d20696b6c20766b766b7320666f276f6b666c3b6b73615d20766b75556e20646a727320766b766b730a2c6420636b78685a202c6420636b78685a206353727179676520647320696b6c410a7478727e20646b203d6b6b726b20636b7964206771766b206e735b6b6b730a676520486b747520646a72732069777473612033202526204c6f785a206a6b746b20646b7341410a322d206773206f7075206c756b72755d206e71785a726b736120647320766b6c6a6b0a665b6b7a4c72203b68276b7120665b6b7a
+Contains ']': True
+First 200 chars: "1- ikl vkvks fo'okfl;ksa] vkuUn djrs vkvks\n,d ckxhZ ,d ckxhZ cSrqyge ds iklA\ntxr~ dk =kkrk ckyd gqvk ns[kks\nge Hktu djrs iwtsa 3 %& LoxZ jktk dksAA\n2- gs opu lukru] nqxZrksa ds vkljk\nf[kzLr ;h'kq f[kz"
+--------------------------------------------------------------------------------
+
+Song 37: iwCcZ ns'k ds T;ksfr"kh
+Raw hex: 312d20697743635a206e73276b20647320543b6b736672226b680a6e735b6b64732070656420726b6a73206468410a65752064732076667220766b75556e206c730a665b6b7a4c72206473205b6b6b737420657361207079206675647973410a3b6b736120676820697a486b715d207277206c6e6b0a6765646b73207669757320696b6c206371796b410a322d2072736a7320696b6c206f7320676b73206675676b790a783b7320466b735d206773206e68756e3b6b79410a6c6066225620486b6a20646b206a6b
+Contains ']': True
+First 200 chars: '1- iwCcZ ns\'k ds T;ksfr"kh\nns[kds ped rkjs dhA\neu ds vfr vkuUn ls\nf[kzLr ds [kkst esa py fudysA\n;ksa gh izHkq] rw lnk\ngedks vius ikl cqykA\n2- rsjs ikl os gks fugky\nx;s Fks] gs nhun;kyA\nl`f"V Hkj dk jk'
+--------------------------------------------------------------------------------
+
+Song 38: T;ksfreku rkjs] py vkxs gekjs]
+Raw hex: 312d20543b6b736672656b7520726b6a735d20707920766b78732067656b6a735d0a7678716f6b20676b7320766b536a20666e5b6b6b207277206f67204c466b6b750a667475657361206e6875203b6b3d6b6820626c20766b276b68226b653b206a6b663d6b0a3b68276b71206c7320486b736156736120746b7320747820646b206753203d6b6b2e6b410a322d206773206c6b6a68206c606622565d20646a203b68276b7120696a206e606622565d0a6d6c6468206a6b7475786a68206353727179676520787a
+Contains ']': True
+First 200 chars: '1- T;ksfreku rkjs] py vkxs gekjs]\nvxqok gks vkSj fn[kk rw og LFkku\nftuesa nhu ;k=kh bl vk\'kh"ke; jkf=k\n;h\'kq ls HksaVsa tks tx dk gS =kk.kA\n2- gs lkjh l`f"V] dj ;h\'kq ij n`f"V]\nmldh jktuxjh cSrqyge xz'
+--------------------------------------------------------------------------------
+
+Song 39: rhuksa jktk 
+Raw hex: 312d207268756b7361206a6b746b20260a67652069776f5a206e73276b206473206a6b746b206753610a6c556e73276b207973646a20766b727320675361410a756e6820796b613f6b2064735d20696f5a7220703c2b2064730a726b6a6b206e735b6b20766b727320675361410a646b6a73206c266720732067207320766e486b727720726b6a6b5d20726b6a6b20276b4871206b0a726b6a6b20543b6b736672656b7520746b732069776f5a0a7678716f6b20676b7364735d20727720666e5b6b6b206e730a4c
+Contains ']': True
+First 200 chars: "1- rhuksa jktk &\nge iwoZ ns'k ds jktk gSa\nlUns'k ysdj vkrs gSaA\nunh yka?k ds] ioZr p<+ ds\nrkjk ns[k vkrs gSaA\ndkjs l&g s g s vnHkrw rkjk] rkjk 'kHq k\nrkjk T;ksfreku tks iwoZ\nvxqok gksds] rw fn[kk ns\nL"
+--------------------------------------------------------------------------------
+
+Song 47: lquks dkSu lh Hkkjh ok.kh] Øw'k ij f[kzLr mPpkjrk gSA
+Raw hex: 312d206c71756b7320646b5375206c6820486b6b6a68206f6b2e6b685d20d877276b20696a20665b6b7a4c72206d50706b6a726b206753410a6c773b5a20646b7320676b73726820675320727374676b66755d206c6479207478727e204d6a726b206753410a69776a6b206771766b203220252620665b6b7a4c72206971646b6a20647320656a726b20675341410a322d20743b20676b6120743b2076696b6a206c715b6b6e6b625a5d2065617879206f6b2e6b6820743b206c6e6b410a4c6f785a20696a206c73
+Contains ']': True
+First 200 chars: "1- lquks dkSu lh Hkkjh ok.kh] Øw'k ij f[kzLr mPpkjrk gSA\nlw;Z dks gksrh gS rstgkfu] ldy txr~ Mjrk gSA\niwjk gqvk 2 %& f[kzLr iqdkj ds ejrk gSAA\n2- t; gka t; vikj lq[knkbZ] eaxy ok.kh t; lnkA\nLoxZ ij ls"
+--------------------------------------------------------------------------------
+
+
+================================================================================
+CONVERTED SONGS WITH ']' SYMBOL
+================================================================================
+
+
+Song 1: हळलेलूयाह ध्न स्तुति जय
+  Line: सुर मिलाओ गुणगाथ गाओ]
+
+Song 12: पवत्रि] पवत्रि पवत्रि सर्वशक्ितमान ईश]
+  Line: 1- पवत्रि] पवत्रि पवत्रि सर्वशक्ितमान ईश]
+  Line: पवत्रि] पवत्रि] पवत्रि] दयाल शक्ितमान ईश]
+  Line: 2- पवत्रि] पवत्रि] पवत्रि] स्तुति संतगण गाते
+  Line: करूबीम और सराफीम यही मन झुक जाते]
+  Line: ‘तू था] अब है] और युगयुग रहेगा’॥
+  Line: 3- पवत्रि] पवत्रि] पवत्रि] मेघों से तू घ्िारा
+
+Song 13: परमेश्वर को परम धम में ध्न
+  Line: हे खृशट सत्य एकलौते पूत] प्रभु यीशु
+  Line: जगत् के पाप जो उठाता] हमारी बिन्ती सुन
+
+Song 14: ‘‘देख] प्रभु आता है’’
+  Line: 1- ‘‘देख] प्रभु आता है’’
+  Line: 2- ‘‘देख] प्रभु आता है’’
+  Line: 3- ‘‘देख] प्रभु आता है’’
+
+Song 19: आज एक बालक जन्मा है
+  Line: कोरेरेरस ः ग्लोरिया] ग्लोरिया] ग्लोरिया] ग्लोरिया
+
+Song 20: गड़ेरिये जब रात समय
+  Line: 2- घबराओ मत] उसने कहा
+
+Song 22: सुन दूत सभा गाती है
+
+Song 29: पास आओ विश्वासियों] आनन्द करते आओ
+  Line: 1- पास आओ विश्वासियों] आनन्द करते आओ
+  Line: 2- हे वचन सनातन] दुर्गतों के आसरा
+  Line: 3- स्वर्ग दूतों संग पृथ्वी] जय जयकर हुलसावे
+
+Song 37: पूब्र्ब देश के ज्योतिशी
+  Line: यों ही प्रभु] तू सदा
+  Line: गये थे] हे दीनदयाल।
+
+Song 38: ज्योतिमान तारे] चल आगे हमारे]
+  Line: 1- ज्योतिमान तारे] चल आगे हमारे]
+  Line: 2- हे सारी सृष्टि] कर यीशु पर दृशिट]
+  Line: 3- देख] जगतारक त्रणदाता उðारक
+  Line: सोता गोशाल में] बन बालक बन दास।

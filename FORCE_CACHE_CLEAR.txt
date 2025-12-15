@@ -1,0 +1,49 @@
+==============================================================================
+FORCE CACHE CLEAR - MANUAL STEPS
+==============================================================================
+
+Your browser is holding onto old cached data. Follow these exact steps:
+
+METHOD 1: Chrome DevTools (RECOMMENDED - 100% EFFECTIVE)
+---------------------------------------------------------
+1. Open the PWA: http://localhost:3000/
+2. Press F12 (open Developer Tools)
+3. Go to "Application" tab (top menu)
+4. On left sidebar, click "Service Workers"
+5. Check the box "Update on reload"
+6. Click "Unregister" next to any service worker
+7. On left sidebar, click "Storage"
+8. Click "Clear site data" button
+9. Close DevTools (F12)
+10. Hard reload: Ctrl + Shift + R (or Ctrl + F5)
+
+METHOD 2: Manual Cache Clear
+-----------------------------
+1. Close ALL browser windows running localhost:3000
+2. Press Ctrl + Shift + Delete
+3. Select:
+   - Time range: "All time"
+   - Check: "Cached images and files"
+   - Check: "Cookies and other site data"
+4. Click "Clear data"
+5. Close browser completely
+6. Reopen and go to: http://localhost:3000/
+
+METHOD 3: Incognito Window (QUICKEST FOR TESTING)
+--------------------------------------------------
+1. Press Ctrl + Shift + N
+2. Go to: http://localhost:3000/
+3. This will show v18 data immediately
+
+==============================================================================
+VERIFICATION
+==============================================================================
+
+Once cache is cleared, you should see:
+✅ Clean Bible references (प्रेरित not प््रेारित)
+✅ No § symbols
+✅ No _ underscores
+✅ All Hindi text properly formatted
+
+Cache version showing in console: v18
+==============================================================================

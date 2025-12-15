@@ -1,0 +1,54 @@
+==============================================================================
+EDGE BROWSER - FORCE CACHE CLEAR (100% EFFECTIVE)
+==============================================================================
+
+Edge has EXTREMELY aggressive PWA caching. Here's how to force clear:
+
+METHOD 1: Edge DevTools (RECOMMENDED)
+--------------------------------------
+1. Open Edge
+2. Navigate to: edge://serviceworker-internals/
+3. Find "localhost:3000" in the list
+4. Click "Unregister" for ALL service workers on that domain
+5. Close this tab
+6. Press F12 on your PWA tab
+7. Go to: Application → Storage → "Clear site data"
+8. Close Edge COMPLETELY (all windows)
+9. Reopen Edge → Go to http://localhost:3000/
+
+METHOD 2: Edge Settings (NUCLEAR OPTION)
+-----------------------------------------
+1. Close ALL Edge windows
+2. Edge Settings → Privacy → "Choose what to clear"
+3. Select:
+   ✅ Browsing history
+   ✅ Cookies and saved website data
+   ✅ Cached data and files
+   Time range: "All time"
+4. Click "Clear now"
+5. Restart Edge
+6. Go to http://localhost:3000/
+
+METHOD 3: InPrivate Window (INSTANT VERIFICATION)
+--------------------------------------------------
+1. Press Ctrl + Shift + N (InPrivate mode)
+2. Go to: http://localhost:3000/
+3. You should see v19 data immediately
+
+METHOD 4: Edge PWA Reset (IF INSTALLED AS APP)
+-----------------------------------------------
+1. Edge Settings → Apps
+2. Find "Sakshi Vani" 
+3. Click "..." → "Remove"
+4. Reinstall the PWA fresh
+
+==============================================================================
+VERIFICATION - What You Should See in v19:
+==============================================================================
+
+Song 12: Clean reference (not "प्न- ि 48")
+Song 14: Clean reference (not "एट ि 2217")
+
+All Bible book names should be properly formatted Hindi.
+
+==============================================================================
