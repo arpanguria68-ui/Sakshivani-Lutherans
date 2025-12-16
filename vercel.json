@@ -3,12 +3,8 @@
     "public": true,
     "buildCommand": "echo 'No build needed for static PWA'",
     "outputDirectory": "pwa",
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
     "headers": [
         {
             "source": "/sw.js",
