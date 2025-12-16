@@ -1,0 +1,17 @@
+__pycache__
+*.py
+*.pyc
+*.pyo
+*.md
+*.txt
+.git
+.gitignore
+sakshivani-rn
+res
+assets
+META-INF
+*.dex
+*.xml
+quiz_data.json
+catechism.json
+catechism.md
