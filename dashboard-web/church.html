@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Attendance - Sakshi Vani</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-display);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-display);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(91, 141, 238, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface);
+            color: var(--text-display);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .option-btn.selected {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .verse-quote {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(91, 141, 238, 0.2) 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+        }
+
+        .verse-quote p {
+            font-family: 'Noto Serif Devanagari', serif;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .verse-quote cite {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #D97706;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        textarea.input-field {
+            min-height: 80px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+            Back
+        </a>
+
+        <h1 class="greeting">चर्च उपस्थिति लॉग करें</h1>
+        <p class="tagline">Log Church Attendance</p>
+
+        <form id="church-form">
+            <div class="form-group">
+                <label>Service Type / सेवा का प्रकार</label>
+                <div class="button-group">
+                    <button type="button" class="option-btn selected" data-service="sunday">Sunday Service</button>
+                    <button type="button" class="option-btn" data-service="midweek">Midweek</button>
+                </div>
+                <div class="button-group" style="margin-top: 8px;">
+                    <button type="button" class="option-btn" data-service="special">Special Service</button>
+                    <button type="button" class="option-btn" data-service="fellowship">Fellowship</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Date / दिनांक</label>
+                <input type="date" class="input-field" id="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Sermon Topic (Optional) / उपदेश विषय</label>
+                <input type="text" class="input-field" id="topic" placeholder="e.g., God's Grace">
+            </div>
+
+            <div class="form-group">
+                <label>Notes (Optional) / टिप्पणी</label>
+                <textarea class="input-field" id="notes" placeholder="Key takeaways from the service..."></textarea>
+            </div>
+
+            <div class="verse-quote">
+                <p>"अपनी सभा करना न छोड़ें, जैसे कुछ लोगों की रीति है।"</p>
+                <cite>- इब्रानियों 10:25</cite>
+            </div>
+
+            <button type="submit" class="submit-btn">Log Attendance</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let selectedService = 'sunday';
+
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Service type selection
+        document.querySelectorAll('[data-service]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-service]').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedService = btn.dataset.service;
+            });
+        });
+
+        // Form submission
+        document.getElementById('church-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const date = document.getElementById('date').value;
+            const topic = document.getElementById('topic').value;
+            const notes = document.getElementById('notes').value;
+
+            trackingStore.addChurchLog({
+                service: selectedService,
+                date,
+                topic,
+                notes
+            });
+
+            alert('Church attendance logged successfully! ⛪');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+
+</html>

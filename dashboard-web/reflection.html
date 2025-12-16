@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Reflection - Sakshi Vani</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-display);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-display);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--quiz);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        textarea.input-field {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .mood-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .mood-btn:hover {
+            border-color: var(--quiz);
+            transform: scale(1.05);
+        }
+
+        .mood-btn.selected {
+            background: var(--quiz);
+            border-color: var(--quiz);
+            transform: scale(1.1);
+        }
+
+        .verse-quote {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+        }
+
+        .verse-quote p {
+            font-family: 'Noto Serif Devanagari', serif;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .verse-quote cite {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--quiz);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #7C3AED;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+        }
+
+        .prompt-card {
+            background: var(--surface);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--quiz);
+        }
+
+        .prompt-card h3 {
+            font-size: 14px;
+            color: var(--quiz);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prompt-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+            Back
+        </a>
+
+        <h1 class="greeting">दैनिक चिंतन</h1>
+        <p class="tagline">Daily Reflection</p>
+
+        <div class="prompt-card">
+            <h3>Reflection Prompts</h3>
+            <p id="prompt-text">What is God teaching you today?</p>
+        </div>
+
+        <form id="reflection-form">
+            <div class="form-group">
+                <label>How are you feeling today? / आज आप कैसा महसूस कर रहे हैं?</label>
+                <div class="button-group">
+                    <button type="button" class="mood-btn" data-mood="joyful" title="Joyful">😊</button>
+                    <button type="button" class="mood-btn" data-mood="peaceful" title="Peaceful">😌</button>
+                    <button type="button" class="mood-btn" data-mood="thankful" title="Thankful">🙏</button>
+                    <button type="button" class="mood-btn" data-mood="struggling" title="Struggling">😔</button>
+                    <button type="button" class="mood-btn" data-mood="hopeful" title="Hopeful">🌟</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Title (Optional) / शीर्षक</label>
+                <input type="text" class="input-field" id="title" placeholder="Give your reflection a title...">
+            </div>
+
+            <div class="form-group">
+                <label>Your Reflection / आपका चिंतन</label>
+                <textarea class="input-field" id="reflection"
+                    placeholder="Write your thoughts, prayers, gratitude, or what God is speaking to your heart today..."
+                    required></textarea>
+            </div>
+
+            <div class="verse-quote">
+                <p>"हे यहोवा, मुझे अपनी बातें समझाओ, मेरे मन की कल्पनाओं पर ध्यान दो।"</p>
+                <cite>- भजन संहिता 19:14</cite>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Reflection</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let selectedMood = null;
+
+        // Reflection prompts
+        const prompts = [
+            "What is God teaching you today?",
+            "How have you seen God's faithfulness this week?",
+            "What are you thankful for right now?",
+            "What challenges are you facing, and how can you trust God?",
+            "How can you share God's love with others today?",
+            "What Bible verse or passage spoke to you recently?"
+        ];
+
+        // Random prompt
+        const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        document.getElementById('prompt-text').textContent = randomPrompt;
+
+        // Mood selection
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedMood = btn.dataset.mood;
+            });
+        });
+
+        // Form submission
+        document.getElementById('reflection-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const reflection = document.getElementById('reflection').value;
+
+            if (!selectedMood) {
+                alert('Please select how you\'re feeling today');
+                return;
+            }
+
+            trackingStore.addReflectionLog({
+                mood: selectedMood,
+                title: title || 'Untitled Reflection',
+                reflection,
+                prompt: randomPrompt
+            });
+
+            alert('Reflection saved successfully! ✍️');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+
+</html>
