@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Journey - Sakshi Vani Dashboard</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#5B8DEE">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="container dashboard-container">
+        <a href="index.html" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+            Back
+        </a>
+
+        <h1 class="greeting">My Journey</h1>
+        <p class="tagline">Track your spiritual growth</p>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="progress-icon primary">
+                    <ion-icon name="heart"></ion-icon>
+                </div>
+                <div class="stat-value" id="prayer-stat">0</div>
+                <div class="stat-label">Prayers Logged</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="progress-icon secondary">
+                    <ion-icon name="book"></ion-icon>
+                </div>
+                <div class="stat-value" id="bible-stat">0</div>
+                <div class="stat-label">Bible Reading</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="progress-icon accent">
+                    <ion-icon name="people"></ion-icon>
+                </div>
+                <div class="stat-value" id="church-stat">0</div>
+                <div class="stat-label">Church Visits</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="progress-icon quiz">
+                    <ion-icon name="create"></ion-icon>
+                </div>
+                <div class="stat-value" id="reflection-stat">0</div>
+                <div class="stat-label">Reflections</div>
+            </div>
+        </div>
+
+        <!-- Activity Tracking -->
+        <div class="activity-card">
+            <h3>📿 Prayer Tracker</h3>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">Log your daily prayers and build a habit</p>
+            <a href="prayer.html" class="activity-btn">
+                <ion-icon name="add-circle"></ion-icon>
+                Log Prayer
+            </a>
+        </div>
+
+        <div class="activity-card">
+            <h3>📖 Bible Reading</h3>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">Track your scripture reading progress</p>
+            <a href="bible.html" class="activity-btn">
+                <ion-icon name="add-circle"></ion-icon>
+                Log Reading
+            </a>
+        </div>
+
+        <div class="activity-card">
+            <h3>⛪ Church Attendance</h3>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">Record your church visits and services</p>
+            <a href="church.html" class="activity-btn">
+                <ion-icon name="add-circle"></ion-icon>
+                Log Attendance
+            </a>
+        </div>
+
+        <div class="activity-card">
+            <h3>✍️ Daily Reflection</h3>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">Journal your thoughts and insights</p>
+            <a href="reflection.html" class="activity-btn">
+                <ion-icon name="add-circle"></ion-icon>
+                Write Reflection
+            </a>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakshi Vani Dashboard</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#5B8DEE">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="avatar">
+                    <ion-icon name="person"></ion-icon>
+                </div>
+                <div>
+                    <p class="welcome-text">Welcome back</p>
+                    <p class="user-name">Believer</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="streak-badge">
+                    🔥 1
+                </div>
+                <button class="icon-btn" id="theme-toggle">
+                    <ion-icon name="moon"></ion-icon>
+                </button>
+                <button class="icon-btn">
+                    <ion-icon name="notifications-outline"></ion-icon>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Greeting -->
+            <h1 class="greeting">Good Morning</h1>
+            <p class="tagline">Let's walk in faith today.</p>
+
+            <!-- Verse of the Day -->
+            <div class="verse-card">
+                <div class="verse-header">
+                    <span class="verse-tag">VERSE OF THE DAY</span>
+                    <button class="icon-btn-secondary">
+                        <ion-icon name="bookmark-outline"></ion-icon>
+                    </button>
+                </div>
+                <p class="verse-text">
+                    "क्योंकि मैं तुम्हारे लिए जो योजनाएँ बनाता हूँ, उन्हें मैं जानता हूँ, तुम्हें आशा और भविष्य देने की
+                    योजनाएँ।"
+                </p>
+                <p class="verse-reference">— यिर्मयाह 29:11</p>
+                <button class="share-btn">
+                    <ion-icon name="share-social"></ion-icon>
+                    Share Verse
+                </button>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="section-header">
+                <h2>Your Progress</h2>
+                <a href="#" class="view-all">View All</a>
+            </div>
+
+            <div class="progress-grid">
+                <!-- My Journey -->
+                <div class="progress-card" onclick="navigateTo('dashboard.html')">
+                    <div class="progress-icon primary">
+                        <ion-icon name="trending-up"></ion-icon>
+                    </div>
+                    <div class="progress-info">
+                        <p class="progress-subtitle">Day 12</p>
+                        <p class="progress-title">My Journey</p>
+                        <p class="progress-desc">Walking in Faith</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+
+                <!-- Songs -->
+                <div class="progress-card" onclick="navigateTo('../pwa/index.html')">
+                    <div class="progress-icon secondary">
+                        <ion-icon name="musical-notes"></ion-icon>
+                    </div>
+                    <div class="progress-info">
+                        <p class="progress-subtitle">350+ गीत</p>
+                        <p class="progress-title">Worship</p>
+                        <p class="progress-desc">Hindi Songs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-grid">
+                <!-- Study/Catechism -->
+                <div class="progress-card" onclick="navigateTo('../pwa/catechism.html')">
+                    <div class="progress-icon accent">
+                        <ion-icon name="book"></ion-icon>
+                    </div>
+                    <div class="progress-info">
+                        <p class="progress-subtitle">धर्मशिक्षा</p>
+                        <p class="progress-title">Study</p>
+                        <p class="progress-desc">Catechism</p>
+                    </div>
+                </div>
+
+                <!-- Bible Quiz -->
+                <div class="progress-card" onclick="navigateTo('quiz.html')">
+                    <div class="progress-icon quiz">
+                        <ion-icon name="help-circle"></ion-icon>
+                    </div>
+                    <div class="progress-info">
+                        <p class="progress-subtitle">प्रश्नोत्तरी</p>
+                        <p class="progress-title">Bible Quiz</p>
+                        <p class="progress-desc">Test Knowledge</p>
+                    </div>
+                    <span class="new-badge">NEW</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

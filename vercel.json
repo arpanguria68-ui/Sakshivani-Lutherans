@@ -1,13 +1,30 @@
 {
     "version": 2,
     "public": true,
-    "buildCommand": "echo 'No build needed for static PWA'",
-    "outputDirectory": "pwa",
+    "buildCommand": "echo 'No build needed for static sites'",
     "cleanUrls": true,
     "trailingSlash": false,
+    "rewrites": [
+        {
+            "source": "/dashboard/(.*)",
+            "destination": "/dashboard-web/$1"
+        },
+        {
+            "source": "/dashboard",
+            "destination": "/dashboard-web/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/pwa/$1"
+        },
+        {
+            "source": "/",
+            "destination": "/pwa/index.html"
+        }
+    ],
     "headers": [
         {
-            "source": "/sw.js",
+            "source": "/pwa/sw.js",
             "headers": [
                 {
                     "key": "Cache-Control",
@@ -20,7 +37,7 @@
             ]
         },
         {
-            "source": "/manifest.json",
+            "source": "/(.*)/manifest.json",
             "headers": [
                 {
                     "key": "Content-Type",

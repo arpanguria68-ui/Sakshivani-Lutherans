@@ -1,0 +1,16 @@
+{
+    "name": "Sakshi Vani Dashboard",
+    "short_name": "Dashboard",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#0F1419",
+    "theme_color": "#5B8DEE",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/3209/3209998.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

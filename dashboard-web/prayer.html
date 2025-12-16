@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Tracker - Sakshi Vani</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-display);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface);
+            color: var(--text-display);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .verse-quote {
+            background: linear-gradient(135deg, rgba(91, 141, 238, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+        }
+
+        .verse-quote p {
+            font-family: 'Noto Serif Devanagari', serif;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .verse-quote cite {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #4A7DDD;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(91, 141, 238, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+            Back
+        </a>
+
+        <h1 class="greeting">प्रार्थना लॉग करें</h1>
+        <p class="tagline">Log Prayer</p>
+
+        <form id="prayer-form">
+            <div class="form-group">
+                <label>Time</label>
+                <div class="button-group">
+                    <button type="button" class="option-btn" data-time="morning">Morning</button>
+                    <button type="button" class="option-btn" data-time="evening">Evening</button>
+                    <button type="button" class="option-btn selected" data-time="anytime">Anytime</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Type</label>
+                <div class="button-group">
+                    <button type="button" class="option-btn selected" data-type="personal">Personal</button>
+                    <button type="button" class="option-btn" data-type="intercessory">Intercessory</button>
+                </div>
+                <div class="button-group" style="margin-top: 8px;">
+                    <button type="button" class="option-btn" data-type="thanksgiving">Thanksgiving</button>
+                    <button type="button" class="option-btn" data-type="repentance">Repentance</button>
+                </div>
+            </div>
+
+            <div class="verse-quote">
+                <p>"प्रार्थना में अटल रहो और धन्यवाद के साथ उसमें जागते रहो।"</p>
+                <cite>- कुलुसियों 4:2</cite>
+            </div>
+
+            <button type="submit" class="submit-btn">Log Prayer</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let selectedTime = 'anytime';
+        let selectedType = 'personal';
+
+        // Time selection
+        document.querySelectorAll('[data-time]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-time]').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTime = btn.dataset.time;
+            });
+        });
+
+        // Type selection
+        document.querySelectorAll('[data-type]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedType = btn.dataset.type;
+            });
+        });
+
+        // Form submission
+        document.getElementById('prayer-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            trackingStore.addPrayerLog({
+                time: selectedTime,
+                type: selectedType
+            });
+
+            alert('Prayer logged successfully! 🙏');
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+
+</html>
