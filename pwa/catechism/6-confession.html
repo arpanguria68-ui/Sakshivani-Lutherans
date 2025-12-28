@@ -1,67 +1,212 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6. पाप स्वीकार (Confession) | धर्मशिक्षा</title>
+    <title>6. पाप स्वीकार (Confession) | Sakshi Vani</title>
+    <link rel="stylesheet" href="../../shared/theme.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./catechism-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Serif Devanagari', serif; line-height: 1.8; background: #fdfbf7; color: #2c3e50; margin: 0; padding: 0; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1.5rem; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
-        
-        /* Typography */
-        h2, h3, h4 { font-family: 'Noto Sans Devanagari', sans-serif; color: #667eea; }
-        h2 { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-top: 30px; }
-        h3.sub-heading { color: #764ba2; margin-top: 40px; background: #f3e5f5; padding: 10px; border-radius: 8px; }
-        h4.question-heading { color: #555; margin-top: 20px; font-weight: bold; }
-        
-        /* Elements */
-        .answer-text { background: #f0f4f8; padding: 15px; border-left: 5px solid #667eea; margin: 15px 0; border-radius: 5px; }
-        .duties-list { background: #e0f2f1; padding: 20px 20px 20px 40px; border-radius: 10px; margin: 20px 0; }
-        .duties-list li { margin-bottom: 10px; }
-        .numbered-item { background: #fff8e1; padding: 10px; border-left: 4px solid #ffb300; margin: 10px 0; }
-        .standout-text { font-weight: bold; font-size: 1.1em; color: #2c3e50; margin: 20px 0; }
-        
-        /* Navigation */
-        .toc-list { list-style: none; padding: 0; }
-        .toc-list li { margin: 15px 0; }
-        .toc-list a { display: block; padding: 15px; background: white; border-radius: 10px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; border-left: 5px solid #667eea; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .toc-list a:hover { transform: translateX(5px); background: #f8f9fa; }
-        
-        .page-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; gap: 10px; }
-        .nav-button { flex: 1; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .home-btn { background: #7f8c8d; flex: 0 0 50px; font-size: 1.2rem; }
-        .prev-btn { background: #667eea; }
-        .next-btn { background: #764ba2; }
-        
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
+
 <body>
-    <div class="header">
-        <h1>6. पाप स्वीकार (Confession)</h1>
+    <!-- Standard Header with Back Button -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="../catechism.html" aria-label="Back" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1>6. पाप स्वीकार</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container" style="padding: 20px;">
+        <!-- Introduction Card -->
+        <div class="intro-card">
+            <div class="intro-label">परिचय (INTRODUCTION)</div>
+            <div class="intro-text">
+                पाप स्वीकार और क्षमा (Confession and Absolution) के विषय में मसीही शिक्षा।
+            </div>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="accordion-list">
+            <!-- 1st Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">1</div>
+                    <div class="header-text">
+                        <span class="sub-label">पहला भाग</span>
+                        <span class="main-title">पाप स्वीकार का स्वरूप</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>पाप स्वीकार क्या है?</strong></p>
+                        <p>पाप स्वीकार में दो विषय हैं: पहला पाप मान लेना, दूसरा पुरोहित से ऐसे पाप का क्षमा ग्रहण करना
+                            जैसे ईश्वर से, और संदेह न करना परन्तु यह दृढ़ विश्वास रखना कि इस पाप क्षमा के द्वारा
+                            स्वर्गवासी ईश्वर के सम्मुख पापमोक्षण प्राप्त हुआ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2nd Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">2</div>
+                    <div class="header-text">
+                        <span class="sub-label">दूसरा भाग</span>
+                        <span class="main-title">पापों की पहचान</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>किन-किन पापों को स्वीकार करना चाहिए?</strong></p>
+                        <p>ईश्वर के सामने अपने को वरन सब अज्ञात पापों को भी दोषी जानना चाहिए, जैसा हम प्रभु की प्रार्थना
+                            में करते हैं। तथापि पुरोहित के सामने हमें केवल उन पापों को मान लेना उचित है जो हम जानते और
+                            मन में अनुभव करते हैं।</p>
+                        <p class="standout-text"><strong>वे कौन-कौन हैं?</strong></p>
+                        <p>दस आज्ञाओं के अनुसार अपने जीवन की दशा परख। चाहे तू माता-पिता, पुत्र-पुत्री, स्वामी, घरनी या
+                            दास हो, चाहे तू अनाज्ञाकारी, अविश्वस्त, आलसी हुआ हो, चाहे तूने वचन अथवा कर्म से किसी को दुःख
+                            दिया हो, चाहे किसी की चोरी अथवा आलस और ढिलाई से हानि की हो।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3rd Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">3</div>
+                    <div class="header-text">
+                        <span class="sub-label">तीसरा भाग</span>
+                        <span class="main-title">कुंजियों का अधिकार</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>कुंजियों का अधिकार क्या है?</strong></p>
+                        <p>यह मण्डली का अद्भुत अधिकार है जो ख्रिस्त ने पृथ्वी पर मण्डली को सौंप दिया है यथा पश्चातापी
+                            पापियों का पाप क्षमा करना परन्तु अपश्चात्तापियों का पाप जब तक वे पश्चात्ताप न करें तब तक रख
+                            छोड़ना।</p>
+                        <p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
+                        <p>संत योहन अपने मंगल समाचार के <em style="font-style:normal; color:var(--accent)">20 वें पर्व
+                                के 22 वें पद</em> में यों लिखता है कि "प्रभु यीशु ने फूंक दिया और अपने शिष्यों से कहा,
+                            'पवित्र आत्मा लो, जिनके पाप तुम क्षमा करो वे उनके लिए क्षमा किये जाते हैं, जिनके तुम रखो वे
+                            रखे हुए हैं'।"</p>
+                        <p class="standout-text"><strong>इस वचन को सुनकर तुम क्या विश्वास करते हो?</strong></p>
+                        <p>हम विश्वास करते हैं कि ख्रिस्त के बुलाए हुए सेवक जो कुछ उसकी ईश्वरीय आज्ञानुसार हमसे करते हैं
+                            अर्थात् - विशेष कर जब वे प्रकट और अपश्चात्तापी पापियों को ख्रिस्तीय मण्डली से निकालते और
+                            उनको जो अपने पापों के लिए पश्चात्ताप करते और सुधारने चाहते हैं, फिर क्षमा ग्रहण करते हैं तो
+                            - यह स्वर्ग में ऐसा पक्का और निश्चय है मानो कि हमारा प्रिय प्रभु यीशु आप ही हमसे ऐसा करता
+                            है।</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-    <div class="container">
-        <h3 class="sub-heading">पाप स्वीकार का स्वरूप</h3>
-<p class="standout-text"><strong>पाप स्वीकार क्या है?</strong></p>
-<div class="answer-text"><p>पाप स्वीकार में दो विषय हैं: पहला पाप मान लेना, दूसरा पुरोहित से ऐसे पाप का क्षमा ग्रहण करना जैसे ईश्वर से, और संदेह न करना परन्तु यह दृढ़ विश्वास रखना कि इस पाप क्षमा के द्वारा स्वर्गवासी ईश्वर के सम्मुख पापमोक्षण प्राप्त हुआ।</p></div>
-<h3 class="sub-heading">पापों की पहचान</h3>
-<p class="standout-text"><strong>किन-किन पापों को स्वीकार करना चाहिए?</strong></p>
-<div class="answer-text"><p>ईश्वर के सामने अपने को वरन सब अज्ञात पापों को भी दोषी जानना चाहिए, जैसा हम प्रभु की प्रार्थना में करते हैं। तथापि पुरोहित के सामने हमें केवल उन पापों को मान लेना उचित है जो हम जानते और मन में अनुभव करते हैं।</p></div>
-<p class="standout-text"><strong>वे कौन-कौन हैं?</strong></p>
-<div class="answer-text"><p>दस आज्ञाओं के अनुसार अपने जीवन की दशा परख। चाहे तू माता-पिता, पुत्र-पुत्री, स्वामी, घरनी या दास हो, चाहे तू अनाज्ञाकारी, अविश्वस्त, आलसी हुआ हो, चाहे तूने वचन अथवा कर्म से किसी को दुःख दिया हो, चाहे किसी की चोरी अथवा आलस और ढिलाई से हानि की हो।</p></div>
-<h3 class="sub-heading">कुंजियों का अधिकार</h3>
-<p class="standout-text"><strong>कुंजियों का अधिकार क्या है?</strong></p>
-<div class="answer-text"><p>यह मण्डली का अद्भुत अधिकार है जो ख्रिस्त ने पृथ्वी पर मण्डली को सौंप दिया है यथा पश्चातापी पापियों का पाप क्षमा करना परन्तु अपश्चात्तापियों का पाप जब तक वे पश्चात्ताप न करें तब तक रख छोड़ना।</p></div>
-<p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
-<div class="answer-text"><p>संत योहन अपने मंगल समाचार के 20 वें पर्व के 22 वें पद में यों लिखता है कि "प्रभु यीशु ने फूंक दिया और अपने शिष्यों से कहा, 'पवित्र आत्मा लो, जिनके पाप तुम क्षमा करो वे उनके लिए क्षमा किये जाते हैं, जिनके तुम रखो वे रखे हुए हैं'।"</p></div>
-<p class="standout-text"><strong>इस वचन को सुनकर तुम क्या विश्वास करते हो?</strong></p>
-<div class="answer-text"><p>हम विश्वास करते हैं कि ख्रिस्त के बुलाए हुए सेवक जो कुछ उसकी ईश्वरीय आज्ञानुसार हमसे करते हैं अर्थात् - विशेष कर जब वे प्रकट और अपश्चात्तापी पापियों को ख्रिस्तीय मण्डली से निकालते और उनको जो अपने पापों के लिए पश्चात्ताप करते और सुधारने चाहते हैं, फिर क्षमा ग्रहण करते हैं तो - यह स्वर्ग में ऐसा पक्का और निश्चय है मानो कि हमारा प्रिय प्रभु यीशु आप ही हमसे ऐसा करता है।</p></div>
+
+    <!-- Floating Play Button -->
+    <button class="play-fab" aria-label="Play Audio" onclick="togglePlay()">
+        <ion-icon name="play" id="play-icon"></ion-icon>
+    </button>
+
+    <!-- Bottom Player / Navigation -->
+    <div class="bottom-player">
+        <div class="next-chapter">
+            <span class="next-label">NEXT APP</span>
+            <a href="7-app1.html" class="next-title">परिशिष्ट 1: प्रश्नोत्तर</a>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn"><ion-icon name="play-skip-back"></ion-icon></button>
+            <button class="control-btn"
+                style="width:40px; height:40px; background:white; color:black; border-radius:50%;"
+                onclick="togglePlay()">
+                <ion-icon name="pause" id="bar-play-icon" style="display:none"></ion-icon>
+                <ion-icon name="play" id="bar-pause-icon"></ion-icon>
+            </button>
+            <button class="control-btn"><ion-icon name="play-skip-forward"></ion-icon></button>
+            <button class="control-btn"><ion-icon name="text"></ion-icon></button>
+        </div>
     </div>
-    <div class="page-nav"><a href="../catechism.html" class="nav-button home-btn">🏠 मुख्य (Home)</a> <a href="5-communion.html" class="nav-button prev-btn">← पिछला (Prev)</a> <a href="7-app1.html" class="nav-button next-btn">अगला (Next) →</a></div>
+
+    <script src="../../shared/theme.js"></script>
+    <script src="../../shared/reader.js"></script>
+    <script>
+        function toggleAccordion(item) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+            item.classList.toggle('active');
+        }
+
+        let isPlaying = false;
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const playIcon = document.getElementById('play-icon');
+            const barPlay = document.getElementById('bar-play-icon');
+            const barPause = document.getElementById('bar-pause-icon');
+
+            if (isPlaying) {
+                playIcon.name = 'pause';
+                barPlay.style.display = 'block';
+                barPause.style.display = 'none';
+                if (window.speechSynthesis) {
+                    const activeItem = document.querySelector('.accordion-item.active .accordion-content');
+                    const textToRead = activeItem ? activeItem.innerText : document.querySelector('.intro-text').innerText;
+                    const u = new SpeechSynthesisUtterance(textToRead);
+                    u.lang = 'hi-IN';
+                    window.speechSynthesis.speak(u);
+                }
+            } else {
+                playIcon.name = 'play';
+                barPlay.style.display = 'none';
+                barPause.style.display = 'block';
+                window.speechSynthesis.cancel();
+            }
+        }
+    </script>
+    <style>
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </body>
+
 </html>

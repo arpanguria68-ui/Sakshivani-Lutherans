@@ -1,22 +1,10 @@
-/* Root Variables */
+/* Root Variables - Updated for Vibrant Light Theme */
 :root {
-    --primary: #5B8DEE;
-    --secondary: #A78BFA;
-    --accent: #F59E0B;
-    --quiz: #8B5CF6;
-    --success: #10B981;
-    --danger: #F87171;
-
-    --bg-start: #0F1419;
-    --bg-end: #1A1F2E;
-    --surface: #1E2430;
-    --text-display: #FFFFFF;
-    --text-muted: #9CA3AF;
-
+    /* Inherit core colors from shared/theme.css where possible, override specific dashboard needs */
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
 
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -24,28 +12,135 @@
     --spacing-xl: 32px;
 }
 
-[data-theme="light"] {
-    --bg-start: #F3F4F6;
-    --bg-end: #E5E7EB;
-    --surface: #FFFFFF;
-    --text-display: #1F2937;
-    --text-muted: #6B7280;
-}
-
 /* Reset & Base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 body {
     font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
-    background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
-    color: var(--text-display);
-    min-height: 100vh;
+    background-color: var(--bg-primary);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    color: var(--text-primary);
     line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 40px;
 }
+
+/* Dark Mode Overrides for specific Dashboard elements */
+[data-theme="dark"] .reader-header {
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .nav-select,
+[data-theme="dark"] .chapter-nav-btn,
+[data-theme="dark"] .lang-toggle,
+[data-theme="dark"] .chapter-chip {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .sidebar {
+    background: rgba(15, 23, 42, 0.9);
+    border-right: 1px solid var(--border);
+}
+
+[data-theme="dark"] .search-input {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .book-list-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .verse-block {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .verse-block:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .chapter-title {
+    color: var(--text-display);
+    border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .verse-num {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .feature-card {
+    background: var(--bg-secondary);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .feature-card:hover {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .greeting-section {
+    background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+}
+
+[data-theme="dark"] .verse-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .activity-card {
+    background: var(--bg-secondary);
+    border-color: var(--border);
+}
+
+/* Ensure text colors in dashboard verify against dark background */
+[data-theme="dark"] .user-name,
+[data-theme="dark"] .stat-value {
+    color: var(--text-display);
+}
+
+/* Explicit overrides for Feature Cards to ensure readability */
+[data-theme="dark"] .feature-card h3 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .feature-card p {
+    color: #cbd5e1 !important;
+    /* text-secondary */
+}
+
+/* Ensure icons remain visible */
+[data-theme="dark"] .feature-card .feature-icon {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff;
+}
+
+/* Greeting Section Text */
+/* Greeting Section Text - Ensure white text on brand gradient */
+[data-theme="dark"] .greeting-section,
+.greeting-section {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .greeting-section h2,
+[data-theme="dark"] .greeting-section p,
+[data-theme="dark"] .verse-text,
+[data-theme="dark"] .verse-reference,
+.greeting-section h2,
+.greeting-section p {
+    color: #ffffff !important;
+}
+
 
 .container {
     max-width: 600px;
@@ -60,6 +155,11 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-lg);
+    background: var(--surface-glass);
+    /* Glassmorphic header for dashboard too? Or just keep simple */
+    padding: 16px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
 }
 
 .header-left {
@@ -69,26 +169,29 @@ body {
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
-    background: rgba(91, 141, 238, 0.3);
+    width: 48px;
+    height: 48px;
+    background: var(--accent);
+    /* Gold for Avatar highlight */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary);
+    color: var(--brand-dark);
+    /* Dark text on Gold */
     font-size: 20px;
+    box-shadow: 0 4px 10px rgba(255, 209, 102, 0.3);
 }
 
 .welcome-text {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .user-name {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
     color: var(--text-display);
 }
 
@@ -99,66 +202,67 @@ body {
 }
 
 .streak-badge {
-    background: rgba(91, 141, 238, 0.2);
-    color: var(--primary);
+    background: #FFF;
+    color: var(--accent);
     padding: 6px 12px;
-    border-radius: var(--radius-md);
+    border-radius: 100px;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 800;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .icon-btn {
-    background: transparent;
-    border: none;
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     color: var(--text-muted);
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-card);
 }
 
 .icon-btn:hover {
-    color: var(--primary);
-    transform: scale(1.1);
-}
-
-.icon-btn-secondary {
-    background: transparent;
-    border: none;
-    color: var(--text-display);
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.icon-btn-secondary:hover {
-    transform: scale(1.1);
+    color: var(--primary-foreground);
+    background: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
 }
 
 /* Typography */
 .greeting {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     margin-bottom: 4px;
     color: var(--text-display);
+    padding: 0 8px;
 }
 
 .tagline {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--text-muted);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    padding: 0 8px;
 }
 
 /* Verse Card */
 .verse-card {
     background: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    padding: 24px;
     margin-bottom: var(--spacing-xl);
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .verse-card::before {
@@ -168,51 +272,36 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(91, 141, 238, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(46, 49, 146, 0.05) 0%, rgba(27, 255, 255, 0.05) 100%);
     pointer-events: none;
 }
 
-.verse-card>* {
-    position: relative;
-    z-index: 1;
-}
-
-.verse-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
 .verse-tag {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
+    background: #FFF;
+    padding: 6px 16px;
+    border-radius: 100px;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.5px;
-    color: var(--text-display);
+    color: var(--accent);
+    box-shadow: var(--shadow-card);
 }
 
 .verse-text {
     font-family: 'Noto Serif Devanagari', serif;
-    font-size: 20px;
-    line-height: 32px;
-    margin: 16px 0 12px;
+    font-size: 22px;
+    line-height: 1.6;
+    margin: 20px 0 16px;
     color: var(--text-display);
-}
-
-.verse-reference {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 16px;
+    font-weight: 600;
 }
 
 .share-btn {
     background: var(--primary);
     color: white;
+    /* White text on Indigo */
     border: none;
-    padding: 12px 24px;
+    padding: 14px 24px;
     border-radius: var(--radius-md);
     font-weight: 700;
     cursor: pointer;
@@ -221,75 +310,49 @@ body {
     justify-content: center;
     gap: 8px;
     width: 100%;
-    font-size: 14px;
+    font-size: 15px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(250, 204, 21, 0.2);
 }
 
 .share-btn:hover {
-    background: #4A7DDD;
+    background: #FDE047;
+    /* Lighter yellow */
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(91, 141, 238, 0.3);
-}
-
-.share-btn ion-icon {
-    font-size: 16px;
-}
-
-/* Section Header */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.section-header h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text-display);
-}
-
-.view-all {
-    font-size: 14px;
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.view-all:hover {
-    color: var(--secondary);
+    box-shadow: 0 8px 16px rgba(250, 204, 21, 0.3);
 }
 
 /* Progress Grid */
 .progress-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .progress-card {
     background: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
+    padding: 20px;
     min-height: 140px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .progress-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-soft);
 }
 
 .progress-icon {
     width: 48px;
     height: 48px;
-    border-radius: var(--radius-md);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -297,155 +360,75 @@ body {
     margin-bottom: 12px;
 }
 
-.progress-icon.primary {
-    background: rgba(91, 141, 238, 0.2);
-    color: var(--primary);
-}
-
-.progress-icon.secondary {
-    background: rgba(167, 139, 250, 0.2);
-    color: var(--secondary);
-}
-
-.progress-icon.accent {
-    background: rgba(245, 158, 11, 0.2);
-    color: var(--accent);
-}
-
-.progress-icon.quiz {
-    background: rgba(139, 92, 246, 0.2);
-    color: var(--quiz);
-}
-
-.progress-info {
-    flex: 1;
-}
-
-.progress-subtitle {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.progress-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 4px 0 2px;
-    color: var(--text-display);
-}
-
-.progress-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.progress-bar {
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    margin-top: 8px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 2px;
-    transition: width 0.3s ease;
-}
-
-.new-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--danger);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 700;
-}
-
 /* Dashboard Page Styles */
-.dashboard-container {
-    max-width: 800px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: var(--spacing-xl);
-}
-
 .stat-card {
     background: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    padding: 24px;
     text-align: center;
     transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .stat-value {
     font-size: 36px;
-    font-weight: 700;
+    font-weight: 800;
     margin: 12px 0 8px;
-}
-
-.stat-label {
-    font-size: 14px;
-    color: var(--text-muted);
+    color: var(--text-display);
 }
 
 .activity-card {
     background: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    margin-bottom: 16px;
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
 }
 
-.activity-card h3 {
-    font-size: 18px;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-display);
+.activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
 }
 
 .activity-btn {
     background: var(--primary);
     color: white;
+    /* White text on Indigo */
     border: none;
-    padding: 12px 24px;
-    border-radius: var(--radius-md);
-    font-weight: 600;
+    padding: 14px 24px;
+    border-radius: 100px;
+    /* Pill shape */
+    font-weight: 700;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     transition: all 0.3s ease;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
+    box-shadow: 0 4px 6px rgba(250, 204, 21, 0.15);
 }
 
 .activity-btn:hover {
-    background: #4A7DDD;
+    background: #FDE047;
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(91, 141, 238, 0.3);
+    box-shadow: 0 8px 12px rgba(250, 204, 21, 0.25);
 }
+
 
 .activity-btn ion-icon {
     font-size: 18px;
 }
 
 .back-button {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-display);
+    background: white;
+    color: var(--text-muted);
     border: none;
     padding: 10px 20px;
-    border-radius: var(--radius-md);
+    border-radius: 100px;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
@@ -454,10 +437,15 @@ body {
     margin-bottom: var(--spacing-lg);
     transition: all 0.3s ease;
     text-decoration: none;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .back-button:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--surface);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    color: var(--primary-foreground);
 }
 
 /* Responsive */
@@ -510,4 +498,22 @@ body {
 
 .progress-card:nth-child(4) {
     animation-delay: 0.4s;
+}
+
+/* Greeting Section Base Style */
+.greeting-section {
+    background: var(--brand-gradient);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    margin-bottom: var(--spacing-xl);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    color: white;
+}
+
+/* Ensure no conflict with dark mode override if it's the same */
+[data-theme="dark"] .greeting-section {
+    background: var(--brand-gradient);
+    /* Use brand gradient in dark mode too */
 }

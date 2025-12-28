@@ -1,74 +1,234 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4. बपतिस्मा (Holy Baptism) | धर्मशिक्षा</title>
+    <title>4. बपतिस्मा (Holy Baptism) | Sakshi Vani</title>
+    <link rel="stylesheet" href="../../shared/theme.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./catechism-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Serif Devanagari', serif; line-height: 1.8; background: #fdfbf7; color: #2c3e50; margin: 0; padding: 0; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1.5rem; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
-        
-        /* Typography */
-        h2, h3, h4 { font-family: 'Noto Sans Devanagari', sans-serif; color: #667eea; }
-        h2 { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-top: 30px; }
-        h3.sub-heading { color: #764ba2; margin-top: 40px; background: #f3e5f5; padding: 10px; border-radius: 8px; }
-        h4.question-heading { color: #555; margin-top: 20px; font-weight: bold; }
-        
-        /* Elements */
-        .answer-text { background: #f0f4f8; padding: 15px; border-left: 5px solid #667eea; margin: 15px 0; border-radius: 5px; }
-        .duties-list { background: #e0f2f1; padding: 20px 20px 20px 40px; border-radius: 10px; margin: 20px 0; }
-        .duties-list li { margin-bottom: 10px; }
-        .numbered-item { background: #fff8e1; padding: 10px; border-left: 4px solid #ffb300; margin: 10px 0; }
-        .standout-text { font-weight: bold; font-size: 1.1em; color: #2c3e50; margin: 20px 0; }
-        
-        /* Navigation */
-        .toc-list { list-style: none; padding: 0; }
-        .toc-list li { margin: 15px 0; }
-        .toc-list a { display: block; padding: 15px; background: white; border-radius: 10px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; border-left: 5px solid #667eea; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .toc-list a:hover { transform: translateX(5px); background: #f8f9fa; }
-        
-        .page-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; gap: 10px; }
-        .nav-button { flex: 1; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .home-btn { background: #7f8c8d; flex: 0 0 50px; font-size: 1.2rem; }
-        .prev-btn { background: #667eea; }
-        .next-btn { background: #764ba2; }
-        
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
+
 <body>
-    <div class="header">
-        <h1>4. बपतिस्मा (Holy Baptism)</h1>
+    <!-- Standard Header with Back Button -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="../catechism.html" aria-label="Back" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1>4. बपतिस्मा</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container" style="padding: 20px;">
+        <!-- Introduction Card -->
+        <div class="intro-card">
+            <div class="intro-label">परिचय (INTRODUCTION)</div>
+            <div class="intro-text">
+                पवित्र बपतिस्मा क्या है और इसका हमारे जीवन में क्या महत्व है?
+            </div>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="accordion-list">
+            <!-- 1st Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">1</div>
+                    <div class="header-text">
+                        <span class="sub-label">पहला भाग</span>
+                        <span class="main-title">बपतिस्मा का स्वरूप</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>बपतिस्मा क्या है?</strong></p>
+                        <p>बपतिस्मा केवल साधारण जल नहीं, परन्तु ईश्वर की आज्ञा और वचन से जोड़ा और मिलाया हुआ जल है।</p>
+                        <p class="standout-text"><strong>वह ईश्वर का कौन वचन है?</strong></p>
+                        <p>वही वचन है जो हमारा प्रभु यीशु ख्रिस्त <em
+                                style="font-style:normal; color:var(--accent)">मत्ती 28:19</em> में कहता है कि "तुम जाके
+                            सब देशों के लोगों को शिष्य करो और उन्हें पिता, पुत्र और पवित्र आत्मा के नाम से बपतिस्मा दो।"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2nd Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">2</div>
+                    <div class="header-text">
+                        <span class="sub-label">दूसरा भाग</span>
+                        <span class="main-title">बपतिस्मा का लाभ</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>बपतिस्मा क्या फल देता है?</strong></p>
+                        <p>वह पापों की क्षमा करता, मृत्यु और शैतान से छुड़ाता और हरएक को जो ईश्वर के वचन और प्रतिज्ञा पर
+                            विश्वास करता है, अनन्त सुख देता है।</p>
+                        <p class="standout-text"><strong>ईश्वर का वचन और प्रतिज्ञा क्या है?</strong></p>
+                        <p>वही है जो हमारे प्रभु यीशु, <em style="font-style:normal; color:var(--accent)">मार्क के
+                                16:16</em> में कहता है कि "जो विश्वास करे और बपतिस्मा लेवे सो त्राण पावेगा परन्तु जो
+                            विश्वास न करे सो दण्ड के योग्य ठहराया जायेगा।"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3rd Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">3</div>
+                    <div class="header-text">
+                        <span class="sub-label">तीसरा भाग</span>
+                        <span class="main-title">जल और वचन</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>जल क्यों कर ऐसे बड़े कार्य कर सकता है?</strong></p>
+                        <p>जल तो ऐसे बड़े कार्य नहीं करता है परन्तु ईश्वर का वचन जो जल से मिला और उससे लगा हुआ है और
+                            विश्वास जो जल से मिले हुए ईश्वर के वचन पर प्रीति रखता है। क्योंकि ईश्वर के वचन के बिना जल
+                            केवल साधारण जल होकर बपतिस्मा नहीं है, परन्तु ईश्वर के वचन के संग वह बपतिस्मा है। अर्थात् दया
+                            और जीवन का त्राणकारी जल और पवित्र आत्मा के द्वारा नये जन्म का स्नान।</p>
+                        <p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
+                        <p>जैसे पावल <em style="font-style:normal; color:var(--accent)">तीतुस के 3:5</em> में कहता है कि
+                            "नये जन्म के स्नान के द्वारा और पवित्र आत्मा से नये किये जाने के द्वारा उसने हमें बचाया, जिस
+                            आत्मा को उसने हमारे त्राणकर्त्ता यीशु ख्रिस्त के द्वारा हमों पर अधिकाई से उंडेला। इसलिए कि
+                            हम उसके अनुग्रह से धर्मी ठहराये जाके अनन्त जीवन की आशा के अनुसार अधिकारी बन जावें, यह वचन
+                            विश्वास योग्य है।"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4th Part -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">4</div>
+                    <div class="header-text">
+                        <span class="sub-label">चौथा भाग</span>
+                        <span class="main-title">बपतिस्मा का महत्व</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>परन्तु ऐसे जलाभिषेक का क्या अर्थ है?</strong></p>
+                        <p>उसका यह अर्थ है पुराना आदम जो अब तक हम में है, प्रतिदिन के पश्चाताप और मन फिराने से डुबाया
+                            जाकर सब पाप और कुअभिलाषा सहित मरे, और दिन-दिन नया मनुष्य निकलता और पुनर्जीवित होता रहे जो
+                            धर्म और पवित्रता से सदालों ईश्वर के सम्मुख जीवे।</p>
+                        <p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
+                        <p>सन्त पावल <em style="font-style:normal; color:var(--accent)">रोमियों के 6:4</em> में कहता है
+                            कि "उसकी मृत्यु का बपतिस्मा लेने से हम उसके संग गाड़े गये कि जैसे ख्रिस्त पिता के ऐश्वर्य से
+                            मृतकों में से उठाया गया, वैसे हम भी जीवन की सी नई चाल चलें।"</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-    <div class="container">
-        <h3 class="sub-heading">पहला: बपतिस्मा का स्वरूप</h3>
-<p class="standout-text"><strong>बपतिस्मा क्या है?</strong></p>
-<div class="answer-text"><p>बपतिस्मा केवल साधारण जल नहीं, परन्तु ईश्वर की आज्ञा और वचन से जोड़ा और मिलाया हुआ जल है।</p></div>
-<p class="standout-text"><strong>वह ईश्वर का कौन वचन है?</strong></p>
-<div class="answer-text"><p>वही वचन है जो हमारा प्रभु यीशु ख्रिस्त *मत्ती 28:19* में कहता है कि "तुम जाके सब देशों के लोगों को शिष्य करो और उन्हें पिता, पुत्र और पवित्र आत्मा के नाम से बपतिस्मा दो।"</p></div>
-<h3 class="sub-heading">दूसरा: बपतिस्मा का लाभ</h3>
-<p class="standout-text"><strong>बपतिस्मा क्या फल देता है?</strong></p>
-<div class="answer-text"><p>वह पापों की क्षमा करता, मृत्यु और शैतान से छुड़ाता और हरएक को जो ईश्वर के वचन और प्रतिज्ञा पर विश्वास करता है, अनन्त सुख देता है।</p></div>
-<p class="standout-text"><strong>ईश्वर का वचन और प्रतिज्ञा क्या है?</strong></p>
-<div class="answer-text"><p>वही है जो हमारे प्रभु यीशु, *मार्क के 16:16* में कहता है कि "जो विश्वास करे और बपतिस्मा लेवे सो त्राण पावेगा परन्तु जो विश्वास न करे सो दण्ड के योग्य ठहराया जायेगा।"</p></div>
-<h3 class="sub-heading">तीसरा: जल और वचन</h3>
-<p class="standout-text"><strong>जल क्यों कर ऐसे बड़े कार्य कर सकता है?</strong></p>
-<div class="answer-text"><p>जल तो ऐसे बड़े कार्य नहीं करता है परन्तु ईश्वर का वचन जो जल से मिला और उससे लगा हुआ है और विश्वास जो जल से मिले हुए ईश्वर के वचन पर प्रीति रखता है।</p></div>
-<div class="answer-text"><p>क्योंकि ईश्वर के वचन के बिना जल केवल साधारण जल होकर बपतिस्मा नहीं है, परन्तु ईश्वर के वचन के संग वह बपतिस्मा है। अर्थात् दया और जीवन का त्राणकारी जल और पवित्र आत्मा के द्वारा नये जन्म का स्नान।</p></div>
-<p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
-<div class="answer-text"><p>जैसे पावल *तीतुस के 3:5* में कहता है कि "नये जन्म के स्नान के द्वारा और पवित्र आत्मा से नये किये जाने के द्वारा उसने हमें बचाया, जिस आत्मा को उसने हमारे त्राणकर्त्ता यीशु ख्रिस्त के द्वारा हमों पर अधिकाई से उंडेला।</p></div>
-<div class="answer-text"><p>इसलिए कि हम उसके अनुग्रह से धर्मी ठहराये जाके अनन्त जीवन की आशा के अनुसार अधिकारी बन जावें, यह वचन विश्वास योग्य है।"</p></div>
-<h3 class="sub-heading">चौथा: बपतिस्मा का महत्व</h3>
-<p class="standout-text"><strong>परन्तु ऐसे जलाभिषेक का क्या अर्थ है?</strong></p>
-<div class="answer-text"><p>उसका यह अर्थ है पुराना आदम जो अब तक हम में है, प्रतिदिन के पश्चाताप और मन फिराने से डुबाया जाकर सब पाप और कुअभिलाषा सहित मरे, और दिन-दिन नया मनुष्य निकलता और पुनर्जीवित होता रहे जो धर्म और पवित्रता से सदालों ईश्वर के सम्मुख जीवे।</p></div>
-<p class="standout-text"><strong>यह कहाँ लिखा है?</strong></p>
-<div class="answer-text"><p>सन्त पावल *रोमियों के 6:4* में कहता है कि "उसकी मृत्यु का बपतिस्मा लेने से हम उसके संग गाड़े गये कि जैसे ख्रिस्त पिता के ऐश्वर्य से मृतकों में से उठाया गया, वैसे हम भी जीवन की सी नई चाल चलें।"</p></div>
+
+    <!-- Floating Play Button -->
+    <button class="play-fab" aria-label="Play Audio" onclick="togglePlay()">
+        <ion-icon name="play" id="play-icon"></ion-icon>
+    </button>
+
+    <!-- Bottom Player / Navigation -->
+    <div class="bottom-player">
+        <div class="next-chapter">
+            <span class="next-label">NEXT CHAPTER</span>
+            <a href="5-communion.html" class="next-title">प्रभुभोज (Holy Communion)</a>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn"><ion-icon name="play-skip-back"></ion-icon></button>
+            <button class="control-btn"
+                style="width:40px; height:40px; background:white; color:black; border-radius:50%;"
+                onclick="togglePlay()">
+                <ion-icon name="pause" id="bar-play-icon" style="display:none"></ion-icon>
+                <ion-icon name="play" id="bar-pause-icon"></ion-icon>
+            </button>
+            <button class="control-btn"><ion-icon name="play-skip-forward"></ion-icon></button>
+            <button class="control-btn"><ion-icon name="text"></ion-icon></button>
+        </div>
     </div>
-    <div class="page-nav"><a href="../catechism.html" class="nav-button home-btn">🏠 मुख्य (Home)</a> <a href="3-prayer.html" class="nav-button prev-btn">← पिछला (Prev)</a> <a href="5-communion.html" class="nav-button next-btn">अगला (Next) →</a></div>
+
+    <script src="../../shared/theme.js"></script>
+    <script src="../../shared/reader.js"></script>
+    <script>
+        function toggleAccordion(item) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+            item.classList.toggle('active');
+        }
+
+        let isPlaying = false;
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const playIcon = document.getElementById('play-icon');
+            const barPlay = document.getElementById('bar-play-icon');
+            const barPause = document.getElementById('bar-pause-icon');
+
+            if (isPlaying) {
+                playIcon.name = 'pause';
+                barPlay.style.display = 'block';
+                barPause.style.display = 'none';
+                if (window.speechSynthesis) {
+                    const activeItem = document.querySelector('.accordion-item.active .accordion-content');
+                    const textToRead = activeItem ? activeItem.innerText : document.querySelector('.intro-text').innerText;
+                    const u = new SpeechSynthesisUtterance(textToRead);
+                    u.lang = 'hi-IN';
+                    window.speechSynthesis.speak(u);
+                }
+            } else {
+                playIcon.name = 'play';
+                barPlay.style.display = 'none';
+                barPause.style.display = 'block';
+                window.speechSynthesis.cancel();
+            }
+        }
+    </script>
+    <style>
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </body>
+
 </html>

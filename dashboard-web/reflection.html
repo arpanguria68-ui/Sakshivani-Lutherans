@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Reflection - Sakshi Vani</title>
+    <link rel="stylesheet" href="../shared/theme.css">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +16,73 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding-bottom: 40px;
+        }
+
+        /* Standardized Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-display);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .container {
+            padding: 24px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+        }
+
         .form-group {
             margin-bottom: 24px;
         }
@@ -24,24 +92,28 @@
             font-weight: 600;
             margin-bottom: 12px;
             color: var(--text-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
         }
 
+        /* Input Fields */
         .input-field {
             width: 100%;
             padding: 14px 16px;
-            background: var(--surface);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--background);
+            border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            color: var(--text-display);
-            font-size: 16px;
+            color: var(--text-main);
+            font-size: 1rem;
             transition: all 0.3s ease;
             font-family: 'Noto Sans Devanagari', sans-serif;
+            box-sizing: border-box;
         }
 
         .input-field:focus {
             outline: none;
             border-color: var(--quiz);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
         }
 
         textarea.input-field {
@@ -50,9 +122,10 @@
             line-height: 1.6;
         }
 
+        /* Mood Buttons */
         .button-group {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -60,16 +133,20 @@
             flex: 1;
             min-width: 60px;
             padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: var(--surface);
+            border: 1px solid var(--border);
+            background: var(--background);
             border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-size: 24px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mood-btn:hover {
+            background: var(--surface-glass);
             border-color: var(--quiz);
             transform: scale(1.05);
         }
@@ -77,27 +154,63 @@
         .mood-btn.selected {
             background: var(--quiz);
             border-color: var(--quiz);
-            transform: scale(1.1);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
+        /* Prompt Card */
+        .prompt-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            border-left: 4px solid var(--quiz);
+        }
+
+        .prompt-card h3 {
+            font-size: 0.85rem;
+            color: var(--quiz);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .prompt-card p {
+            color: var(--text-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            font-family: 'Noto Serif Devanagari', serif;
+        }
+
+        /* Verse Quote */
         .verse-quote {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+            background: var(--surface);
             padding: 20px;
             border-radius: var(--radius-lg);
             margin: 24px 0;
+            border: 1px solid var(--border);
         }
 
         .verse-quote p {
             font-family: 'Noto Serif Devanagari', serif;
-            line-height: 1.8;
-            margin-bottom: 8px;
+            line-height: 1.6;
+            margin: 0 0 8px 0;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-style: italic;
         }
 
         .verse-quote cite {
-            font-size: 14px;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--quiz);
+            font-weight: 600;
+            display: block;
+            text-align: right;
         }
 
+        /* Submit Button */
         .submit-btn {
             width: 100%;
             padding: 16px;
@@ -105,78 +218,72 @@
             color: white;
             border: none;
             border-radius: var(--radius-md);
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .submit-btn:hover {
-            background: #7C3AED;
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
-        }
-
-        .prompt-card {
-            background: var(--surface);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
-            border-left: 4px solid var(--quiz);
-        }
-
-        .prompt-card h3 {
-            font-size: 14px;
-            color: var(--quiz);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .prompt-card p {
-            color: var(--text-muted);
-            font-size: 14px;
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.5);
+            filter: brightness(1.1);
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <a href="dashboard.html" class="back-button">
-            <ion-icon name="arrow-back"></ion-icon>
-            Back
-        </a>
+    <!-- Header -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="dashboard.html" aria-label="Back" class="back-link">
+                <ion-icon name="arrow-back"></ion-icon>
+            </a>
+            <h1>दैनिक चिंतन</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
 
-        <h1 class="greeting">दैनिक चिंतन</h1>
-        <p class="tagline">Daily Reflection</p>
+    <div class="container">
 
         <div class="prompt-card">
-            <h3>Reflection Prompts</h3>
+            <h3>Reflection Prompt</h3>
             <p id="prompt-text">What is God teaching you today?</p>
         </div>
 
         <form id="reflection-form">
-            <div class="form-group">
-                <label>How are you feeling today? / आज आप कैसा महसूस कर रहे हैं?</label>
-                <div class="button-group">
-                    <button type="button" class="mood-btn" data-mood="joyful" title="Joyful">😊</button>
-                    <button type="button" class="mood-btn" data-mood="peaceful" title="Peaceful">😌</button>
-                    <button type="button" class="mood-btn" data-mood="thankful" title="Thankful">🙏</button>
-                    <button type="button" class="mood-btn" data-mood="struggling" title="Struggling">😔</button>
-                    <button type="button" class="mood-btn" data-mood="hopeful" title="Hopeful">🌟</button>
+            <div class="card">
+                <div class="form-group">
+                    <label>आज आप कैसा महसूस कर रहे हैं? (Mood)</label>
+                    <div class="button-group">
+                        <button type="button" class="mood-btn" data-mood="joyful" title="Joyful">😊</button>
+                        <button type="button" class="mood-btn" data-mood="peaceful" title="Peaceful">😌</button>
+                        <button type="button" class="mood-btn" data-mood="thankful" title="Thankful">🙏</button>
+                        <button type="button" class="mood-btn" data-mood="struggling" title="Struggling">😔</button>
+                        <button type="button" class="mood-btn" data-mood="hopeful" title="Hopeful">🌟</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Title (Optional) / शीर्षक</label>
-                <input type="text" class="input-field" id="title" placeholder="Give your reflection a title...">
-            </div>
+                <div class="form-group">
+                    <label>शीर्षक (Title) - Optional</label>
+                    <input type="text" class="input-field" id="title" placeholder="Give your reflection a title...">
+                </div>
 
-            <div class="form-group">
-                <label>Your Reflection / आपका चिंतन</label>
-                <textarea class="input-field" id="reflection"
-                    placeholder="Write your thoughts, prayers, gratitude, or what God is speaking to your heart today..."
-                    required></textarea>
+                <div class="form-group">
+                    <label>आपका चिंतन (Your Reflection)</label>
+                    <textarea class="input-field" id="reflection"
+                        placeholder="Write your thoughts, prayers, gratitude, or what God is speaking to your heart today..."
+                        required></textarea>
+                </div>
             </div>
 
             <div class="verse-quote">
@@ -184,10 +291,15 @@
                 <cite>- भजन संहिता 19:14</cite>
             </div>
 
-            <button type="submit" class="submit-btn">Save Reflection</button>
+            <button type="submit" class="submit-btn">
+                <ion-icon name="save-outline" style="font-size:1.2em;"></ion-icon>
+                Save Reflection
+            </button>
         </form>
     </div>
 
+    <!-- Scripts -->
+    <script src="../shared/theme.js"></script>
     <script src="app.js"></script>
     <script>
         let selectedMood = null;
@@ -227,15 +339,20 @@
                 return;
             }
 
-            trackingStore.addReflectionLog({
-                mood: selectedMood,
-                title: title || 'Untitled Reflection',
-                reflection,
-                prompt: randomPrompt
-            });
-
-            alert('Reflection saved successfully! ✍️');
-            window.location.href = 'dashboard.html';
+            if (window.trackingStore) {
+                trackingStore.addReflectionLog({
+                    mood: selectedMood,
+                    title: title || 'Untitled Reflection',
+                    reflection,
+                    prompt: randomPrompt
+                });
+                alert('Reflection saved successfully! ✍️');
+                window.location.href = 'dashboard.html';
+            } else {
+                console.error("Tracking store not found");
+                alert('Saved (Mock)');
+                window.location.href = 'dashboard.html';
+            }
         });
     </script>
 </body>

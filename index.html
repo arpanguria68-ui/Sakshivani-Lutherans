@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakshi Vani - साक्षी वाणी</title>
+    <meta name="description" content="Lutheran hymns and spiritual resources in Hindi">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="shared/theme.css">
+    <style>
+        :root {
+            /* Vibrant Light Theme */
+            --bg-color: #fefce8;
+            --bg-gradient: radial-gradient(circle at 20% 50%, #f0e7ff 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #fff5f5 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, #fefce8 0%, transparent 70%);
+            --primary: #FACC15;
+            --secondary: #A78BFA;
+            --accent: #FDBA74;
+            --quiz: #C084FC;
+            --text-display: #1f2937;
+            --text-muted: #6b7280;
+            --surface: rgba(255, 255, 255, 0.8);
+            --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-soft: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --font-heading: 'Noto Serif Devanagari', serif;
+            --font-ui: 'Noto Sans Devanagari', 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            background: var(--bg-color);
+            background-image: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-display);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--secondary), var(--quiz));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            font-family: var(--font-heading);
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-display);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            font-weight: 500;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 40px 32px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card.dashboard::before {
+            background: linear-gradient(90deg, var(--secondary), var(--quiz));
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .pwa .card-icon {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(253, 186, 116, 0.15));
+        }
+
+        .dashboard .card-icon {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(192, 132, 252, 0.15));
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-display);
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .card-features {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            text-align: left;
+        }
+
+        .card-features li {
+            padding: 8px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .dashboard .card-features li::before {
+            color: var(--secondary);
+        }
+
+        .card-button {
+            margin-top: 12px;
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: black;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(250, 204, 21, 0.2);
+        }
+
+        .dashboard .card-button {
+            background: linear-gradient(135deg, var(--secondary), var(--quiz));
+            color: white;
+            box-shadow: 0 4px 6px rgba(167, 139, 250, 0.2);
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            margin-top: 48px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-card {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="sun-icon">☀️</span>
+        <span class="moon-icon">🌙</span>
+    </button>
+
+    <div class="container">
+        <div class="logo">
+            <span class="logo-text">SV</span>
+        </div>
+
+        <h1>साक्षी वाणी</h1>
+        <p class="subtitle">Sakshi Vani - Lutheran Hymns & Spiritual Resources</p>
+
+        <div class="cards-grid">
+            <!-- PWA Card -->
+            <a href="/pwa/" class="app-card pwa">
+                <div class="card-icon">🎵</div>
+                <h2 class="card-title">Sakshi Vani PWA</h2>
+                <p class="card-description">
+                    Access Lutheran hymns, catechism, and worship resources
+                </p>
+                <ul class="card-features">
+                    <li>350+ Hindi worship songs</li>
+                    <li>Complete Luther's Catechism</li>
+                    <li>Search & favorites</li>
+                    <li>Works offline</li>
+                </ul>
+                <button class="card-button">Open PWA →</button>
+            </a>
+
+            <!-- Dashboard Card -->
+            <a href="/dashboard-web/dashboard.html" class="app-card dashboard">
+                <div class="card-icon">📖</div>
+                <h2 class="card-title">My Journey</h2>
+                <p class="card-description">
+                    Track your spiritual growth and devotional activities
+                </p>
+                <ul class="card-features">
+                    <li>Prayer tracker</li>
+                    <li>Bible reading log</li>
+                    <li>Church attendance</li>
+                    <li>Daily reflections</li>
+                </ul>
+                <button class="card-button">Open Dashboard →</button>
+            </a>
+        </div>
+
+        <footer>
+            <p>© 2025 Sakshi Vani - Built with ❤️ for the Lutheran community</p>
+        </footer>
+    </div>
+
+    <!-- Theme System -->
+    <script src="shared/theme.js"></script>
+</body>
+
+</html>
+```

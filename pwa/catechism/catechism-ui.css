@@ -1,0 +1,271 @@
+/* Catechism UI - Mobile First Design */
+:root {
+    --card-bg-light: #ffffff;
+    --card-bg-dark: #1E2430;
+    /* Dark blue-grey from image */
+    --accent-yellow: #FACC15;
+    --text-dark: #cbd5e1;
+    --num-badge-bg: rgba(250, 204, 21, 0.2);
+    --num-badge-text: #FACC15;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-display);
+    padding-bottom: 140px;
+    /* Space for bottom player */
+    transition: background-color 0.3s ease;
+}
+
+/* Introduction Card */
+.intro-card {
+    background: rgba(30, 41, 59, 0.8);
+    /* Dark glass */
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 24px;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .intro-card {
+    background: white;
+    color: var(--text-display);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.intro-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.intro-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* Accordion List */
+.accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.accordion-item {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-card);
+}
+
+[data-theme="light"] .accordion-item {
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.accordion-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.accordion-item.active .accordion-header {
+    background: rgba(250, 204, 21, 0.05);
+    /* Update active state visually */
+}
+
+.badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--num-badge-bg);
+    color: var(--num-badge-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.header-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-label {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.main-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-display);
+    font-family: var(--font-heading);
+}
+
+.chevron {
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.accordion-item.active .chevron {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 1000px;
+    /* Arbitrary large height */
+    transition: max-height 0.3s ease-in-out;
+}
+
+.content-inner {
+    padding: 20px;
+    padding-top: 0;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-display);
+}
+
+.question {
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+    font-size: 0.9rem;
+}
+
+/* Conclusion/Summary Card */
+.summary-card {
+    background: rgba(30, 41, 59, 0.95);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-top: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    /* Always dark bg as per image suggestion or adaptive? Image shows dark card */
+}
+
+/* Bottom Player Bar */
+.bottom-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0F1419;
+    /* Always dark for contrast */
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.next-chapter {
+    display: flex;
+    flex-direction: column;
+}
+
+.next-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+}
+
+.next-title {
+    font-size: 0.95rem;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.player-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.control-btn:hover {
+    opacity: 1;
+}
+
+.play-fab {
+    position: fixed;
+    bottom: 100px;
+    /* Above nav bar */
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    /* Squircle */
+    background: var(--primary);
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+    transition: transform 0.2s;
+}
+
+.play-fab:active {
+    transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.accordion-item.active .accordion-content {
+    animation: slideDown 0.3s ease-out forwards;
+}

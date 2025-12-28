@@ -1,0 +1,227 @@
+/* Accessible Reader Styles */
+:root {
+    --reader-font-family: 'Inter', sans-serif;
+    --reader-font-size: 1.1rem;
+    --reader-line-height: 1.6;
+    --reader-word-spacing: normal;
+    --reader-bg: var(--bg-primary, #ffffff);
+    --reader-text: var(--text-primary, #000000);
+    --reader-highlight: rgba(250, 204, 21, 0.3);
+    --reader-toolbar-bg: var(--bg-secondary, #f3f4f6);
+    --reader-toolbar-text: var(--text-primary, #1f2937);
+}
+
+/* Dyslexia Friendly Font */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/npm/opendyslexic@2.1.0-beta11/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.reader-dyslexic {
+    --reader-font-family: 'OpenDyslexic', sans-serif !important;
+}
+
+/* High Contrast Themes */
+.reader-high-contrast-light {
+    --reader-bg: #ffffff !important;
+    --reader-text: #000000 !important;
+    --reader-highlight: #ffff00 !important;
+    --reader-toolbar-bg: #000000 !important;
+    --reader-toolbar-text: #ffffff !important;
+}
+
+.reader-high-contrast-dark {
+    --reader-bg: #000000 !important;
+    --reader-text: #ffff00 !important;
+    --reader-highlight: #0000aa !important;
+    --reader-toolbar-bg: #ffff00 !important;
+    --reader-toolbar-text: #000000 !important;
+}
+
+/* Text Sizing Classes */
+.text-size-sm {
+    --reader-font-size: 1rem;
+}
+
+.text-size-md {
+    --reader-font-size: 1.25rem;
+}
+
+.text-size-lg {
+    --reader-font-size: 1.5rem;
+}
+
+.text-size-xl {
+    --reader-font-size: 2rem;
+}
+
+/* Line Spacing Classes */
+.line-height-tight {
+    --reader-line-height: 1.4;
+}
+
+.line-height-normal {
+    --reader-line-height: 1.8;
+}
+
+.line-height-loose {
+    --reader-line-height: 2.2;
+}
+
+/* Helper class to apply variables to target content */
+.accessible-content {
+    font-family: var(--reader-font-family) !important;
+    font-size: var(--reader-font-size) !important;
+    line-height: var(--reader-line-height) !important;
+    word-spacing: var(--reader-word-spacing) !important;
+    background-color: var(--reader-bg) !important;
+    color: var(--reader-text) !important;
+    transition: all 0.3s ease;
+}
+
+/* Active Highlight for TTS */
+.tts-highlight {
+    background-color: var(--reader-highlight);
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px var(--reader-highlight);
+    /* Expand highlight slightly */
+    transition: background-color 0.2s;
+}
+
+/* Reader Toolbar */
+.reader-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--reader-toolbar-bg);
+    color: var(--reader-toolbar-text);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    font-family: system-ui, -apple-system, sans-serif;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.reader-toolbar.visible {
+    transform: translateY(0);
+}
+
+.reader-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.reader-btn {
+    background: none;
+    border: 2px solid currentColor;
+    border-radius: 8px;
+    color: inherit;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reader-btn:hover {
+    opacity: 0.8;
+}
+
+.reader-btn:focus-visible {
+    outline: 3px solid var(--primary, #FACC15);
+    outline-offset: 2px;
+}
+
+/* Settings Popover */
+.reader-settings-popover {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: white;
+    color: black;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    z-index: 10000;
+    display: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reader-settings-popover.active {
+    display: block;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reader-setting-group {
+    margin-bottom: 20px;
+}
+
+.reader-setting-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.reader-toggle-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.reader-toggle-btn {
+    flex: 1;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.reader-toggle-btn.active {
+    background: black;
+    color: white;
+    border-color: black;
+}
+
+/* Status Text */
+.reader-status {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Fix: Ensure content isn't hidden by the floating toolbar */
+#book-list,
+.book-list {
+    padding-bottom: 120px !important;
+}
+
+#verse-display {
+    padding-bottom: 120px;
+}

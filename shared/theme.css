@@ -1,0 +1,154 @@
+/**
+ * Theme Variables and Toggle Styles
+ * Shared across all Sakshi Vani components
+ */
+
+/* ===== LIGHT THEME (Default) ===== */
+:root {
+    /* Authority Palette */
+    --bg-primary: #F5F7FB;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #E2E8F0;
+    --bg-gradient: none;
+    /* User requested solid background */
+
+    /* Branding */
+    --brand-indigo: #2E3192;
+    --brand-cyan: #1BFFFF;
+    --brand-gold: #FFD166;
+    --brand-dark: #1E1E2F;
+    --brand-gradient: linear-gradient(135deg, #2E3192 0%, #00C6FF 100%);
+    /* Adjusted cyan for text readability if needed, keeping mostly true to request #1BFFFF */
+
+    /* Text */
+    --text-primary: #1E1E2F;
+    /* As requested */
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --text-display: #1E1E2F;
+
+    /* Accents */
+    --primary: #2E3192;
+    /* Royal Indigo */
+    --secondary: #1BFFFF;
+    /* Holy Cyan */
+    --accent: #FFD166;
+    /* Gold */
+    --quiz: #2E3192;
+    /* Unify quiz with primary for now */
+
+    /* UI Elements */
+    --border: rgba(46, 49, 146, 0.1);
+    --border-light: rgba(46, 49, 146, 0.05);
+    --shadow: 0 4px 6px rgba(46, 49, 146, 0.05);
+    --shadow-soft: 0 10px 15px rgba(46, 49, 146, 0.1);
+    --shadow-card: 0 4px 6px rgba(46, 49, 146, 0.05);
+
+    /* Surface */
+    --surface: #FFFFFF;
+    --surface-glass: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-gradient: radial-gradient(circle at 20% 50%, #1e1b4b 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, #1e293b 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, #0f172a 0%, transparent 70%);
+
+    /* Text */
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-display: #ffffff;
+
+    /* Accents - Slightly adjusted for dark */
+    --primary: #FCD34D;
+    --secondary: #C4B5FD;
+    --accent: #FED7AA;
+    --quiz: #DDD6FE;
+
+    /* UI Elements */
+    --border: rgba(255, 255, 255, 0.1);
+    --border-light: rgba(255, 255, 255, 0.05);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-soft: 0 10px 20px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.2);
+
+    /* Surface */
+    --surface: rgba(30, 41, 59, 0.8);
+    --surface-glass: rgba(30, 41, 59, 0.7);
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-soft);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Icon visibility based on theme */
+[data-theme="light"] .theme-toggle .moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .sun-icon {
+    display: none;
+}
+
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+* {
+    transition: background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Prevent transition on page load */
+.no-transition * {
+    transition: none !important;
+}
+
+/* ===== MOBILE ADJUSTMENTS ===== */
+@media (max-width: 640px) {
+    .theme-toggle {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+    }
+}

@@ -54,47 +54,75 @@ function updateGreeting() {
 updateGreeting();
 
 // Daily Verse (Random selection - in production, fetch from API or database)
-const verses = [
-    {
-        text: '"क्योंकि मैं तुम्हारे लिए जो योजनाएँ बनाता हूँ, उन्हें मैं जानता हूँ, तुम्हें आशा और भविष्य देने की योजनाएँ।"',
-        reference: '— यिर्मयाह 29:11'
-    },
-    {
-        text: '"प्रभु पर भरोसा रखो और भलाई करो, धरती पर बसो और विश्वासयोग्यता से जीवित रहो।"',
-        reference: '— भजन संहिता 37:3'
-    },
-    {
-        text: '"मैं तुम्हें ताकत देता हूँ जब तुम थक जाते हो, और जब तुम कमजोर होते हो तो शक्ति बढ़ाता हूँ।"',
-        reference: '— यशायाह 40:29'
-    },
-    {
-        text: '"परमेश्वर ही हमारा आश्रय और शक्ति है, संकट में अति सहायक।"',
-        reference: '— भजन संहिता 46:1'
-    }
-];
-
-// Load or generate daily verse
+// Daily Verse from Bible Database
 function loadDailyVerse() {
     const verseText = document.querySelector('.verse-text');
     const verseRef = document.querySelector('.verse-reference');
 
     if (!verseText || !verseRef) return;
 
-    // Check if we have a verse for today
+    // Check if we already have a verse for today to avoid changing it on reload
     const today = new Date().toDateString();
     const savedDate = localStorage.getItem('verseDate');
-    let verseIndex = parseInt(localStorage.getItem('verseIndex') || '0');
 
-    // If it's a new day, pick a new verse
-    if (savedDate !== today) {
-        verseIndex = Math.floor(Math.random() * verses.length);
-        localStorage.setItem('verseDate', today);
-        localStorage.setItem('verseIndex', verseIndex.toString());
+    if (savedDate === today) {
+        // Load saved verse
+        verseText.textContent = localStorage.getItem('verseText');
+        verseRef.textContent = localStorage.getItem('verseRef');
+        return;
     }
 
-    const verse = verses[verseIndex];
-    verseText.textContent = verse.text;
-    verseRef.textContent = verse.reference;
+    // Generate new verse from database if available
+    if (typeof HI_BIBLE !== 'undefined' && typeof BIBLE_BOOKS !== 'undefined') {
+        try {
+            // Pick Random Book
+            const books = HI_BIBLE.Book;
+            const bookIndex = Math.floor(Math.random() * books.length);
+            const book = books[bookIndex];
+            const bookName = BIBLE_BOOKS['hi'][bookIndex];
+
+            // Pick Random Chapter
+            const chapterIndex = Math.floor(Math.random() * book.Chapter.length);
+            const chapter = book.Chapter[chapterIndex];
+
+            // Pick Random Verse
+            // Handle array vs single object for Verse
+            const verses = Array.isArray(chapter.Verse) ? chapter.Verse : [chapter.Verse];
+            const verseIndex = Math.floor(Math.random() * verses.length);
+            const verseObj = verses[verseIndex];
+
+            // Format parts
+            const cleanText = verseObj.Verse.replace(/"/g, ''); // Remove existing quotes if any
+            const vText = `"${cleanText}"`;
+
+            // Calculate real verse number
+            let vNum = verseIndex + 1;
+            if (verseObj.Verseid) {
+                vNum = parseInt(verseObj.Verseid) % 1000 + 1;
+            }
+
+            const vRef = `— ${bookName} ${chapterIndex + 1}:${vNum}`;
+
+            // Update UI
+            verseText.textContent = vText;
+            verseRef.textContent = vRef;
+
+            // Save for the day
+            localStorage.setItem('verseDate', today);
+            localStorage.setItem('verseText', vText);
+            localStorage.setItem('verseRef', vRef);
+
+        } catch (e) {
+            console.error("Error generating verse:", e);
+            // Fallback
+            verseText.textContent = '"परमेश्वर ही हमारा आश्रय और शक्ति है, संकट में अति सहायक।"';
+            verseRef.textContent = '— भजन संहिता 46:1';
+        }
+    } else {
+        // Fallback if data not loaded
+        verseText.textContent = '"प्रभु पर भरोसा रखो और भलाई करो, धरती पर बसो और विश्वासयोग्यता से जीवित रहो।"';
+        verseRef.textContent = '— भजन संहिता 37:3';
+    }
 }
 
 loadDailyVerse();

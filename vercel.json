@@ -4,6 +4,11 @@
     "buildCommand": "echo 'No build needed for static sites'",
     "cleanUrls": true,
     "trailingSlash": false,
+    "functions": {
+        "api/*.py": {
+            "maxDuration": 10
+        }
+    },
     "rewrites": [
         {
             "source": "/dashboard/(.*)",
@@ -14,12 +19,16 @@
             "destination": "/dashboard-web/index.html"
         },
         {
-            "source": "/(.*)",
+            "source": "/pwa/(.*)",
             "destination": "/pwa/$1"
         },
         {
-            "source": "/",
+            "source": "/pwa",
             "destination": "/pwa/index.html"
+        },
+        {
+            "source": "/",
+            "destination": "/index.html"
         }
     ],
     "headers": [

@@ -1,116 +1,369 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1. दस आज्ञा (Ten Commandments) | धर्मशिक्षा</title>
+    <title>1. दस आज्ञा (Ten Commandments) | Sakshi Vani</title>
+    <link rel="stylesheet" href="../../shared/theme.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./catechism-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Noto Serif Devanagari', serif; line-height: 1.8; background: #fdfbf7; color: #2c3e50; margin: 0; padding: 0; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1.5rem; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
-        
-        /* Typography */
-        h2, h3, h4 { font-family: 'Noto Sans Devanagari', sans-serif; color: #667eea; }
-        h2 { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-top: 30px; }
-        h3.sub-heading { color: #764ba2; margin-top: 40px; background: #f3e5f5; padding: 10px; border-radius: 8px; }
-        h4.question-heading { color: #555; margin-top: 20px; font-weight: bold; }
-        
-        /* Elements */
-        .answer-text { background: #f0f4f8; padding: 15px; border-left: 5px solid #667eea; margin: 15px 0; border-radius: 5px; }
-        .duties-list { background: #e0f2f1; padding: 20px 20px 20px 40px; border-radius: 10px; margin: 20px 0; }
-        .duties-list li { margin-bottom: 10px; }
-        .numbered-item { background: #fff8e1; padding: 10px; border-left: 4px solid #ffb300; margin: 10px 0; }
-        .standout-text { font-weight: bold; font-size: 1.1em; color: #2c3e50; margin: 20px 0; }
-        
-        /* Navigation */
-        .toc-list { list-style: none; padding: 0; }
-        .toc-list li { margin: 15px 0; }
-        .toc-list a { display: block; padding: 15px; background: white; border-radius: 10px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; border-left: 5px solid #667eea; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .toc-list a:hover { transform: translateX(5px); background: #f8f9fa; }
-        
-        .page-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; gap: 10px; }
-        .nav-button { flex: 1; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .home-btn { background: #7f8c8d; flex: 0 0 50px; font-size: 1.2rem; }
-        .prev-btn { background: #667eea; }
-        .next-btn { background: #764ba2; }
-        
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
+
 <body>
-    <div class="header">
-        <h1>1. दस आज्ञा (Ten Commandments)</h1>
+    <!-- Standard Header with Back Button -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="../catechism.html" aria-label="Back" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1>1. दस आज्ञा</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container" style="padding: 20px;">
+        <!-- Introduction Card -->
+        <div class="intro-card">
+            <div class="intro-label">परिचय (INTRODUCTION)</div>
+            <div class="intro-text">
+                बाइबल में दी गई दस आज्ञाएँ और उनका अर्थ नीचे दिया गया है। विस्तार से पढ़ने के लिए टेप करें।
+            </div>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="accordion-list">
+            <!-- 1st Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">1</div>
+                    <div class="header-text">
+                        <span class="sub-label">पहली आज्ञा</span>
+                        <span class="main-title">परमेश्वर तेरा ईश्वर मैं हूँ</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू किसी दूसरे को ईश्वर मत मानना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम सब वस्तुओं से अधिक ईश्वर का भय, प्रेम और भरोसा रखें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2nd Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">2</div>
+                    <div class="header-text">
+                        <span class="sub-label">दूसरी आज्ञा</span>
+                        <span class="main-title">मूर्तिपूजा मत कर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू अपने लिये कोई मूर्ति खोदकर न बनाना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम किसी बनायी हुई वस्तु की पूजा-सेवा न करें। न उसका नाम
+                            लेवें, न उसके सामने झुकें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3rd Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">3</div>
+                    <div class="header-text">
+                        <span class="sub-label">तीसरी आज्ञा</span>
+                        <span class="main-title">ईश्वर का नाम व्यर्थ न लेना</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>परमेश्वर अपने ईश्वर का नाम अकारथ मत ले।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम उसके नाम से श्राप न देवें, न किरिया खावें, न टोना ओझाई
+                            करें, न झूठ बोलें, न ठगें। परन्तु सब विपत्तियों में उसकी दोहाई, विनती, स्तुति और धन्यवाद
+                            करें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">4</div>
+                    <div class="header-text">
+                        <span class="sub-label">चौथी आज्ञा</span>
+                        <span class="main-title">विश्रामवार पवित्र रखना</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>विश्रामवार को पवित्र रखने के लिए मत भूल।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम उसका वचन और धर्मोपदेश को तुच्छ न करें परन्तु पवित्र मान
+                            कर आनन्द से सुनें और सीखें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">5</div>
+                    <div class="header-text">
+                        <span class="sub-label">पाँचवी आज्ञा</span>
+                        <span class="main-title">माता-पिता का आदर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>अपने माता-पिता का आदर कर।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, और अपने माता-पिता और स्वामियों का अपमान न करें, न ही उनको
+                            क्रोधित करें। परन्तु उनका सम्मान और सेवा करें, आज्ञा मानें और उनको प्यार करें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">6</div>
+                    <div class="header-text">
+                        <span class="sub-label">छठवीं आज्ञा</span>
+                        <span class="main-title">हत्या मत कर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू खून न करना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम अपने पड़ोसी के देह और प्राण को किसी प्रकार की हानि और
+                            दुःख न पहुँचावें। परन्तु देह और प्राण की विपत्ति में उसकी सहायता और भलाई करें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">7</div>
+                    <div class="header-text">
+                        <span class="sub-label">सातवीं आज्ञा</span>
+                        <span class="main-title">व्यभिचार मत कर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू व्यभिचार न करना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम अपने मन वचन और कर्म में शुद्ध और संयमी होकर जीवन बितावें
+                            और हर एक स्त्री-पुरुष, परस्पर प्रेम और आदर करें।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">8</div>
+                    <div class="header-text">
+                        <span class="sub-label">आठवीं आज्ञा</span>
+                        <span class="main-title">चोरी मत कर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू चोरी न करना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम अपने पड़ोसी का धन-सम्पत्ति न छीनें, न खोटे माल अथवा
+                            व्यापार को अपनावें। परन्तु उसके धन-सम्पत्ति और जीविका की वृद्धि और रक्षा में सहायता करें।
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">9</div>
+                    <div class="header-text">
+                        <span class="sub-label">नवीं आज्ञा</span>
+                        <span class="main-title">झूठी साक्षी मत दे</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू अपने पड़ोसी के विरुद्ध झूठी साक्षी न देना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम अपने पड़ोसी से झूठ न बोलें, न उसका भेद खोलें, न चुगली, न
+                            मिथ्या अपवाद करें। परन्तु उसका पक्ष और आदर करें और जहाँ तक बन पड़े यत्न से उसको भला ठहरावें।
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10th Commandment -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">10</div>
+                    <div class="header-text">
+                        <span class="sub-label">दसवीं आज्ञा</span>
+                        <span class="main-title">लालच मत कर</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>तू अपने पड़ोसी के घर का लालच न करना।</strong></p>
+                        <div class="question">इसका क्या अर्थ है?</div>
+                        <p>हम ईश्वर का भय और प्रेम रखें, कि हम अपने पड़ोसी के घर द्वार, खेत और मवेशियों पर लोभ की दृष्टि
+                            न रखें, न बहाना करके उनको अपनावें, न उसकी स्त्री, दास-दासी को फुसलावें या बिगाड़ें। परन्तु
+                            यत्न करें कि जो कुछ उसका है, कुशल से उसके पास रहे और उसके काम आवे।</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Conclusion Card -->
+        <div class="summary-card">
+            <h3 style="color:var(--primary); margin-bottom:12px;">आज्ञाओं का निष्कर्ष</h3>
+            <p style="margin-bottom:8px; opacity:0.8; font-size:0.9rem;">ईश्वर इन सब आज्ञाओं के विषय में क्या कहता है?
+            </p>
+
+            <div
+                style="background:rgba(255,255,255,0.05); padding:16px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.1);">
+                <p><em>"ईश्वर यों कहता है कि मैं परमेश्वर तेरा प्रभु ज्वलित ईश्वर हूँ।"</em></p>
+            </div>
+
+            <p style="opacity:0.9; margin-bottom:12px; font-size:0.95rem;">इसलिए हम ईश्वर के क्रोध से डरें और उसकी
+                आज्ञाओं के विरुद्ध न करें।</p>
+        </div>
+
     </div>
-    <div class="container">
-        <h3 class="sub-heading">पहली आज्ञा</h3>
-<p class="standout-text"><strong>परमेश्वर तेरा ईश्वर मैं हूँ, किसी दूसरे को ईश्वर मत मान।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम सब वस्तुओं से अधिक ईश्वर का भय, प्रेम और भरोसा रखें।</p></div>
-<h3 class="sub-heading">दूसरी आज्ञा</h3>
-<p class="standout-text"><strong>किसी प्रकार की मूर्तिपूजा मत कर।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम किसी बनायी हुई वस्तु की पूजा-सेवा न करें। न उसका नाम लेवें, न उसके सामने झुकें।</p></div>
-<div class="answer-text"><p>क्योंकि ईश्वर आत्मा है और अवश्य है कि उसके भजन करनेवाले, आत्मा और सच्चाई से भजन करें।</p></div>
-<h3 class="sub-heading">तीसरी आज्ञा</h3>
-<p class="standout-text"><strong>परमेश्वर अपने ईश्वर का नाम अकारथ मत ले क्योंकि ईश्वर, उसको जो उसका नाम अकारथ लेता है, निर्दोषी न ठहरावेगा।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम उसके नाम से श्राप न देवें, न किरिया खावें, न टोना ओझाई करें, न झूठ बोलें, न ठगें।</p></div>
-<div class="answer-text"><p>परन्तु सब विपत्तियों में उसकी दोहाई, विनती, स्तुति और धन्यवाद करें।</p></div>
-<h3 class="sub-heading">चौथी आज्ञा</h3>
-<p class="standout-text"><strong>विश्रामवार को पवित्र रखने के लिए मत भूल।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम उसका वचन और धर्मोपदेश को तुच्छ न करें परन्तु पवित्र मान कर आनन्द से सुनें और सीखें।</p></div>
-<h3 class="sub-heading">पाँचवी आज्ञा</h3>
-<p class="standout-text"><strong>अपने माता-पिता का आदर कर जिससे तेरा भला हो और पृथ्वी पर तेरा जीवन अधिक होवे।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने माता-पिता और स्वामियों का अपमान न करें, न ही उनको क्रोधित करें।</p></div>
-<div class="answer-text"><p>परन्तु उनका सम्मान और सेवा करें, आज्ञा मानें और उनको प्यार करें।</p></div>
-<h3 class="sub-heading">छठवीं आज्ञा</h3>
-<p class="standout-text"><strong>मनुष्य हत्या मत कर।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने पड़ोसी के देह और प्राण को किसी प्रकार की हानि और दुःख न पहुँचावें।</p></div>
-<div class="answer-text"><p>परन्तु देह और प्राण की विपत्ति में उसकी सहायता और भलाई करें।</p></div>
-<h3 class="sub-heading">सातवीं आज्ञा</h3>
-<p class="standout-text"><strong>व्यभिचार मत कर।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने मन वचन और कर्म में शुद्ध और संयमी होकर जीवन बितावें और हर एक स्त्री-पुरुष, परस्पर प्रेम और आदर करें।</p></div>
-<h3 class="sub-heading">आठवीं आज्ञा</h3>
-<p class="standout-text"><strong>चोरी मत कर।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने पड़ोसी का धन-सम्पत्ति न छीनें, न खोटे माल अथवा व्यापार को अपनावें।</p></div>
-<div class="answer-text"><p>परन्तु उसके धन-सम्पत्ति और जीविका की वृद्धि और रक्षा में सहायता करें।</p></div>
-<h3 class="sub-heading">नवीं आज्ञा</h3>
-<p class="standout-text"><strong>अपने पड़ोसी पर झूठी साक्षी मत दें।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने पड़ोसी से झूठ न बोलें, न उसका भेद खोलें, न चुगली, न मिथ्या अपवाद करें।</p></div>
-<div class="answer-text"><p>परन्तु उसका पक्ष और आदर करें और जहाँ तक बन पड़े यत्न से उसको भला ठहरावें।</p></div>
-<h3 class="sub-heading">दसवीं आज्ञा</h3>
-<p class="standout-text"><strong>अपने पड़ोसी के घर और उसके परिवार का लालच मत कर।</strong> </p>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>हम ईश्वर का भय और प्रेम रखें।</p></div>
-<div class="answer-text"><p>हम अपने पड़ोसी के घर द्वार, खेत और मवेशियों पर लोभ की दृष्टि न रखें, न बहाना करके उनको अपनावें, न उसकी स्त्री, दास-दासी को फुसलावें या बिगाड़ें।</p></div>
-<div class="answer-text"><p>परन्तु यत्न करें कि जो कुछ उसका है, कुशल से उसके पास रहे और उसके काम आवे।</p></div>
-<h3 class="sub-heading">आज्ञाओं का निष्कर्ष</h3>
-<p class="standout-text"><strong>ईश्वर इन सब आज्ञाओं के विषय में क्या कहता है?</strong> </p>
-<div class="answer-text"><p>ईश्वर यों कहता है कि मैं परमेश्वर तेरा प्रभु ज्वलित ईश्वर हूँ।</p></div>
-<div class="answer-text"><p>मैं पितरों के अपराध का दण्ड, उनके पुत्रों को जो मुझसे बैर रखते हैं, उनकी तीसरी और चौथी पीढ़ी को देता हूँ परन्तु सहस्रों पर जो मुझे प्यार करते और मेरी आज्ञाओं का पालन करते हैं, मैं दया करता हूँ।</p></div>
-<h4 class="question-heading">इसका क्या अर्थ है?</h4>
-<div class="answer-text"><p>ईश्वर उन सभी को दण्ड देने के लिए धमकाता है जो उसकी आज्ञाओं का उल्लंघन करते हैं।</p></div>
-<div class="answer-text"><p>इसलिए हम ईश्वर के क्रोध से डरें और उसकी आज्ञाओं के विरुद्ध न करें।</p></div>
-<div class="answer-text"><p>फिर वह अपने अनुग्रह और सारी भलाई की प्रतिज्ञा उन सभों को देता है, जो इन आज्ञाओं को मानते हैं।</p></div>
-<div class="answer-text"><p>इसलिए हम उसको प्यार भी करें, उनपर भरोसा रखें और आनन्द से उसकी आज्ञाओं का पालन करें।</p></div>
+
+    <!-- Floating Play Button -->
+    <button class="play-fab" aria-label="Play Audio" onclick="togglePlay()">
+        <ion-icon name="play" id="play-icon"></ion-icon>
+    </button>
+
+    <!-- Bottom Player / Navigation -->
+    <div class="bottom-player">
+        <div class="next-chapter">
+            <span class="next-label">NEXT CHAPTER</span>
+            <a href="2-creed.html" class="next-title">प्रार्थना (Prayer)</a> <!-- Verify link logic -->
+        </div>
+        <div class="player-controls">
+            <button class="control-btn"><ion-icon name="play-skip-back"></ion-icon></button>
+            <button class="control-btn"
+                style="width:40px; height:40px; background:white; color:black; border-radius:50%;"
+                onclick="togglePlay()">
+                <ion-icon name="pause" id="bar-play-icon" style="display:none"></ion-icon>
+                <ion-icon name="play" id="bar-pause-icon"></ion-icon>
+            </button>
+            <button class="control-btn"><ion-icon name="play-skip-forward"></ion-icon></button>
+            <button class="control-btn"><ion-icon name="text"></ion-icon></button>
+        </div>
     </div>
-    <div class="page-nav"><a href="../catechism.html" class="nav-button home-btn">🏠 मुख्य (Home)</a> <a href="2-creed.html" class="nav-button next-btn">अगला (Next) →</a></div>
+
+    <script src="../../shared/theme.js"></script>
+    <script src="../../shared/reader.js"></script>
+    <script>
+        // Accordion Logic
+        function toggleAccordion(item) {
+            // Close others if needed (optional, keeping multi-open for now or strict accordion?)
+            // Strict accordion usually feels better on mobile
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+
+            item.classList.toggle('active');
+        }
+
+        // Play Logic Placeholder (Integrating with Reader)
+        let isPlaying = false;
+        // Reader is initialized automatically if AccessibleReader is present
+        // We need to hook into it
+
+        function togglePlay() {
+            // Simple mockup toggle
+            isPlaying = !isPlaying;
+            const playIcon = document.getElementById('play-icon');
+            const barPlay = document.getElementById('bar-play-icon');
+            const barPause = document.getElementById('bar-pause-icon');
+
+            if (isPlaying) {
+                playIcon.name = 'pause';
+                barPlay.style.display = 'block';
+                barPause.style.display = 'none';
+                // Trigger Reader Text-to-Speech
+                if (window.speechSynthesis) {
+                    // Hacky: Read the visible/active content
+                    // Real implementation should utilize AccessibleReader instance
+                    const activeItem = document.querySelector('.accordion-item.active .accordion-content');
+                    const textToRead = activeItem ? activeItem.innerText : "Please open a section to read.";
+                    const u = new SpeechSynthesisUtterance(textToRead);
+                    u.lang = 'hi-IN';
+                    window.speechSynthesis.speak(u);
+                }
+            } else {
+                playIcon.name = 'play';
+                barPlay.style.display = 'none';
+                barPause.style.display = 'block';
+                window.speechSynthesis.cancel();
+            }
+        }
+    </script>
+
+    <style>
+        /* Specific overrides for Back Link styling in Header */
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </body>
+
 </html>

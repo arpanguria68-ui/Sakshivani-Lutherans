@@ -1,53 +1,182 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>धर्मशिक्षा (Catechism) | धर्मशिक्षा</title>
-    <link rel="stylesheet" href="style.css">
+    <title>धर्मशिक्षा (Catechism) | Sakshi Vani</title>
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        body { font-family: 'Noto Serif Devanagari', serif; line-height: 1.8; background: #fdfbf7; color: #2c3e50; margin: 0; padding: 0; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1.5rem; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
-        
-        /* Typography */
-        h2, h3, h4 { font-family: 'Noto Sans Devanagari', sans-serif; color: #667eea; }
-        h2 { border-bottom: 3px solid #667eea; padding-bottom: 10px; margin-top: 30px; }
-        h3.sub-heading { color: #764ba2; margin-top: 40px; background: #f3e5f5; padding: 10px; border-radius: 8px; }
-        h4.question-heading { color: #555; margin-top: 20px; font-weight: bold; }
-        
+        /* Catechism Specific Overrides */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 120px;
+            /* Extra padding for bottom nav on mobile */
+        }
+
+        /* Typography - using vars */
+        /* Typography - using vars */
+        h2 {
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 30px;
+            color: var(--text-display);
+        }
+
+        h3.sub-heading {
+            color: var(--quiz);
+            margin-top: 40px;
+            background: var(--surface);
+            padding: 10px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+        }
+
+        h4.question-heading {
+            color: var(--text-muted);
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
         /* Elements */
-        .answer-text { background: #f0f4f8; padding: 15px; border-left: 5px solid #667eea; margin: 15px 0; border-radius: 5px; }
-        .duties-list { background: #e0f2f1; padding: 20px 20px 20px 40px; border-radius: 10px; margin: 20px 0; }
-        .duties-list li { margin-bottom: 10px; }
-        .numbered-item { background: #fff8e1; padding: 10px; border-left: 4px solid #ffb300; margin: 10px 0; }
-        .standout-text { font-weight: bold; font-size: 1.1em; color: #2c3e50; margin: 20px 0; }
-        
+        .answer-text {
+            background: var(--surface);
+            padding: 20px;
+            border-left: 5px solid var(--secondary);
+            margin: 15px 0;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+            color: var(--text-display);
+            /* Verify text color */
+        }
+
+        .duties-list {
+            background: var(--surface-glass);
+            padding: 20px 20px 20px 40px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+        }
+
+        .duties-list li {
+            margin-bottom: 10px;
+            color: var(--text-display);
+        }
+
+        .numbered-item {
+            background: var(--bg-tertiary);
+            /* Was #fffbeeb3 */
+            padding: 10px;
+            border-left: 4px solid var(--accent);
+            margin: 10px 0;
+            border-radius: var(--radius-sm);
+            color: var(--text-display);
+        }
+
+        .standout-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--text-display);
+            margin: 20px 0;
+        }
+
         /* Navigation */
-        .toc-list { list-style: none; padding: 0; }
-        .toc-list li { margin: 15px 0; }
-        .toc-list a { display: block; padding: 15px; background: white; border-radius: 10px; text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; border-left: 5px solid #667eea; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .toc-list a:hover { transform: translateX(5px); background: #f8f9fa; }
-        
-        .page-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; gap: 10px; }
-        .nav-button { flex: 1; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; font-family: 'Noto Sans Devanagari', sans-serif; }
-        .home-btn { background: #7f8c8d; flex: 0 0 50px; font-size: 1.2rem; }
-        .prev-btn { background: #667eea; }
-        .next-btn { background: #764ba2; }
-        
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .toc-list a {
+            display: block;
+            padding: 20px;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--text-display);
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+            border-left: none;
+            font-weight: bold;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .toc-list a:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-soft);
+            background: var(--bg-secondary);
+        }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <h1>धर्मशिक्षा (Catechism)</h1>
-    </div>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="sun-icon">☀️</span>
+        <span class="moon-icon">🌙</span>
+    </button>
+
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <!-- Back Button -->
+            <a href="../dashboard-web/dashboard.html" aria-label="Back"
+                style="display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:var(--surface); border-radius:50%; color:var(--text-display); text-decoration:none; box-shadow: var(--shadow-card);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+
+            <div
+                style="width:40px; height:40px; background:linear-gradient(135deg, var(--secondary), var(--quiz)); border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:1.2rem;">
+                ✝</div>
+            <h1>धर्मशिक्षा (Catechism)</h1>
+        </div>
+
+        <!-- Profile/Dashboard Link -->
+        <a href="../dashboard-web/dashboard.html" style="text-decoration: none;">
+            <div
+                style="width:40px; height:40px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-user" style="color: var(--secondary);">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </a>
+    </header>
+
     <div class="container">
-        <ul class="toc-list"><li><a href="catechism/1-commandments.html">1. दस आज्ञा (Ten Commandments)</a></li><li><a href="catechism/2-creed.html">2. प्रेरितों का विश्वास (The Creed)</a></li><li><a href="catechism/3-prayer.html">3. प्रभु की प्रार्थना (Lord's Prayer)</a></li><li><a href="catechism/4-baptism.html">4. बपतिस्मा (Holy Baptism)</a></li><li><a href="catechism/5-communion.html">5. प्रभुभोज (Holy Communion)</a></li><li><a href="catechism/6-confession.html">6. पाप स्वीकार (Confession)</a></li><li><a href="catechism/7-app1.html">परिशिष्ट 1: प्रश्नोत्तर</a></li><li><a href="catechism/8-app2.html">परिशिष्ट 2: दैनिक प्रार्थना</a></li><li><a href="catechism/9-app3.html">परिशिष्ट 3: घर की पटिया</a></li><li><a href="catechism/10-app4.html">परिशिष्ट 4: व्यक्तिगत प्रार्थनाएँ</a></li></ul>
+        <ul class="toc-list">
+            <li><a href="catechism/1-commandments.html">1. दस आज्ञा (Ten Commandments)</a></li>
+            <li><a href="catechism/2-creed.html">2. प्रेरितों का विश्वास (The Creed)</a></li>
+            <li><a href="catechism/3-prayer.html">3. प्रभु की प्रार्थना (Lord's Prayer)</a></li>
+            <li><a href="catechism/4-baptism.html">4. बपतिस्मा (Holy Baptism)</a></li>
+            <li><a href="catechism/5-communion.html">5. प्रभुभोज (Holy Communion)</a></li>
+            <li><a href="catechism/6-confession.html">6. पाप स्वीकार (Confession)</a></li>
+            <li><a href="catechism/7-app1.html">परिशिष्ट 1: प्रश्नोत्तर</a></li>
+            <li><a href="catechism/8-app2.html">परिशिष्ट 2: दैनिक प्रार्थना</a></li>
+            <li><a href="catechism/9-app3.html">परिशिष्ट 3: घर की पटिया</a></li>
+            <li><a href="catechism/10-app4.html">परिशिष्ट 4: व्यक्तिगत प्रार्थनाएँ</a></li>
+        </ul>
     </div>
-    
-<div style="text-align: center; margin-top: 30px;"><a href="index.html" style="display: inline-block; padding: 15px 30px; background: #333; color: white; text-decoration: none; border-radius: 25px; font-weight: bold;">← गीत (Songs)</a></div></body>
+
+    <!-- Floating Bottom Navigation (Consistent with Index) -->
+
+
+    <!-- Theme System -->
+    <script src="../shared/theme.js"></script>
+</body>
+
 </html>

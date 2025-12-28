@@ -4,107 +4,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journey - Sakshi Vani Dashboard</title>
+    <title>My Journey - Sakshi Vani</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#5B8DEE">
+    <meta name="theme-color" content="#FACC15">
+    <link rel="stylesheet" href="../shared/theme.css">
     <link rel="stylesheet" href="style.css">
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600&family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Ionicons -->
+    <style>
+        /* Mobile-First Redesign - Steve Jobs Principles */
+        .dashboard-wrapper {
+            max-width: 100%;
+            padding: 0;
+            padding-bottom: 80px;
+            /* Space for bottom nav */
+        }
+
+        /* Greeting Section */
+        .greeting-section {
+            padding: 24px 20px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--quiz) 100%);
+            color: white;
+        }
+
+        .greeting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            font-family: var(--font-heading);
+        }
+
+        .user-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 4px 0 0 0;
+        }
+
+        .greeting-subtitle {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-top: 8px;
+        }
+
+        /* Verse of the Day Card */
+        .verse-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .verse-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .verse-text {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .verse-reference {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        /* Feature Cards - Simplified */
+        .features-section {
+            padding: 24px 20px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: var(--text-display);
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.prayer {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(192, 132, 252, 0.15));
+        }
+
+        .feature-icon.bible {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(59, 130, 246, 0.15));
+        }
+
+        .feature-icon.church {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(253, 186, 116, 0.15));
+        }
+
+        .feature-icon.reflect {
+            background: linear-gradient(135deg, rgba(253, 186, 116, 0.15), rgba(251, 146, 60, 0.15));
+        }
+
+        .feature-content h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            font-family: var(--font-ui);
+        }
+
+        .feature-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Bottom Navigation - Matching PWA Design */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111827;
+            padding: 12px 20px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border: none;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+            font-weight: 600;
+            min-width: 44px;
+            min-height: 44px;
+            padding: 4px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: white;
+        }
+
+        .nav-item ion-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Center Action Button - Matching PWA */
+        .center-action {
+            background: var(--primary);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(250, 204, 21, 0.3);
+        }
+
+        .center-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(250, 204, 21, 0.4);
+        }
+
+        .center-action ion-icon {
+            font-size: 1.6rem;
+        }
+
+        @media (max-width: 640px) {
+            .greeting-section {
+                padding: 20px 16px;
+            }
+
+            .user-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .verse-text {
+                font-size: 1rem;
+            }
+
+            .features-section {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body>
-    <div class="container dashboard-container">
-        <a href="index.html" class="back-button">
-            <ion-icon name="arrow-back"></ion-icon>
-            Back
-        </a>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="sun-icon">☀️</span>
+        <span class="moon-icon">🌙</span>
+    </button>
 
-        <h1 class="greeting">My Journey</h1>
-        <p class="tagline">Track your spiritual growth</p>
-
-        <!-- Stats Overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="progress-icon primary">
-                    <ion-icon name="heart"></ion-icon>
+    <div class="dashboard-wrapper">
+        <!-- Greeting Section with Verse of the Day -->
+        <div class="greeting-section">
+            <div class="greeting-header">
+                <div class="user-info">
+                    <p>Welcome back</p>
+                    <h2 id="time-greeting">Good Morning</h2>
                 </div>
-                <div class="stat-value" id="prayer-stat">0</div>
-                <div class="stat-label">Prayers Logged</div>
             </div>
+            <p class="greeting-subtitle">Let's walk in faith today.</p>
 
-            <div class="stat-card">
-                <div class="progress-icon secondary">
-                    <ion-icon name="book"></ion-icon>
+            <!-- Verse of the Day -->
+            <div class="verse-card">
+                <div class="verse-label">VERSE OF THE DAY</div>
+                <div class="verse-text" id="daily-verse">
+                    "यहोवा पर भरोसा रखो और भलाई करो, धरती पर बसो और विश्वासयोग्यता से जीवित रहो।"
                 </div>
-                <div class="stat-value" id="bible-stat">0</div>
-                <div class="stat-label">Bible Reading</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="progress-icon accent">
-                    <ion-icon name="people"></ion-icon>
-                </div>
-                <div class="stat-value" id="church-stat">0</div>
-                <div class="stat-label">Church Visits</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="progress-icon quiz">
-                    <ion-icon name="create"></ion-icon>
-                </div>
-                <div class="stat-value" id="reflection-stat">0</div>
-                <div class="stat-label">Reflections</div>
+                <div class="verse-reference" id="verse-reference">— भजन संहिता 37:3</div>
             </div>
         </div>
 
-        <!-- Activity Tracking -->
-        <div class="activity-card">
-            <h3>📿 Prayer Tracker</h3>
-            <p style="color: var(--text-muted); margin-bottom: 16px;">Log your daily prayers and build a habit</p>
-            <a href="prayer.html" class="activity-btn">
-                <ion-icon name="add-circle"></ion-icon>
-                Log Prayer
+        <!-- Feature Cards -->
+        <div class="features-section">
+            <a href="prayer.html" class="feature-card">
+                <div class="feature-icon prayer">🙏</div>
+                <div class="feature-content">
+                    <h3>Prayer</h3>
+                    <p>Log your daily prayers</p>
+                </div>
             </a>
-        </div>
 
-        <div class="activity-card">
-            <h3>📖 Bible Reading</h3>
-            <p style="color: var(--text-muted); margin-bottom: 16px;">Track your scripture reading progress</p>
-            <a href="bible.html" class="activity-btn">
-                <ion-icon name="add-circle"></ion-icon>
-                Log Reading
+            <a href="read_bible.html" class="feature-card">
+                <div class="feature-icon bible">📖</div>
+                <div class="feature-content">
+                    <h3>Bible</h3>
+                    <p>Read scripture today</p>
+                </div>
             </a>
-        </div>
 
-        <div class="activity-card">
-            <h3>⛪ Church Attendance</h3>
-            <p style="color: var(--text-muted); margin-bottom: 16px;">Record your church visits and services</p>
-            <a href="church.html" class="activity-btn">
-                <ion-icon name="add-circle"></ion-icon>
-                Log Attendance
+            <a href="church.html" class="feature-card">
+                <div class="feature-icon church">⛪</div>
+                <div class="feature-content">
+                    <h3>Church</h3>
+                    <p>Track attendance</p>
+                </div>
             </a>
-        </div>
 
-        <div class="activity-card">
-            <h3>✍️ Daily Reflection</h3>
-            <p style="color: var(--text-muted); margin-bottom: 16px;">Journal your thoughts and insights</p>
-            <a href="reflection.html" class="activity-btn">
-                <ion-icon name="add-circle"></ion-icon>
-                Write Reflection
+            <a href="reflection.html" class="feature-card">
+                <div class="feature-icon reflect">✍️</div>
+                <div class="feature-content">
+                    <h3>Reflection</h3>
+                    <p>Daily journal</p>
+                </div>
+            </a>
+
+            <a href="../pwa/index.html" class="feature-card">
+                <div class="feature-icon"
+                    style="background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(253, 186, 116, 0.15));">🎵
+                </div>
+                <div class="feature-content">
+                    <h3>Sakshi Vani</h3>
+                    <p>Browse worship songs</p>
+                </div>
+            </a>
+
+            <a href="../pwa/catechism.html" class="feature-card">
+                <div class="feature-icon"
+                    style="background: linear-gradient(135deg, rgba(192, 132, 252, 0.15), rgba(139, 92, 246, 0.15));">📚
+                </div>
+                <div class="feature-content">
+                    <h3>Catechism</h3>
+                    <p>Study Luther's teachings</p>
+                </div>
             </a>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Bottom Navigation - Matching PWA Design with Center Button -->
+
+
+    <script>
+        // Dynamic greeting based on time
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const greetingEl = document.getElementById('time-greeting');
+
+            if (hour < 12) {
+                greetingEl.textContent = 'Good Morning';
+            } else if (hour < 17) {
+                greetingEl.textContent = 'Good Afternoon';
+            } else {
+                greetingEl.textContent = 'Good Evening';
+            }
+        }
+
+        // Daily Bible verses (rotating selection)
+        const verses = [
+            {
+                text: '"यहोवा पर भरोसा रखो और भलाई करो, धरती पर बसो और विश्वासयोग्यता से जीवित रहो।"',
+                ref: '— भजन संहिता 37:3'
+            },
+            {
+                text: '"मैं तुम से कहता हूँ कि विश्वास के साथ प्रार्थना में जो कुछ माँगोगे, वह तुम्हें मिलेगा।"',
+                ref: '— मत्ती 21:22'
+            },
+            {
+                text: '"क्योंकि परमेश्वर ने जगत से ऐसा प्रेम रखा कि उसने अपना एकलौता पुत्र दे दिया।"',
+                ref: '— यूहन्ना 3:16'
+            },
+            {
+                text: '"प्रभु मेरा चरवाहा है; मुझे किसी चीज की कमी नहीं होगी।"',
+                ref: '— भजन संहिता 23:1'
+            },
+            {
+                text: '"यदि परमेश्वर हमारी ओर है तो कौन हमारे विरोध में है?"',
+                ref: '— रोमियों 8:31'
+            }
+        ];
+
+        function setDailyVerse() {
+            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const verseIndex = dayOfYear % verses.length;
+            const todaysVerse = verses[verseIndex];
+
+            document.getElementById('daily-verse').textContent = todaysVerse.text;
+            document.getElementById('verse-reference').textContent = todaysVerse.ref;
+        }
+
+        // Initialize on page load
+        updateGreeting();
+        setDailyVerse();
+    </script>
+
+    <!-- Theme System -->
+    <script src="../shared/theme.js"></script>
 </body>
 
 </html>
