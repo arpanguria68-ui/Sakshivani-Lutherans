@@ -4,11 +4,6 @@
     "buildCommand": "echo 'No build needed for static sites'",
     "cleanUrls": true,
     "trailingSlash": false,
-    "functions": {
-        "api/*.py": {
-            "maxDuration": 10
-        }
-    },
     "rewrites": [
         {
             "source": "/dashboard/(.*)",
