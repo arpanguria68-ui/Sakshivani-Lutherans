@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSongs(allSongs);
     } else {
         // Fallback for server environment or if script missing
-        fetch('./songs.json')
+        fetch('/pwa/songs.json')
             .then(response => response.json())
             .then(data => {
                 allSongs = data.sort((a, b) => a.id - b.id);
