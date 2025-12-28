@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sakshi Vani</title>
-    <link rel="manifest" href="/pwa/manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#6200ee">
-    <link rel="stylesheet" href="/shared/theme.css">
-    <link rel="stylesheet" href="/shared/reader.css">
-    <link rel="stylesheet" href="/pwa/style.css">
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/reader.css">
+    <link rel="stylesheet" href="./style.css">
 
     <!-- Google Fonts: Noto Serif Devanagari (Lyrics/Title) & Noto Sans Devanagari (UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
     <header>
         <div style="display:flex; align-items:center; gap:12px;">
             <!-- Back Button -->
-            <a href="/dashboard-web/dashboard.html" aria-label="Back"
+            <a href="../dashboard-web/dashboard.html" aria-label="Back"
                 style="display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:var(--surface); border-radius:50%; color:var(--text-display); text-decoration:none; box-shadow: var(--shadow-card);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -45,7 +45,7 @@
         </div>
 
         <!-- Profile Icon linking to Dashboard -->
-        <a href="/dashboard-web/dashboard.html" style="text-decoration: none;">
+        <a href="../dashboard-web/dashboard.html" style="text-decoration: none;">
             <div
                 style="width:40px; height:40px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -83,13 +83,13 @@
     </div>
 
     <!-- Load data as global variable to avoid CORS on file:// -->
-    <script src="/pwa/songs.js"></script>
+    <script src="./songs.js"></script>
     <!-- Theme System -->
-    <script src="/shared/theme.js"></script>
-    <script src="/shared/reader.js"></script>
+    <script src="../shared/theme.js"></script>
+    <script src="../shared/reader.js"></script>
 
     <!-- App Initialization -->
-    <script src="/pwa/app.js" defer></script>
+    <script src="./app.js" defer></script>
 </body>
 
 </html>
