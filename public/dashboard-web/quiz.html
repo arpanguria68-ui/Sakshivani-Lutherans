@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Quiz - Sakshi Vani</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--quiz) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: var(--quiz);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            color: var(--text-display);
+        }
+
+        .answer-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .answer-option:hover {
+            border-color: var(--quiz);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .answer-option.selected {
+            border-color: var(--quiz);
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .answer-option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .answer-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            background: var(--quiz);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .answer-option.correct .option-letter {
+            background: var(--success);
+        }
+
+        .answer-option.incorrect .option-letter {
+            background: var(--danger);
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .quiz-btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-btn-primary {
+            background: var(--quiz);
+            color: white;
+        }
+
+        .quiz-btn-primary:hover:not(:disabled) {
+            background: #7C3AED;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+        }
+
+        .quiz-btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quiz-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-display);
+        }
+
+        .quiz-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(91, 141, 238, 0.2) 100%);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--quiz);
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: var(--text-display);
+        }
+
+        .new-badge-quiz {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container quiz-container">
+        <a href="./" class="back-button">
+            <ion-icon name="arrow-back"></ion-icon>
+            Back
+        </a>
+
+        <h1 class="greeting">बाइबल प्रश्नोत्तरी <span class="new-badge-quiz">NEW</span></h1>
+        <p class="tagline">Test Your Bible Knowledge</p>
+
+        <!-- Quiz Header -->
+        <div class="quiz-header" id="quiz-header">
+            <div class="quiz-progress">
+                <span id="progress-text">Question 1 of 5</span>
+                <span id="score-text">Score: 0</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-bar" style="width: 20%"></div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="question-card">
+            <div class="question-number" id="question-number">Question 1</div>
+            <div class="question-text" id="question-text">Loading question...</div>
+
+            <div id="answers-container"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="quiz-actions">
+            <button class="quiz-btn quiz-btn-secondary" id="skip-btn">Skip</button>
+            <button class="quiz-btn quiz-btn-primary" id="next-btn" disabled>Next Question</button>
+        </div>
+
+        <!-- Result Card (Hidden initially) -->
+        <div class="result-card" id="result-card" style="display: none;">
+            <div class="result-score" id="final-score">0/5</div>
+            <div class="result-message" id="result-message">Great job!</div>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Keep studying God's Word!</p>
+            <button class="quiz-btn quiz-btn-primary" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="../quiz_data.json"></script>
+    <script>
+        // Quiz questions (sample data)
+        const quizQuestions = [
+            {
+                question: "बाइबल में कितनी पुस्तकें हैं? (How many books are in the Bible?)",
+                options: ["66", "72", "39", "27"],
+                correct: 0
+            },
+            {
+                question: "पहला मानव कौन था? (Who was the first human?)",
+                options: ["नूह (Noah)", "आदम (Adam)", "मूसा (Moses)", "अब्राहम (Abraham)"],
+                correct: 1
+            },
+            {
+                question: "यीशु का जन्म कहाँ हुआ था? (Where was Jesus born?)",
+                options: ["यरूशलेम (Jerusalem)", "नासरत (Nazareth)", "बैतलहम (Bethlehem)", "गलील (Galilee)"],
+                correct: 2
+            },
+            {
+                question: "दस आज्ञाएँ किसे दी गईं? (To whom were the Ten Commandments given?)",
+                options: ["मूसा (Moses)", "दाऊद (David)", "पतरस (Peter)", "पौलुस (Paul)"],
+                correct: 0
+            },
+            {
+                question: "नया नियम में कितने सुसमाचार हैं? (How many Gospels are in the New Testament?)",
+                options: ["2", "3", "4", "5"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function loadQuestion() {
+            const q = quizQuestions[currentQuestion];
+            selectedAnswer = null;
+
+            document.getElementById('question-number').textContent = `Question ${currentQuestion + 1}`;
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / quizQuestions.length) * 100}%`;
+            document.getElementById('next-btn').disabled = true;
+
+            // Load answers
+            const answersContainer = document.getElementById('answers-container');
+            answersContainer.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'answer-option';
+                optionDiv.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div>${option}</div>
+                `;
+                optionDiv.onclick = () => selectAnswer(index, optionDiv);
+                answersContainer.appendChild(optionDiv);
+            });
+        }
+
+        function selectAnswer(index, element) {
+            if (selectedAnswer !== null) return; // Prevent changing answer
+
+            selectedAnswer = index;
+            const q = quizQuestions[currentQuestion];
+
+            // Show correct/incorrect
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach((opt, i) => {
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== q.correct) {
+                    opt.classList.add('incorrect');
+                }
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (index === q.correct) {
+                score++;
+                document.getElementById('score-text').textContent = `Score: ${score}`;
+            }
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentQuestion++;
+
+            if (currentQuestion < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        document.getElementById('skip-btn').addEventListener('click', () => {
+            currentQuestion++;
+
+            if (currentQuestion < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            document.getElementById('quiz-header').style.display = 'none';
+            document.getElementById('question-card').style.display = 'none';
+            document.querySelector('.quiz-actions').style.display = 'none';
+            document.getElementById('result-card').style.display = 'block';
+
+            document.getElementById('final-score').textContent = `${score}/${quizQuestions.length}`;
+
+            const percentage = (score / quizQuestions.length) * 100;
+            let message = '';
+
+            if (percentage >= 80) {
+                message = 'Excellent! 🌟';
+            } else if (percentage >= 60) {
+                message = 'Good job! 👏';
+            } else {
+                message = 'Keep learning! 📖';
+            }
+
+            document.getElementById('result-message').textContent = message;
+        }
+
+        // Initialize
+        loadQuestion();
+    </script>
+</body>
+
+</html>

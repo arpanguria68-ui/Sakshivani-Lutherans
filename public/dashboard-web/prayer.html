@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Tracker - Sakshi Vani</title>
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding-bottom: 40px;
+        }
+
+        /* Standardized Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-display);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .container {
+            padding: 24px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text-muted);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .option-btn:hover {
+            background: var(--surface-glass);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .verse-quote {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .verse-quote p {
+            font-family: 'Noto Serif Devanagari', serif;
+            line-height: 1.6;
+            margin: 0 0 8px 0;
+            color: var(--text-display);
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .verse-quote cite {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: block;
+            text-align: right;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="./" aria-label="Back" class="back-link">
+                <ion-icon name="arrow-back"></ion-icon>
+            </a>
+            <h1>प्रार्थना लॉग करें</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container">
+
+        <form id="prayer-form">
+            <div class="card">
+                <div class="form-group">
+                    <label>समय (Time)</label>
+                    <div class="button-group">
+                        <button type="button" class="option-btn" data-time="morning">Morning</button>
+                        <button type="button" class="option-btn" data-time="evening">Evening</button>
+                        <button type="button" class="option-btn selected" data-time="anytime">Anytime</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>प्रार्थना का प्रकार (Type)</label>
+                    <div class="button-group">
+                        <button type="button" class="option-btn selected" data-type="personal">Personal</button>
+                        <button type="button" class="option-btn" data-type="intercessory">Intercessory</button>
+                    </div>
+                    <div class="button-group" style="margin-top: 10px;">
+                        <button type="button" class="option-btn" data-type="thanksgiving">Thanksgiving</button>
+                        <button type="button" class="option-btn" data-type="repentance">Repentance</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verse-quote">
+                <p>"प्रार्थना में अटल रहो और धन्यवाद के साथ उसमें जागते रहो।"</p>
+                <cite>- कुलुसियों 4:2</cite>
+            </div>
+
+            <button type="submit" class="submit-btn"
+                style="display:flex; align-items:center; justify-content:center; gap:8px;">
+                <ion-icon name="checkmark-circle-outline" style="font-size:1.2em;"></ion-icon>
+                Log Prayer
+            </button>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared/theme.js"></script>
+    <script src="app.js"></script>
+    <script>
+        let selectedTime = 'anytime';
+        let selectedType = 'personal';
+
+        // Time selection
+        document.querySelectorAll('[data-time]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-time]').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTime = btn.dataset.time;
+            });
+        });
+
+        // Type selection
+        document.querySelectorAll('[data-type]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedType = btn.dataset.type;
+            });
+        });
+
+        // Form submission
+        document.getElementById('prayer-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (window.trackingStore) {
+                trackingStore.addPrayerLog({
+                    time: selectedTime,
+                    type: selectedType
+                });
+                alert('Prayer logged successfully! 🙏');
+                window.location.href = 'dashboard.html';
+            } else {
+                console.error("Tracking store not found");
+                alert('Saved (Mock)');
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+
+    <!-- Theme System -->
+    <script src="../shared/theme.js"></script>
+</body>
+
+</html>

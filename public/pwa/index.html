@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakshi Vani</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#6200ee">
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/reader.css">
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- Google Fonts: Noto Serif Devanagari (Lyrics/Title) & Noto Sans Devanagari (UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <!-- Back Button -->
+            <a href="../dashboard-web/" aria-label="Back"
+                style="display:flex; align-items:center; justify-content:center; width:40px; height:40px; background:var(--surface); border-radius:50%; color:var(--text-display); text-decoration:none; box-shadow: var(--shadow-card);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+
+            <!-- Logo area -->
+            <div class="brand-logo">SV</div>
+
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+            <h1>Sakshi Vani</h1>
+        </div>
+
+        <!-- Profile Icon linking to Dashboard -->
+        <a href="../dashboard-web/" style="text-decoration: none;">
+            <div
+                style="width:40px; height:40px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-user" style="color: var(--primary);">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </a>
+    </header>
+
+    <!-- Floating Bottom Navigation -->
+
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search songs / गीत खोजें...">
+    </div>
+
+    <ul id="song-list">
+        <!-- Songs will be populated here -->
+    </ul>
+
+    <!-- Song Detail View (Modal/Page) -->
+    <div id="song-detail">
+        <div class="detail-header">
+            <button id="back-btn" class="back-btn">&#8592;</button>
+            <h1 style="flex:1; font-size:1.1rem; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">Song
+                Detail</h1>
+        </div>
+        <div id="detail-content">
+            <h2 id="detail-title"></h2>
+            <div id="detail-lyrics"></div>
+        </div>
+    </div>
+
+    <!-- Load data as global variable to avoid CORS on file:// -->
+    <script src="./songs.js"></script>
+    <!-- Theme System -->
+    <script src="../shared/theme.js"></script>
+    <script src="../shared/reader.js"></script>
+
+    <!-- App Initialization -->
+    <script src="./app.js" defer></script>
+</body>
+
+</html>

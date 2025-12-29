@@ -1,0 +1,302 @@
+/* Root Variables - Updated for Vibrant Light Theme */
+:root {
+    /* Inherit core colors from shared/theme.css */
+    /* --primary, --secondary, --accent are defined globally */
+    --primary-foreground: #ffffff;
+    /* White text on Indigo */
+
+    /* Background Gradients */
+    --bg-color: #f0fdf4;
+    /* Fallback */
+    --bg-gradient: radial-gradient(circle at 15% 50%, #f0e7ff, transparent 25%),
+        radial-gradient(circle at 85% 30%, #fff5f5, transparent 25%),
+        radial-gradient(circle at 50% 50%, #fefce8, transparent 50%);
+
+    --surface: #FFFFFF;
+    --surface-glass: rgba(255, 255, 255, 0.7);
+    --text-display: #111827;
+    /* Dark Grey/Black */
+    --text-muted: #6B7280;
+    /* Medium Grey */
+
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --font-heading: 'Noto Serif Devanagari', serif;
+    --font-body: 'Noto Serif Devanagari', serif;
+    --font-ui: 'Noto Sans Devanagari', sans-serif;
+
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] {
+    --bg-start: #0F1419;
+    --bg-end: #1A1F2E;
+    --surface: #1E2430;
+    --surface-glass: rgba(30, 41, 59, 0.9);
+    /* Dark glass */
+    --text-display: #FFFFFF;
+    --text-muted: #9CA3AF;
+    --primary-foreground: #FFFFFF;
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-color, #FAFAFA);
+    /* Use var fallback */
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    color: var(--text-display);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* Header */
+header {
+    background: var(--surface-glass);
+    /* Use variable for dark mode support */
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-md);
+    padding-top: max(var(--spacing-md), env(safe-area-inset-top, 8px));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--text-display);
+    margin: 0;
+}
+
+/* Search Bar */
+#search-container {
+    padding: var(--spacing-md);
+    background: transparent;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#search-input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 100px;
+    /* Pill shape */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: white;
+    color: var(--text-display);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-card);
+}
+
+#search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.2);
+}
+
+#search-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Song List */
+#song-list {
+    list-style: none;
+    padding: 0 var(--spacing-md) var(--spacing-lg);
+    padding-bottom: 120px;
+    /* Extra padding for fixed bottom nav */
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.song-item {
+    background: var(--surface);
+    padding: 20px;
+    border-radius: var(--radius-xl);
+    /* Rounded 3xl look */
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.song-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.song-item::before {
+    /* Subtle decorative accent on hover/active or just static */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.song-item:hover::before {
+    opacity: 1;
+}
+
+.song-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-display);
+    line-height: 1.3;
+}
+
+.song-meta {
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+/* Song Detail View */
+#song-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    background-image: var(--bg-gradient);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+#song-detail.active {
+    transform: translateX(0);
+}
+
+.detail-header {
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-card);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.back-btn {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-display);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.back-btn:hover {
+    background: var(--primary);
+    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#detail-content {
+    padding: var(--spacing-lg);
+    padding-bottom: 120px;
+    /* Extra padding for fixed bottom nav */
+    overflow-y: auto;
+    flex: 1;
+}
+
+#detail-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    color: var(--primary);
+    line-height: 1.4;
+}
+
+#detail-lyrics {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    white-space: pre-wrap;
+    line-height: 2;
+    color: var(--text-display);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+    /* Horizontal padding for mobile readability */
+}
+
+.verse-num {
+    color: var(--accent);
+    font-weight: bold;
+    margin-right: 0.5rem;
+    font-family: var(--font-ui);
+}
+
+/* Cleaned up Brand Logo */
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+}

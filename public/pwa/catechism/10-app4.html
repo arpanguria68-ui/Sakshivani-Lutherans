@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>परिशिष्ट 4: व्यक्तिगत प्रार्थनाएँ (Private Prayers) | Sakshi Vani</title>
+    <link rel="stylesheet" href="../../shared/theme.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./catechism-ui.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <!-- Standard Header with Back Button -->
+    <header>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <a href="../catechism.html" aria-label="Back" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1>परिशिष्ट 4: व्यक्तिगत प्रार्थनाएँ</h1>
+        </div>
+        <button id="theme-toggle" class="theme-toggle"
+            style="position:static; width:40px; height:40px; font-size:1.2rem; background:transparent; border:none; box-shadow:none;">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="container" style="padding: 20px;">
+        <!-- Introduction Card -->
+        <div class="intro-card">
+            <div class="intro-label">परिचय (INTRODUCTION)</div>
+            <div class="intro-text">
+                व्यक्तिगत और विशेष अवसरों के लिए प्रार्थनाएँ।
+            </div>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="accordion-list">
+            <!-- Confession Prayer -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">🙏</div>
+                    <div class="header-text">
+                        <span class="sub-label">पाप स्वीकार</span>
+                        <span class="main-title">वेदी के सक्रामेन्त के लिए</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>प्रार्थना:</strong></p>
+                        <p>"हे सर्वशक्तिमान परमेश्वर दयालु पिता, मैं दुर्गत पापी मनुष्य तेरे आगे अपने सब पाप और अपराधों
+                            को मान लेता हूँ, जिनसे मैंने बारम्बार तुझे क्रोधित किया और अब और सदा के लिए तेरे दण्ड के
+                            योग्य हुआ हूँ।</p>
+                        <p>मैं उनके कारण उदास हूँ और निपट पश्चात्ताप करता हूँ और मैं विनती करता हूँ कि अपनी अथाह दया के
+                            कारण और अपने प्रिय पुत्र यीशु ख्रिस्त के निर्दोष कठिन दुःख और मृत्यु के कारण मुझ पापी पर
+                            दयालु हो और मेरे सारे पापों को क्षमा कर।</p>
+                        <p>और अपने पवित्र आत्मा से मेरी सहायता कर कि मैं यीशु पर विश्वास करके धर्म और पवित्रता से जीऊँ
+                            और चलूँ।"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baptismal Vow -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">💧</div>
+                    <div class="header-text">
+                        <span class="sub-label">बपतिस्मा</span>
+                        <span class="main-title">बपतिस्मा की वाचा</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>प्रतिज्ञा:</strong></p>
+                        <p>"मैं संसार और शैतान को, संसार का कार्य और शैतान का कार्य और सब पाप और बुराई और इस देश की बुरी
+                            रीति को छोड़ देता हूँ।</p>
+                        <p>और हे त्रिएक परमेश्वर पिता और पुत्र और पवित्र आत्मा, मैं अपने को तेरे हाथ में सौंप देता हूँ
+                            कि तेरे लिए जीऊँ और तेरी दया में मरूँ।</p>
+                        <p>हे प्रभु इसमें मुझे सहायता कर, आमीन।"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sunday Confession -->
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <div class="badge">⛪</div>
+                    <div class="header-text">
+                        <span class="sub-label">आराधना</span>
+                        <span class="main-title">रविवार की आराधना के लिए</span>
+                    </div>
+                    <ion-icon name="chevron-down-outline" class="chevron"></ion-icon>
+                </div>
+                <div class="accordion-content">
+                    <div class="content-inner">
+                        <p class="standout-text"><strong>प्रार्थना:</strong></p>
+                        <p>"हे सर्वशक्तिमान ईश्वर दयालु पिता, हम दीनताई से अपने सब पाप और अपराधों को तेरे सम्मुख मान
+                            लेते हैं।</p>
+                        <p>तू अपने प्रिय पुत्र, हमारे प्रभु यीशु ख्रिस्त के कारण, हम पर दया दृष्टि कर और हमारे सब पापों
+                            को क्षमा कर, आमीन।"</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Floating Play Button -->
+    <button class="play-fab" aria-label="Play Audio" onclick="togglePlay()">
+        <ion-icon name="play" id="play-icon"></ion-icon>
+    </button>
+
+    <!-- Bottom Player / Navigation -->
+    <div class="bottom-player">
+        <div class="next-chapter">
+            <span class="next-label">END</span>
+            <a href="../catechism.html" class="next-title">वापस सूची में जाएं</a>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn"><ion-icon name="play-skip-back"></ion-icon></button>
+            <button class="control-btn"
+                style="width:40px; height:40px; background:white; color:black; border-radius:50%;"
+                onclick="togglePlay()">
+                <ion-icon name="pause" id="bar-play-icon" style="display:none"></ion-icon>
+                <ion-icon name="play" id="bar-pause-icon"></ion-icon>
+            </button>
+            <button class="control-btn"><ion-icon name="play-skip-forward"></ion-icon></button>
+            <button class="control-btn"><ion-icon name="text"></ion-icon></button>
+        </div>
+    </div>
+
+    <script src="../../shared/theme.js"></script>
+    <script src="../../shared/reader.js"></script>
+    <script>
+        function toggleAccordion(item) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(i => {
+                if (i !== item) i.classList.remove('active');
+            });
+            item.classList.toggle('active');
+        }
+
+        let isPlaying = false;
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const playIcon = document.getElementById('play-icon');
+            const barPlay = document.getElementById('bar-play-icon');
+            const barPause = document.getElementById('bar-pause-icon');
+
+            if (isPlaying) {
+                playIcon.name = 'pause';
+                barPlay.style.display = 'block';
+                barPause.style.display = 'none';
+                if (window.speechSynthesis) {
+                    const activeItem = document.querySelector('.accordion-item.active .accordion-content');
+                    const textToRead = activeItem ? activeItem.innerText : document.querySelector('.intro-text').innerText;
+                    const u = new SpeechSynthesisUtterance(textToRead);
+                    u.lang = 'hi-IN';
+                    window.speechSynthesis.speak(u);
+                }
+            } else {
+                playIcon.name = 'play';
+                barPlay.style.display = 'none';
+                barPause.style.display = 'block';
+                window.speechSynthesis.cancel();
+            }
+        }
+    </script>
+    <style>
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 50%;
+            color: var(--text-display);
+            text-decoration: none;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</body>
+
+</html>
