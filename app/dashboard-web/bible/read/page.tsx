@@ -12,7 +12,7 @@ interface Book {
 }
 
 interface BibleData {
-    [key: string]: {
+    [bookId: string]: {
         [chapter: string]: {
             [verse: string]: string
         }
@@ -21,37 +21,33 @@ interface BibleData {
 
 export default function BibleReaderPage() {
     const [books, setBooks] = useState<Book[]>([])
-    const [selectedBook, setSelectedBook] = useState<string>('')
-    const [selectedChapter, setSelectedChapter] = useState<number>(1)
+    const [selectedBookIndex, setSelectedBookIndex] = useState(0)
+    const [selectedChapter, setSelectedChapter] = useState(1)
     const [bibleData, setBibleData] = useState<BibleData>({})
-    const [currentText, setCurrentText] = useState<string>('')
     const [language, setLanguage] = useState<'en' | 'hi'>('hi')
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+    const [searchQuery, setSearchQuery] = useState('')
 
+    // Load books
     useEffect(() => {
-        // Load books list
         fetch('/dashboard-web/data/bible/books.js')
             .then(res => res.text())
             .then(text => {
-                // Extract JSON from the JS file
                 const jsonMatch = text.match(/const books = (\[[\s\S]*\]);/)
                 if (jsonMatch) {
                     const booksData = JSON.parse(jsonMatch[1])
                     setBooks(booksData)
-                    if (booksData.length > 0) {
-                        setSelectedBook(booksData[0].id)
-                    }
                 }
             })
             .catch(err => console.error('Error loading books:', err))
     }, [])
 
+    // Load Bible data when language changes
     useEffect(() => {
-        // Load Bible data when language changes
         const dataFile = language === 'hi' ? 'hi_data.js' : 'en_data.js'
         fetch(`/dashboard-web/data/bible/${dataFile}`)
             .then(res => res.text())
             .then(text => {
-                // Extract JSON from the JS file
                 const jsonMatch = text.match(/const bibleData = ({[\s\S]*});/)
                 if (jsonMatch) {
                     const data = JSON.parse(jsonMatch[1])
@@ -61,111 +57,269 @@ export default function BibleReaderPage() {
             .catch(err => console.error('Error loading Bible data:', err))
     }, [language])
 
-    useEffect(() => {
-        // Update current text when book/chapter changes
-        if (selectedBook && bibleData[selectedBook]) {
-            const chapterData = bibleData[selectedBook][selectedChapter]
-            if (chapterData) {
-                const verses = Object.entries(chapterData)
-                    .map(([verse, text]) => `${verse}. ${text}`)
-                    .join('\n\n')
-                setCurrentText(verses)
-            }
-        }
-    }, [selectedBook, selectedChapter, bibleData])
+    const selectedBook = books[selectedBookIndex]
+    const currentVerses = selectedBook && bibleData[selectedBook.id]?.[selectedChapter]
 
-    const selectedBookData = books.find(b => b.id === selectedBook)
-    const maxChapters = selectedBookData?.chapters || 1
+    const goToPrevChapter = () => {
+        if (selectedChapter > 1) {
+            setSelectedChapter(selectedChapter - 1)
+        } else if (selectedBookIndex > 0) {
+            setSelectedBookIndex(selectedBookIndex - 1)
+            setSelectedChapter(books[selectedBookIndex - 1].chapters)
+        }
+    }
+
+    const goToNextChapter = () => {
+        if (selectedBook && selectedChapter < selectedBook.chapters) {
+            setSelectedChapter(selectedChapter + 1)
+        } else if (selectedBookIndex < books.length - 1) {
+            setSelectedBookIndex(selectedBookIndex + 1)
+            setSelectedChapter(1)
+        }
+    }
+
+    const filteredBooks = searchQuery
+        ? books.filter(book =>
+            book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            book.nameHindi.includes(searchQuery)
+        )
+        : books
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <header className="bg-white sticky top-0 z-50 shadow-sm">
-                <div className="p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <Link href="/dashboard-web/" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+        <>
+            <style jsx global>{`
+        @import url('/shared/theme.css');
+        body { margin: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+      `}</style>
+
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+                {/* Header */}
+                <header style={{
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    backdropFilter: 'blur(10px)',
+                    padding: '1rem 1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+                    zIndex: 50
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <Link href="/dashboard-web/" style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '40px',
+                            height: '40px',
+                            background: 'var(--surface)',
+                            borderRadius: '50%',
+                            color: 'var(--text-display)',
+                            textDecoration: 'none'
+                        }}>
                             ←
                         </Link>
-                        <h1 className="text-xl font-bold">Bible Reader</h1>
-                    </div>
-                    <button
-                        onClick={() => setLanguage(language === 'hi' ? 'en' : 'hi')}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold"
-                    >
-                        {language === 'hi' ? 'हिंदी' : 'English'}
-                    </button>
-                </div>
-
-                {/* Book Selector */}
-                <div className="px-4 pb-4">
-                    <select
-                        value={selectedBook}
-                        onChange={(e) => {
-                            setSelectedBook(e.target.value)
-                            setSelectedChapter(1)
-                        }}
-                        className="w-full p-3 rounded-xl border-2 border-gray-200 bg-white font-semibold"
-                    >
-                        {books.map(book => (
-                            <option key={book.id} value={book.id}>
-                                {language === 'hi' ? book.nameHindi : book.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Chapter Selector */}
-                <div className="px-4 pb-4">
-                    <div className="flex items-center gap-2">
                         <button
-                            onClick={() => setSelectedChapter(Math.max(1, selectedChapter - 1))}
-                            disabled={selectedChapter === 1}
-                            className="px-4 py-2 bg-gray-200 rounded-lg font-bold disabled:opacity-50"
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                            style={{
+                                background: 'var(--surface)',
+                                border: 'none',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                cursor: 'pointer'
+                            }}
                         >
-                            ←
+                            ☰
                         </button>
-                        <select
-                            value={selectedChapter}
-                            onChange={(e) => setSelectedChapter(Number(e.target.value))}
-                            className="flex-1 p-3 rounded-xl border-2 border-gray-200 bg-white font-semibold text-center"
+                        <h1 style={{ margin: 0, fontSize: '1.2rem' }}>Bible Reader</h1>
+                    </div>
+
+                    {/* Language Toggle */}
+                    <div style={{ display: 'flex', background: 'white', borderRadius: '100px', padding: '4px', border: '1px solid rgba(0,0,0,0.1)' }}>
+                        <button
+                            onClick={() => setLanguage('en')}
+                            style={{
+                                background: language === 'en' ? 'var(--primary)' : 'transparent',
+                                border: 'none',
+                                padding: '6px 14px',
+                                borderRadius: '100px',
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                                fontSize: '13px'
+                            }}
                         >
-                            {Array.from({ length: maxChapters }, (_, i) => i + 1).map(ch => (
-                                <option key={ch} value={ch}>
-                                    Chapter {ch}
+                            EN
+                        </button>
+                        <button
+                            onClick={() => setLanguage('hi')}
+                            style={{
+                                background: language === 'hi' ? 'var(--primary)' : 'transparent',
+                                border: 'none',
+                                padding: '6px 14px',
+                                borderRadius: '100px',
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                                fontSize: '13px'
+                            }}
+                        >
+                            हिं
+                        </button>
+                    </div>
+                </header>
+
+                {/* Controls Row */}
+                <div style={{ padding: '1rem 1.5rem', background: 'var(--bg-color)', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '12px' }}>
+                        {/* Book Select */}
+                        <select
+                            value={selectedBookIndex}
+                            onChange={(e) => {
+                                setSelectedBookIndex(Number(e.target.value))
+                                setSelectedChapter(1)
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: '8px 12px',
+                                borderRadius: '100px',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                background: 'white',
+                                fontSize: '14px'
+                            }}
+                        >
+                            {books.map((book, index) => (
+                                <option key={book.id} value={index}>
+                                    {language === 'hi' ? book.nameHindi : book.name}
                                 </option>
                             ))}
                         </select>
+
+                        {/* Chapter Select */}
+                        <select
+                            value={selectedChapter}
+                            onChange={(e) => setSelectedChapter(Number(e.target.value))}
+                            style={{
+                                padding: '8px 12px',
+                                borderRadius: '100px',
+                                border: '1px solid rgba(0,0,0,0.1)',
+                                background: 'white',
+                                fontSize: '14px'
+                            }}
+                        >
+                            {selectedBook && Array.from({ length: selectedBook.chapters }, (_, i) => i + 1).map(ch => (
+                                <option key={ch} value={ch}>Chapter {ch}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <button
-                            onClick={() => setSelectedChapter(Math.min(maxChapters, selectedChapter + 1))}
-                            disabled={selectedChapter === maxChapters}
-                            className="px-4 py-2 bg-gray-200 rounded-lg font-bold disabled:opacity-50"
+                            onClick={goToPrevChapter}
+                            disabled={selectedBookIndex === 0 && selectedChapter === 1}
+                            style={{
+                                padding: '10px',
+                                borderRadius: '50%',
+                                border: '1px solid rgba(0,0,0,0.05)',
+                                background: 'white',
+                                cursor: 'pointer',
+                                opacity: selectedBookIndex === 0 && selectedChapter === 1 ? 0.5 : 1
+                            }}
+                        >
+                            ←
+                        </button>
+                        <div style={{ flex: 1, textAlign: 'center', fontWeight: 600 }}>
+                            {selectedBook && `${language === 'hi' ? selectedBook.nameHindi : selectedBook.name} ${selectedChapter}`}
+                        </div>
+                        <button
+                            onClick={goToNextChapter}
+                            disabled={selectedBookIndex === books.length - 1 && selectedBook && selectedChapter === selectedBook.chapters}
+                            style={{
+                                padding: '10px',
+                                borderRadius: '50%',
+                                border: '1px solid rgba(0,0,0,0.05)',
+                                background: 'white',
+                                cursor: 'pointer',
+                                opacity: selectedBookIndex === books.length - 1 && selectedBook && selectedChapter === selectedBook.chapters ? 0.5 : 1
+                            }}
                         >
                             →
                         </button>
                     </div>
                 </div>
-            </header>
 
-            {/* Bible Text */}
-            <div className="p-6 max-w-4xl mx-auto">
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                    <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
-                        {selectedBookData && (language === 'hi' ? selectedBookData.nameHindi : selectedBookData.name)} {selectedChapter}
-                    </h2>
-                    <div className="prose prose-lg max-w-none">
-                        {currentText.split('\n\n').map((verse, idx) => (
-                            <p key={idx} className="mb-4 leading-relaxed text-gray-800">
-                                {verse}
-                            </p>
-                        ))}
-                    </div>
-                    {!currentText && (
-                        <p className="text-center text-gray-500 py-8">
-                            Loading Bible text...
-                        </p>
+                {/* Main Content */}
+                <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                    {/* Sidebar */}
+                    {isSidebarOpen && (
+                        <div style={{
+                            width: '300px',
+                            background: 'rgba(255,255,255,0.7)',
+                            backdropFilter: 'blur(10px)',
+                            borderRight: '1px solid rgba(0,0,0,0.05)',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}>
+                            <div style={{ padding: '16px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                                <input
+                                    type="text"
+                                    placeholder="Search books..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px 10px 10px 36px',
+                                        borderRadius: '100px',
+                                        border: '1px solid rgba(0,0,0,0.1)',
+                                        background: 'white'
+                                    }}
+                                />
+                            </div>
+                            <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+                                {filteredBooks.map((book, index) => (
+                                    <div
+                                        key={book.id}
+                                        onClick={() => {
+                                            setSelectedBookIndex(books.indexOf(book))
+                                            setSelectedChapter(1)
+                                        }}
+                                        style={{
+                                            padding: '12px 16px',
+                                            cursor: 'pointer',
+                                            borderRadius: '8px',
+                                            background: selectedBookIndex === books.indexOf(book) ? 'var(--primary)' : 'transparent',
+                                            color: selectedBookIndex === books.indexOf(book) ? 'black' : 'var(--text-muted)',
+                                            marginBottom: '4px',
+                                            fontWeight: 500
+                                        }}
+                                    >
+                                        {language === 'hi' ? book.nameHindi : book.name}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     )}
+
+                    {/* Verse Display */}
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
+                        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                            <h2 style={{ marginBottom: '2rem', textAlign: 'center', color: 'var(--primary)' }}>
+                                {selectedBook && `${language === 'hi' ? selectedBook.nameHindi : selectedBook.name} ${selectedChapter}`}
+                            </h2>
+                            <div style={{ fontSize: '1.1rem', lineHeight: '2', fontFamily: 'var(--font-heading)' }}>
+                                {currentVerses ? (
+                                    Object.entries(currentVerses).map(([verse, text]) => (
+                                        <p key={verse} style={{ marginBottom: '1.5rem' }}>
+                                            <sup style={{ color: 'var(--primary)', fontWeight: 'bold', marginRight: '8px' }}>{verse}</sup>
+                                            {text}
+                                        </p>
+                                    ))
+                                ) : (
+                                    <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Loading verses...</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
