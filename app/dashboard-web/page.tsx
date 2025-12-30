@@ -94,6 +94,20 @@ export default function DashboardPage() {
                         <p className="text-xs text-gray-600">Test knowledge</p>
                     </Link>
 
+                    {/* Bible Reader */}
+                    <Link href="/dashboard-web/bible/read" className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow text-white">
+                        <div className="text-3xl mb-2">📕</div>
+                        <h4 className="font-bold mb-1">Read Bible</h4>
+                        <p className="text-xs opacity-90">Full Reader</p>
+                    </Link>
+
+                    {/* Catechism */}
+                    <Link href="/pwa/catechism" className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow text-white">
+                        <div className="text-3xl mb-2">📚</div>
+                        <h4 className="font-bold mb-1">Catechism</h4>
+                        <p className="text-xs opacity-90">Luther's Teaching</p>
+                    </Link>
+
                     {/* Sakshi Vani */}
                     <Link href="/pwa/" className="bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow text-white">
                         <div className="text-3xl mb-2">🎵</div>

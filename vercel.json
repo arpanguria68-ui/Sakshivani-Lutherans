@@ -1,18 +1,14 @@
 {
     "version": 2,
     "public": true,
-    "buildCommand": "echo 'No build needed for static sites'",
+    "buildCommand": "echo 'Using static HTML - no build needed'",
     "outputDirectory": ".",
     "cleanUrls": true,
     "trailingSlash": true,
     "redirects": [
         {
-            "source": "/pwa",
-            "destination": "/pwa/"
-        },
-        {
-            "source": "/dashboard",
-            "destination": "/dashboard/"
+            "source": "/",
+            "destination": "/dashboard-web/"
         }
     ],
     "rewrites": [
@@ -22,24 +18,12 @@
         },
         {
             "source": "/dashboard",
-            "destination": "/dashboard-web/index.html"
-        },
-        {
-            "source": "/pwa/(.*)",
-            "destination": "/pwa/$1"
-        },
-        {
-            "source": "/pwa",
-            "destination": "/pwa/index.html"
-        },
-        {
-            "source": "/",
-            "destination": "/index.html"
+            "destination": "/dashboard-web/"
         }
     ],
     "headers": [
         {
-            "source": "/pwa/sw.js",
+            "source": "/sw.js",
             "headers": [
                 {
                     "key": "Cache-Control",

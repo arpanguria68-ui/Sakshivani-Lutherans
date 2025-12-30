@@ -5,9 +5,13 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
-    // Disable server-side features for static export
-    experimental: {
-        appDir: true,
+    // Exclude React Native and other non-Next.js folders
+    pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+    typescript: {
+        ignoreBuildErrors: false,
+    },
+    eslint: {
+        ignoreDuringBuilds: false,
     },
 }
 
