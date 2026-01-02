@@ -8,10 +8,7 @@ __pycache__
 .gitignore
 sakshivani-rn
 res
-assets
 META-INF
 *.dex
 *.xml
-quiz_data.json
-catechism.json
 catechism.md
