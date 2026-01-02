@@ -18,9 +18,7 @@ class AccessibleReader {
 
         this.synth = window.speechSynthesis;
         this.utterance = null;
-        this.audioPlayer = new Audio(); // For Neural TTS
         this.isPlaying = false;
-        this.useNeural = false; // Toggles based on server availability
         this.chunks = []; // Array of { element, text }
         this.currentIndex = 0;
         this.settings = {
@@ -28,8 +26,7 @@ class AccessibleReader {
             lineHeight: 'normal',   // tight, normal, loose
             theme: 'default',       // default, contrast-light, contrast-dark
             font: 'default',        // default, dyslexic
-            rate: 1.0,
-            mode: 'auto'            // auto (prefer neural), native (browser only)
+            rate: 1.0
         };
 
         this.init();
@@ -42,47 +39,8 @@ class AccessibleReader {
         this.applySettings();
         this.setupKeyboardShortcuts();
 
-        // check availability of Neural Server
-        this.checkNeuralServer();
-
         // Show toolbar
         setTimeout(() => document.querySelector('.reader-toolbar').classList.add('visible'), 500);
-
-        // Handle Audio Player Events
-        this.audioPlayer.addEventListener('ended', () => {
-            if (this.isPlaying) {
-                this.currentIndex++;
-                if (this.currentIndex < this.chunks.length) {
-                    this.speakChunk(this.currentIndex);
-                } else {
-                    this.pause(); // Reset at end
-                    this.currentIndex = 0;
-                }
-            }
-        });
-    }
-
-    async checkNeuralServer() {
-        if (this.settings.mode === 'native') {
-            this.useNeural = false;
-            return;
-        }
-
-        try {
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), 1000); // 1s timeout
-            const res = await fetch('http://localhost:8000/health', { signal: controller.signal });
-            clearTimeout(id);
-
-            if (res.ok) {
-                this.useNeural = true;
-                this.updateStatus('Neural Voice Ready');
-                // document.getElementById('reader-mode-indicator').textContent = '🤖 Neural';
-            }
-        } catch (e) {
-            this.useNeural = false;
-            console.log('Neural Server not available, using Native TTS');
-        }
     }
 
     // --- UI INJECTION ---
@@ -141,13 +99,6 @@ class AccessibleReader {
                         <button class="reader-toggle-btn" data-setting="font" data-val="dyslexic">Dyslexic</button>
                     </div>
                 </div>
-                 <div class="reader-setting-group">
-                    <label>Voice Mode</label>
-                    <div class="reader-toggle-group">
-                        <button class="reader-toggle-btn active" data-setting="mode" data-val="auto">Auto</button>
-                        <button class="reader-toggle-btn" data-setting="mode" data-val="native">Native</button>
-                    </div>
-                </div>
                 <div class="reader-setting-group">
                     <label>Speed</label>
                     <div class="reader-toggle-group">
@@ -190,14 +141,7 @@ class AccessibleReader {
 
                 // Update State
                 this.settings[setting] = val;
-
-                if (setting === 'mode') {
-                    this.settings.mode = val;
-                    this.checkNeuralServer(); // Re-check
-                } else {
-                    this.applySettings();
-                }
-
+                this.applySettings();
                 this.saveSettings();
 
                 // UI Feedback
@@ -269,19 +213,12 @@ class AccessibleReader {
 
     pause() {
         this.isPlaying = false;
-
-        // Stop Neural
-        this.audioPlayer.pause();
-        this.audioPlayer.currentTime = 0;
-
-        // Stop Native
         this.synth.cancel();
-
         document.getElementById('reader-play').innerHTML = '▶ Play';
         this.updateStatus('Paused');
     }
 
-    async speakChunk(index) {
+    speakChunk(index) {
         if (index >= this.chunks.length) {
             this.pause();
             return;
@@ -290,52 +227,11 @@ class AccessibleReader {
         this.currentIndex = index;
         const chunk = this.chunks[index];
 
-        // Highlight
         this.highlight(chunk.element);
-
-        // Scroll into view
         chunk.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Update status
         this.updateStatus(`Reading ${index + 1}/${this.chunks.length}`);
 
-        if (this.useNeural) {
-            // --- Neural TTS Path ---
-            try {
-                this.audioPlayer.pause(); // Ensure clear
-
-                // Fetch Audio
-                const response = await fetch('http://localhost:8000/tts', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        text: chunk.text,
-                        language: this.language || 'en' // Pass current lang state
-                    })
-                });
-
-                if (!response.ok) throw new Error('TTS Gen Failed');
-
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-
-                // Clean up old URL?
-                // URL.revokeObjectURL...
-
-                this.audioPlayer.src = url;
-                this.audioPlayer.playbackRate = parseFloat(this.settings.rate) || 1.0;
-                this.audioPlayer.play();
-                // 'ended' event handler calls next chunk
-            } catch (e) {
-                console.error("Neural TTS Error:", e);
-                // Fallback to native for this chunk?
-                this.speakNative(chunk);
-            }
-
-        } else {
-            // --- Native TTS Path ---
-            this.speakNative(chunk);
-        }
+        this.speakNative(chunk);
     }
 
     speakNative(chunk) {
