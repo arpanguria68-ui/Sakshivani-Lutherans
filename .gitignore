@@ -34,7 +34,14 @@ dist/
 .env
 .env.local
 
+# Log files
+*.log
+
 # React Native
 sakshivani-rn/.expo/
 sakshivani-rn/android/app/build/
 sakshivani-rn/ios/Pods/
+
+# Test artifacts
+verification/
+test-results/

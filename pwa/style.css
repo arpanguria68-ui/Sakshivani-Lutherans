@@ -6,19 +6,6 @@
     /* White text on Indigo */
 
     /* Background Gradients */
-    --bg-color: #f0fdf4;
-    /* Fallback */
-    --bg-gradient: radial-gradient(circle at 15% 50%, #f0e7ff, transparent 25%),
-        radial-gradient(circle at 85% 30%, #fff5f5, transparent 25%),
-        radial-gradient(circle at 50% 50%, #fefce8, transparent 50%);
-
-    --surface: #FFFFFF;
-    --surface-glass: rgba(255, 255, 255, 0.7);
-    --text-display: #111827;
-    /* Dark Grey/Black */
-    --text-muted: #6B7280;
-    /* Medium Grey */
-
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
@@ -32,20 +19,6 @@
     --font-heading: 'Noto Serif Devanagari', serif;
     --font-body: 'Noto Serif Devanagari', serif;
     --font-ui: 'Noto Sans Devanagari', sans-serif;
-
-    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
-    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-[data-theme="dark"] {
-    --bg-start: #0F1419;
-    --bg-end: #1A1F2E;
-    --surface: #1E2430;
-    --surface-glass: rgba(30, 41, 59, 0.9);
-    /* Dark glass */
-    --text-display: #FFFFFF;
-    --text-muted: #9CA3AF;
-    --primary-foreground: #FFFFFF;
 }
 
 /* Reset & Base */
@@ -57,12 +30,10 @@
 
 body {
     font-family: var(--font-body);
-    background-color: var(--bg-color, #FAFAFA);
-    /* Use var fallback */
+    background-color: var(--bg-primary);
     background-image: var(--bg-gradient);
     background-attachment: fixed;
-    background-size: 100% 100%;
-    color: var(--text-display);
+    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
     padding-bottom: 80px;

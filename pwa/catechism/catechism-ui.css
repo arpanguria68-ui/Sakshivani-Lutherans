@@ -1,14 +1,4 @@
 /* Catechism UI - Mobile First Design */
-:root {
-    --card-bg-light: #ffffff;
-    --card-bg-dark: #1E2430;
-    /* Dark blue-grey from image */
-    --accent-yellow: #FACC15;
-    --text-dark: #cbd5e1;
-    --num-badge-bg: rgba(250, 204, 21, 0.2);
-    --num-badge-text: #FACC15;
-}
-
 body {
     background-color: var(--bg-primary);
     color: var(--text-display);
@@ -90,8 +80,8 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--num-badge-bg);
-    color: var(--num-badge-text);
+    background: rgba(var(--accent), 0.2);
+    color: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -299,9 +299,6 @@ function loadChapter() {
             }
 
             if (verses.length > 0) {
-                // Debug: Capture rendering source
-                state.debugSource = verses[0].Verse.substring(0, 10);
-
                 elements.verseDisplay.innerHTML = verses.map(v => {
                     // Verseid is typically "00001000". slice(-3) gives "000". parseInt is 0. Conventionally this is Verse 1.
                     // We add 1 to correct the display.
