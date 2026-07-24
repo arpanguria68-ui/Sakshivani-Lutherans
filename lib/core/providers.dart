@@ -16,6 +16,8 @@ import '../features/auth/domain/auth_state.dart';
 import '../services/church_courtesy_service.dart';
 import '../services/notification_service.dart';
 import '../services/sync_service.dart';
+import '../services/tts_service.dart';
+import '../features/reader/controller/reader_settings_controller.dart';
 import 'app_runtime.dart';
 import 'bootstrap/firebase_bootstrap.dart';
 import 'theme/theme_mode_controller.dart';
@@ -106,12 +108,20 @@ final Provider<NotificationService> notificationServiceProvider =
   return NotificationService();
 });
 
+final Provider<TtsService> ttsServiceProvider =
+    Provider<TtsService>((ProviderRef<TtsService> ref) {
+  final TtsService service = TtsService();
+  ref.onDispose(service.dispose);
+  return service;
+});
+
 final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FutureProviderRef<void> ref) async {
   AppRuntime.firebaseEnabled = await FirebaseBootstrap.initialize();
   final AppDatabase database = await AppDatabase.open();
   AppRuntime.setDatabase(database);
 
   await ref.read(themeModeControllerProvider.notifier).load();
+  await ref.read(readerSettingsControllerProvider.notifier).load();
   await ref.read(authControllerProvider.notifier).initialize();
 
   final NotificationService notifications = ref.read(notificationServiceProvider);

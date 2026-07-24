@@ -8,6 +8,7 @@ class LocalStorageService {
   static const String _courtesyVolumeLevelKey = 'settings.courtesy_volume_level';
   static const String _localGuestUidKey = 'auth.local_guest_uid';
   static const String _songReaderFontSizeKey = 'settings.song_reader_font_size';
+  static const String _readerSettingsKey = 'settings.reader_settings_json';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -66,5 +67,13 @@ class LocalStorageService {
 
   Future<void> setSongReaderFontSize(double value) async {
     await (await _prefs).setDouble(_songReaderFontSizeKey, value);
+  }
+
+  Future<String?> getReaderSettingsJson() async {
+    return (await _prefs).getString(_readerSettingsKey);
+  }
+
+  Future<void> setReaderSettingsJson(String json) async {
+    await (await _prefs).setString(_readerSettingsKey, json);
   }
 }
