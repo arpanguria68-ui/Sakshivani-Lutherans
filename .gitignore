@@ -38,3 +38,18 @@ dist/
 sakshivani-rn/.expo/
 sakshivani-rn/android/app/build/
 sakshivani-rn/ios/Pods/
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+*.iml
+.idea/
+flutter_setup.log
+android/local.properties
+android/key.properties
+android/.kotlin/
+android/.gradle/
+**/*.keystore
+**/*.jks

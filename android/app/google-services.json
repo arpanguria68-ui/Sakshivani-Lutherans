@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "508965701606",
+    "project_id": "sakshivani-lutherans",
+    "storage_bucket": "sakshivani-lutherans.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508965701606:android:9f56a2d4a6c8c5c421f827",
+        "android_client_info": {
+          "package_name": "com.sakshivani.Lutherans"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAukQjjZSelinaRkuHO_5teNSDGbojKQ3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
