@@ -10,6 +10,7 @@ import '../data/repositories/favorites_repository.dart';
 import '../data/repositories/progress_repository.dart';
 import '../data/repositories/reflection_repository.dart';
 import '../data/repositories/sync_queue_repository.dart';
+import '../data/search/search_repository.dart';
 import '../features/auth/controller/auth_controller.dart';
 import '../features/auth/domain/auth_state.dart';
 import '../services/church_courtesy_service.dart';
@@ -50,6 +51,14 @@ final Provider<ContentRepository> contentRepositoryProvider =
 final Provider<BibleRepository> bibleRepositoryProvider =
     Provider<BibleRepository>((ProviderRef<BibleRepository> ref) {
   return BibleRepository();
+});
+
+final Provider<SearchRepository> searchRepositoryProvider =
+    Provider<SearchRepository>((ProviderRef<SearchRepository> ref) {
+  return SearchRepository(
+    ref.read(contentRepositoryProvider),
+    ref.read(bibleRepositoryProvider),
+  );
 });
 
 final Provider<ProgressRepository> progressRepositoryProvider =

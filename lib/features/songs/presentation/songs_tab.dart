@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/providers.dart';
 import '../../../data/models/song.dart';
-import 'song_reader_screen.dart';
+import '../../../data/search/search_engine.dart';
+import '../../search/providers/search_providers.dart';
+import 'song_reader_screen.dart' show favoriteSongsProvider;
 import '../../../shared/widgets/glass_card.dart';
+import '../../../shared/widgets/highlighted_text.dart';
 import '../../../shared/widgets/section_heading.dart';
 
 class SongsTab extends ConsumerStatefulWidget {
@@ -17,19 +22,45 @@ class SongsTab extends ConsumerStatefulWidget {
 
 class _SongsTabState extends ConsumerState<SongsTab> {
   final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
   String _query = '';
 
   @override
+  void initState() {
+    super.initState();
+    // Warm the song index shortly after first frame so the first query is fast.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(searchRepositoryProvider).warmUp(languages: const <String>[]);
+    });
+  }
+
+  @override
   void dispose() {
+    _debounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
 
+  void _onQueryChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 200), () {
+      if (!mounted) return;
+      setState(() => _query = value.trim());
+    });
+  }
+
+  void _clear() {
+    _debounce?.cancel();
+    _searchController.clear();
+    setState(() => _query = '');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<Song>> songs = ref.watch(songsProvider(_query));
+    final bool searching = _query.isNotEmpty;
     final AsyncValue<List<String>> favorites = ref.watch(favoriteSongsProvider);
-    final Set<String> favoriteIds = favorites.value == null ? <String>{} : favorites.value!.toSet();
+    final Set<String> favoriteIds =
+        favorites.value == null ? <String>{} : favorites.value!.toSet();
 
     return SafeArea(
       child: Column(
@@ -38,85 +69,148 @@ class _SongsTabState extends ConsumerState<SongsTab> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             child: Column(
               children: <Widget>[
-                const SectionHeading(title: 'गीत पुस्तक', subtitle: 'Search by title, lyric, category, reference'),
+                const SectionHeading(
+                  title: 'गीत पुस्तक',
+                  subtitle: 'Smart search — title, lyric, category, or romanised Hindi',
+                ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: _searchController,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'Search songs...',
+                    hintText: 'Search songs… (e.g. yeeshu, prabhu, आराधना)',
                     prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _query.isEmpty
+                    suffixIcon: _searchController.text.isEmpty
                         ? null
                         : IconButton(
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() {
-                                _query = '';
-                              });
-                            },
+                            onPressed: _clear,
                             icon: const Icon(Icons.close),
                           ),
                   ),
-                  onChanged: (String value) {
-                    setState(() {
-                      _query = value;
-                    });
-                  },
+                  onChanged: _onQueryChanged,
                 ),
               ],
             ),
           ),
           Expanded(
-            child: songs.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (Object e, StackTrace _) => Center(child: Text('Could not load songs: $e')),
-              data: (List<Song> items) {
-                if (items.isEmpty) {
-                  return const Center(child: Text('No songs found for this search.'));
-                }
-                return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
-                  itemCount: items.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (BuildContext context, int index) {
-                    final Song song = items[index];
-                    return GlassCard(
-                      onTap: () => context.push('/song/${song.id}'),
-                      child: Row(
-                        children: <Widget>[
-                          CircleAvatar(
-                            child: Text('${song.id}'),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(song.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-                                const SizedBox(height: 2),
-                                Text(song.category, maxLines: 1, overflow: TextOverflow.ellipsis),
-                              ],
-                            ),
-                          ),
-                          if (favoriteIds.contains(song.id.toString()))
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4),
-                              child: Icon(
-                                Icons.favorite,
-                                size: 18,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.chevron_right),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
+            child: searching
+                ? _buildSearchResults(favoriteIds)
+                : _buildBrowseList(favoriteIds),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBrowseList(Set<String> favoriteIds) {
+    final AsyncValue<List<Song>> songs = ref.watch(songsProvider(''));
+    return songs.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (Object e, StackTrace _) => Center(child: Text('Could not load songs: $e')),
+      data: (List<Song> items) {
+        if (items.isEmpty) {
+          return const Center(child: Text('No songs available.'));
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+          itemCount: items.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (BuildContext context, int index) {
+            final Song song = items[index];
+            return _SongCard(
+              song: song,
+              isFavorite: favoriteIds.contains(song.id.toString()),
+              matchedTerms: const <String>{},
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildSearchResults(Set<String> favoriteIds) {
+    final AsyncValue<List<SearchHit<Song>>> results =
+        ref.watch(songSearchProvider(_query));
+    return results.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (Object e, StackTrace _) => Center(child: Text('Search failed: $e')),
+      data: (List<SearchHit<Song>> hits) {
+        if (hits.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                'No matches for “$_query”.\nTry a different word or spelling.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+          itemCount: hits.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (BuildContext context, int index) {
+            final SearchHit<Song> hit = hits[index];
+            return _SongCard(
+              song: hit.ref,
+              isFavorite: favoriteIds.contains(hit.ref.id.toString()),
+              matchedTerms: hit.matchedTerms,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _SongCard extends StatelessWidget {
+  const _SongCard({
+    required this.song,
+    required this.isFavorite,
+    required this.matchedTerms,
+  });
+
+  final Song song;
+  final bool isFavorite;
+  final Set<String> matchedTerms;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      onTap: () => context.push('/song/${song.id}'),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(child: Text('${song.id}')),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                HighlightedText(
+                  text: song.title,
+                  terms: matchedTerms,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  song.category,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ),
           ),
+          if (isFavorite)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Icon(Icons.favorite, size: 18, color: Theme.of(context).colorScheme.primary),
+            ),
+          const SizedBox(width: 8),
+          const Icon(Icons.chevron_right),
         ],
       ),
     );

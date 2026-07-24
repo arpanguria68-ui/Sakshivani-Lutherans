@@ -216,6 +216,38 @@ class BibleRepository {
     return verses[verse - 1];
   }
 
+  /// Flatten every verse of [language] into a single list (used to build the
+  /// in-memory search index). Cached parse means this is a one-time O(verses).
+  Future<List<BibleVerse>> getAllVerses(String language) async {
+    final Map<String, dynamic> map = await _ensureLoaded(language);
+    final List<dynamic> books = map['Book'] as List<dynamic>;
+    final List<String> names = language == 'en' ? _englishBooks : _hindiBooks;
+    final List<BibleVerse> result = <BibleVerse>[];
+
+    for (int b = 0; b < books.length; b++) {
+      final Map<String, dynamic> book = (books[b] as Map<dynamic, dynamic>).cast<String, dynamic>();
+      final List<dynamic> chapters = book['Chapter'] as List<dynamic>;
+      for (int c = 0; c < chapters.length; c++) {
+        final Map<String, dynamic> chapter =
+            (chapters[c] as Map<dynamic, dynamic>).cast<String, dynamic>();
+        final List<dynamic> verses = chapter['Verse'] as List<dynamic>;
+        for (int v = 0; v < verses.length; v++) {
+          final Map<String, dynamic> verse =
+              (verses[v] as Map<dynamic, dynamic>).cast<String, dynamic>();
+          result.add(BibleVerse(
+            id: '$language-${b + 1}-${c + 1}-${v + 1}',
+            book: names[b],
+            chapter: c + 1,
+            verse: v + 1,
+            text: verse['Verse'] as String? ?? '',
+            language: language,
+          ));
+        }
+      }
+    }
+    return result;
+  }
+
   Future<List<BibleVerse>> search({
     required String language,
     required String query,

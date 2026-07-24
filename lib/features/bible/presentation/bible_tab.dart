@@ -373,6 +373,9 @@ final bibleVersesProvider = FutureProvider.family<List<BibleVerse>, BibleLocatio
 
 final bibleSearchProvider = FutureProvider.family<List<BibleVerse>, BibleSearchRequest>(
   (ref, BibleSearchRequest query) async {
-    return ref.read(bibleRepositoryProvider).search(language: query.language, query: query.query);
+    final hits = await ref
+        .read(searchRepositoryProvider)
+        .searchVerses(query.language, query.query, limit: 80);
+    return hits.map((h) => h.ref).toList(growable: false);
   },
 );

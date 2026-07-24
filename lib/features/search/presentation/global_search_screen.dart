@@ -177,8 +177,11 @@ final globalSearchProvider = FutureProvider.family<GlobalSearchResult, String>(
       return const GlobalSearchResult(songs: <Song>[], verses: <BibleVerse>[], catechism: <CatechismChapter>[]);
     }
 
-    final songs = await ref.read(contentRepositoryProvider).getSongs(query: q);
-    final verses = await ref.read(bibleRepositoryProvider).search(language: 'hi', query: q, limit: 20);
+    final searchRepo = ref.read(searchRepositoryProvider);
+    final songHits = await searchRepo.searchSongs(q, limit: 20);
+    final songs = songHits.map((h) => h.ref).toList(growable: false);
+    final verseHits = await searchRepo.searchVersesAllLanguages(q, limit: 20);
+    final verses = verseHits.map((h) => h.ref).toList(growable: false);
     final catechism = await ref.read(contentRepositoryProvider).getCatechismChapters();
     final String lower = q.toLowerCase();
     final catechismFiltered = catechism.where((CatechismChapter c) {
