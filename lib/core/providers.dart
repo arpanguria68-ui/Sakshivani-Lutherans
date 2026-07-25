@@ -7,6 +7,7 @@ import '../data/repositories/auth_repository.dart';
 import '../data/repositories/bible_repository.dart';
 import '../data/repositories/content_repository.dart';
 import '../data/repositories/favorites_repository.dart';
+import '../data/repositories/planner_repository.dart';
 import '../data/repositories/progress_repository.dart';
 import '../data/repositories/reflection_repository.dart';
 import '../data/repositories/sync_queue_repository.dart';
@@ -68,6 +69,11 @@ final Provider<ProgressRepository> progressRepositoryProvider =
   return ProgressRepository(ref.read(databaseProvider), ref.read(syncQueueRepositoryProvider));
 });
 
+final Provider<PlannerRepository> plannerRepositoryProvider =
+    Provider<PlannerRepository>((ProviderRef<PlannerRepository> ref) {
+  return PlannerRepository(ref.read(databaseProvider));
+});
+
 final Provider<ReflectionRepository> reflectionRepositoryProvider =
     Provider<ReflectionRepository>((ProviderRef<ReflectionRepository> ref) {
   return ReflectionRepository(ref.read(databaseProvider), ref.read(syncQueueRepositoryProvider));
@@ -126,6 +132,10 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
 
   final NotificationService notifications = ref.read(notificationServiceProvider);
   await notifications.initialize();
-  await notifications.scheduleDailyVerseReminder();
+  final LocalStorageService storage = ref.read(localStorageServiceProvider);
+  if (await storage.getReminderEnabled()) {
+    final (int h, int m) = await storage.getReminderTime();
+    await notifications.scheduleDailyVerseReminderAt(hour: h, minute: m);
+  }
   await notifications.scheduleChurchCourtesyReminder();
 });

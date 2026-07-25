@@ -13,6 +13,42 @@ class NotificationService {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings settings = InitializationSettings(android: android);
     await _plugin.initialize(settings);
+
+    // Android 13+ runtime notification permission.
+    final AndroidFlutterLocalNotificationsPlugin? androidImpl = _plugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await androidImpl?.requestNotificationsPermission();
+  }
+
+  /// Schedule the daily reminder at [hour]:[minute] (replaces id 1002).
+  Future<void> scheduleDailyVerseReminderAt({required int hour, required int minute}) async {
+    await _plugin.cancel(1002);
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'daily_verse',
+      'Daily Verse',
+      channelDescription: 'Daily verse and reading reminders.',
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+    );
+    const NotificationDetails details = NotificationDetails(android: androidDetails);
+    final DateTime now = DateTime.now();
+    DateTime next = DateTime(now.year, now.month, now.day, hour, minute);
+    if (!next.isAfter(now)) {
+      next = next.add(const Duration(days: 1));
+    }
+    await _plugin.zonedSchedule(
+      1002,
+      'Sakshi Vani',
+      'आज का वचन और पठन के लिए खोलें',
+      tz.TZDateTime.from(next, tz.local),
+      details,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+
+  Future<void> cancelDailyVerseReminder() async {
+    await _plugin.cancel(1002);
   }
 
   Future<void> scheduleChurchCourtesyReminder() async {

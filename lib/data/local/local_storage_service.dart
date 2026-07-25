@@ -9,6 +9,9 @@ class LocalStorageService {
   static const String _localGuestUidKey = 'auth.local_guest_uid';
   static const String _songReaderFontSizeKey = 'settings.song_reader_font_size';
   static const String _readerSettingsKey = 'settings.reader_settings_json';
+  static const String _reminderEnabledKey = 'settings.daily_reminder_enabled';
+  static const String _reminderHourKey = 'settings.daily_reminder_hour';
+  static const String _reminderMinuteKey = 'settings.daily_reminder_minute';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -75,5 +78,25 @@ class LocalStorageService {
 
   Future<void> setReaderSettingsJson(String json) async {
     await (await _prefs).setString(_readerSettingsKey, json);
+  }
+
+  Future<bool> getReminderEnabled() async {
+    return (await _prefs).getBool(_reminderEnabledKey) ?? true;
+  }
+
+  Future<void> setReminderEnabled(bool v) async {
+    await (await _prefs).setBool(_reminderEnabledKey, v);
+  }
+
+  /// Daily reminder time as (hour, minute); defaults to 06:30.
+  Future<(int, int)> getReminderTime() async {
+    final prefs = await _prefs;
+    return (prefs.getInt(_reminderHourKey) ?? 6, prefs.getInt(_reminderMinuteKey) ?? 30);
+  }
+
+  Future<void> setReminderTime(int hour, int minute) async {
+    final prefs = await _prefs;
+    await prefs.setInt(_reminderHourKey, hour);
+    await prefs.setInt(_reminderMinuteKey, minute);
   }
 }

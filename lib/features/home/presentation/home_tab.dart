@@ -5,7 +5,10 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers.dart';
 import '../../../data/models/bible_verse.dart';
+import '../../../data/repositories/planner_repository.dart';
 import '../../../data/repositories/progress_repository.dart';
+import '../../planner/domain/reading_plan.dart';
+import '../../planner/presentation/planner_screen.dart';
 import '../../../services/church_courtesy_service.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
@@ -149,6 +152,8 @@ class _HomeTabState extends ConsumerState<HomeTab> {
               },
             ),
           ),
+          const SizedBox(height: 14),
+          const _TodayReadingCard(),
           const SizedBox(height: 18),
           const SectionHeading(title: 'Quick Access'),
           const SizedBox(height: 12),
@@ -174,11 +179,26 @@ class _HomeTabState extends ConsumerState<HomeTab> {
             ],
           ),
           const SizedBox(height: 12),
-          _QuickActionCard(
-            icon: Icons.quiz,
-            title: 'Bible Quiz',
-            subtitle: 'Test and learn',
-            onTap: () => context.push('/quiz'),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: _QuickActionCard(
+                  icon: Icons.quiz,
+                  title: 'Bible Quiz',
+                  subtitle: 'Test and learn',
+                  onTap: () => context.push('/quiz'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _QuickActionCard(
+                  icon: Icons.event_available,
+                  title: 'Planner',
+                  subtitle: 'Reading plans',
+                  onTap: () => context.push('/planner'),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
           const SectionHeading(title: 'Journey Snapshot'),
@@ -229,6 +249,67 @@ final FutureProvider<ProgressStats> progressStatsProvider =
     FutureProvider<ProgressStats>((FutureProviderRef<ProgressStats> ref) async {
   return ref.read(progressRepositoryProvider).getProgressStats();
 });
+
+class _TodayReadingCard extends ConsumerWidget {
+  const _TodayReadingCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<ActivePlan?> active = ref.watch(activePlanProvider);
+    final TextTheme text = Theme.of(context).textTheme;
+
+    return active.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (ActivePlan? plan) {
+        if (plan == null) {
+          return GlassCard(
+            onTap: () => context.push('/planner'),
+            child: Row(
+              children: <Widget>[
+                const Icon(Icons.event_available),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Start a reading plan', style: text.titleMedium),
+                      Text('Daily Bible readings with progress', style: text.bodySmall),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right),
+              ],
+            ),
+          );
+        }
+        final ReadingPlan rp = ReadingPlans.build(plan.planKey);
+        final int day = PlannerRepository.currentDayIndex(plan.startDate)
+            .clamp(0, rp.totalDays - 1);
+        return GlassCard(
+          onTap: () => context.push('/planner'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  const Icon(Icons.event_available, size: 18),
+                  const SizedBox(width: 6),
+                  Text("Today's reading · Day ${day + 1}", style: text.titleMedium),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(rp.days[day].label('hi'),
+                  style: text.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 2),
+              Text(rp.title, style: text.bodySmall),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
 
 class _QuickActionCard extends StatelessWidget {
   const _QuickActionCard({

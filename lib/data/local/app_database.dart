@@ -27,49 +27,15 @@ class AppDatabase {
 
     final Database appDb = await openDatabase(
       appDbPath,
-      version: 1,
+      version: 2,
       onCreate: (Database db, int version) async {
-        await db.execute('''
-          CREATE TABLE prayer_logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date_iso TEXT NOT NULL,
-            count INTEGER NOT NULL DEFAULT 0,
-            notes TEXT NOT NULL DEFAULT '',
-            synced INTEGER NOT NULL DEFAULT 0,
-            updated_at TEXT NOT NULL
-          )
-        ''');
-
-        await db.execute('''
-          CREATE TABLE reflections (
-            id TEXT PRIMARY KEY,
-            text TEXT NOT NULL,
-            verse TEXT NOT NULL,
-            date_iso TEXT NOT NULL,
-            is_private INTEGER NOT NULL DEFAULT 1,
-            synced INTEGER NOT NULL DEFAULT 0,
-            updated_at TEXT NOT NULL
-          )
-        ''');
-
-        await db.execute('''
-          CREATE TABLE sync_queue (
-            id TEXT PRIMARY KEY,
-            type TEXT NOT NULL,
-            payload TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            retries INTEGER NOT NULL DEFAULT 0
-          )
-        ''');
-
-        await db.execute('''
-          CREATE TABLE favorites (
-            id TEXT PRIMARY KEY,
-            item_type TEXT NOT NULL,
-            item_ref TEXT NOT NULL,
-            created_at TEXT NOT NULL
-          )
-        ''');
+        await _createV1(db);
+        await _createV2(db);
+      },
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        if (oldVersion < 2) {
+          await _createV2(db);
+        }
       },
     );
 
@@ -96,6 +62,66 @@ class AppDatabase {
       _songsDb = null;
     }
     _instance = null;
+  }
+
+  static Future<void> _createV1(Database db) async {
+    await db.execute('''
+      CREATE TABLE prayer_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date_iso TEXT NOT NULL,
+        count INTEGER NOT NULL DEFAULT 0,
+        notes TEXT NOT NULL DEFAULT '',
+        synced INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE reflections (
+        id TEXT PRIMARY KEY,
+        text TEXT NOT NULL,
+        verse TEXT NOT NULL,
+        date_iso TEXT NOT NULL,
+        is_private INTEGER NOT NULL DEFAULT 1,
+        synced INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE sync_queue (
+        id TEXT PRIMARY KEY,
+        type TEXT NOT NULL,
+        payload TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        retries INTEGER NOT NULL DEFAULT 0
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE favorites (
+        id TEXT PRIMARY KEY,
+        item_type TEXT NOT NULL,
+        item_ref TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      )
+    ''');
+  }
+
+  /// Reading-plan state + per-day completions (added in v2).
+  static Future<void> _createV2(Database db) async {
+    await db.execute('''
+      CREATE TABLE active_plan (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        plan_key TEXT NOT NULL,
+        start_iso TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE plan_completions (
+        plan_key TEXT NOT NULL,
+        day_index INTEGER NOT NULL,
+        done_iso TEXT NOT NULL,
+        PRIMARY KEY (plan_key, day_index)
+      )
+    ''');
   }
 
   static Future<String> _ensureSongsDb() async {

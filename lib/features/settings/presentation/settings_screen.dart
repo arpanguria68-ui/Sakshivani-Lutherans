@@ -18,6 +18,8 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _churchModeEnabled = true;
   double _courtesyVolume = 0.20;
+  bool _reminderEnabled = true;
+  TimeOfDay _reminderTime = const TimeOfDay(hour: 6, minute: 30);
 
   @override
   void initState() {
@@ -29,13 +31,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final storage = ref.read(localStorageServiceProvider);
     final bool enabled = await storage.getChurchModeEnabled();
     final double volume = await storage.getCourtesyVolumeLevel();
+    final bool remEnabled = await storage.getReminderEnabled();
+    final (int h, int m) = await storage.getReminderTime();
     if (!mounted) {
       return;
     }
     setState(() {
       _churchModeEnabled = enabled;
       _courtesyVolume = volume;
+      _reminderEnabled = remEnabled;
+      _reminderTime = TimeOfDay(hour: h, minute: m);
     });
+  }
+
+  Future<void> _applyReminder() async {
+    final storage = ref.read(localStorageServiceProvider);
+    final notifications = ref.read(notificationServiceProvider);
+    await storage.setReminderEnabled(_reminderEnabled);
+    await storage.setReminderTime(_reminderTime.hour, _reminderTime.minute);
+    if (_reminderEnabled) {
+      await notifications.scheduleDailyVerseReminderAt(
+          hour: _reminderTime.hour, minute: _reminderTime.minute);
+    } else {
+      await notifications.cancelDailyVerseReminder();
+    }
   }
 
   @override
@@ -124,6 +143,43 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           label: const Text('DND settings'),
                         ),
                       ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Daily Reminder', style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 8),
+                    SwitchListTile.adaptive(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Daily verse & reading reminder'),
+                      subtitle: const Text('A gentle nudge to open the app each day.'),
+                      value: _reminderEnabled,
+                      onChanged: (bool v) async {
+                        setState(() => _reminderEnabled = v);
+                        await _applyReminder();
+                      },
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.schedule),
+                      title: const Text('Reminder time'),
+                      trailing: Text(_reminderTime.format(context)),
+                      enabled: _reminderEnabled,
+                      onTap: () async {
+                        final TimeOfDay? picked = await showTimePicker(
+                          context: context,
+                          initialTime: _reminderTime,
+                        );
+                        if (picked != null) {
+                          setState(() => _reminderTime = picked);
+                          await _applyReminder();
+                        }
+                      },
                     ),
                   ],
                 ),
