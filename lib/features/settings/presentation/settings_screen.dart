@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/providers.dart';
 import '../../../features/auth/domain/auth_state.dart';
 import '../../../services/church_courtesy_service.dart';
+import '../../../services/tts_service.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -20,6 +21,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   double _courtesyVolume = 0.20;
   bool _reminderEnabled = true;
   TimeOfDay _reminderTime = const TimeOfDay(hour: 6, minute: 30);
+  List<TtsEngineInfo> _ttsEngines = <TtsEngineInfo>[];
+  String? _ttsEngine; // null = auto
 
   @override
   void initState() {
@@ -36,12 +39,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (!mounted) {
       return;
     }
-    setState(() {
-      _churchModeEnabled = enabled;
-      _courtesyVolume = volume;
-      _reminderEnabled = remEnabled;
-      _reminderTime = TimeOfDay(hour: h, minute: m);
-    });
+    final String? ttsEngine = await storage.getTtsEngine();
+    if (mounted) {
+      setState(() {
+        _churchModeEnabled = enabled;
+        _courtesyVolume = volume;
+        _reminderEnabled = remEnabled;
+        _reminderTime = TimeOfDay(hour: h, minute: m);
+        _ttsEngine = ttsEngine;
+      });
+    }
+    // Engine discovery can take a moment; load it after the basics.
+    final List<TtsEngineInfo> engines =
+        await ref.read(ttsServiceProvider).availableEngines();
+    if (mounted) setState(() => _ttsEngines = engines);
+  }
+
+  Future<void> _selectTtsEngine(String? engine) async {
+    setState(() => _ttsEngine = engine);
+    await ref.read(ttsServiceProvider).setPreferredEngine(engine);
+    await ref.read(localStorageServiceProvider).setTtsEngine(engine);
   }
 
   Future<void> _applyReminder() async {
@@ -181,6 +198,68 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         }
                       },
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              GlassCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Read-aloud voice (TTS)', style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Choose the speech engine. “Auto” uses the best installed '
+                      'engine per language and falls back to Google TTS for '
+                      'languages your default engine can’t speak (e.g. Hindi).',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 6),
+                    RadioListTile<String?>(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Auto (recommended)'),
+                      subtitle: const Text('Best engine per language'),
+                      value: null,
+                      groupValue: _ttsEngine,
+                      onChanged: _selectTtsEngine,
+                    ),
+                    if (_ttsEngines.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text('Detecting installed engines…'),
+                      )
+                    else
+                      ..._ttsEngines.map((TtsEngineInfo e) => RadioListTile<String?>(
+                            contentPadding: EdgeInsets.zero,
+                            title: Row(
+                              children: <Widget>[
+                                Flexible(child: Text(e.label, overflow: TextOverflow.ellipsis)),
+                                if (e.isDefault)
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 6),
+                                    child: Text('· default', style: TextStyle(fontSize: 12)),
+                                  ),
+                              ],
+                            ),
+                            subtitle: Text(
+                              'Hindi ${e.supportsHindi ? "✓" : "✗"}  ·  '
+                              'English ${e.supportsEnglish ? "✓" : "✗"}  ·  '
+                              '${e.languageCount} languages',
+                            ),
+                            value: e.id,
+                            groupValue: _ttsEngine,
+                            onChanged: _selectTtsEngine,
+                          )),
+                    if (_ttsEngines.isNotEmpty &&
+                        !_ttsEngines.any((TtsEngineInfo e) => e.supportsHindi))
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          'No installed engine has a Hindi voice. Install it in '
+                          'Settings → General management → Text-to-speech (Google TTS).',
+                          style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                        ),
+                      ),
                   ],
                 ),
               ),

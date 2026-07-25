@@ -1,37 +1,131 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
-/// Thin wrapper over flutter_tts for reading hymns / verses / catechism aloud,
-/// line by line, with per-line callbacks so the UI can highlight the active
-/// line. Uses the device's offline TTS engine (no network).
+/// Info about one installed TTS engine and the languages we care about.
+class TtsEngineInfo {
+  const TtsEngineInfo({
+    required this.id,
+    required this.label,
+    required this.isDefault,
+    required this.supportsHindi,
+    required this.supportsEnglish,
+    required this.languageCount,
+  });
+
+  final String id;
+  final String label;
+  final bool isDefault;
+  final bool supportsHindi;
+  final bool supportsEnglish;
+  final int languageCount;
+}
+
+/// Wrapper over flutter_tts for line-by-line read-aloud.
 ///
-/// Hindi note: many OEM TTS engines (e.g. Samsung) omit Hindi. We prefer the
-/// Google TTS engine when present, and report when hi-IN isn't installed so the
-/// UI can guide the user to install the voice.
+/// Engine-aware: it discovers installed TTS engines, lets the user pick a
+/// preferred one, and — crucially — for any content language the chosen engine
+/// can't speak (commonly Hindi on OEM engines like Samsung) it falls back to
+/// Google TTS automatically, per line.
 class TtsService {
   TtsService() {
     _initFuture = _init();
   }
 
+  static const String googleEngine = 'com.google.android.tts';
+
   final FlutterTts _tts = FlutterTts();
   late final Future<void> _initFuture;
+
   bool _cancelled = false;
   int _currentLine = 0;
   bool _isSpeaking = false;
+
+  String? _preferredEngine; // null = auto
+  String? _defaultEngine;
+  String? _activeEngine; // currently set on the plugin
+  final Map<String, Set<String>> _engineLangs = <String, Set<String>>{};
 
   int get currentLine => _currentLine;
   bool get isSpeaking => _isSpeaking;
 
   Future<void> _init() async {
     await _tts.awaitSpeakCompletion(true);
-    // Prefer the Google engine, which ships Hindi, when it's installed.
+    await _scanEngines();
+  }
+
+  /// Enumerate engines and the languages each supports (one-time, cached).
+  Future<void> _scanEngines() async {
     try {
-      final dynamic engines = await _tts.getEngines;
-      if (engines is List && engines.contains('com.google.android.tts')) {
-        await _tts.setEngine('com.google.android.tts');
+      _defaultEngine = (await _tts.getDefaultEngine) as String?;
+    } catch (_) {}
+    List<String> engines = <String>[];
+    try {
+      final dynamic e = await _tts.getEngines;
+      if (e is List) engines = e.map((dynamic x) => x.toString()).toList();
+    } catch (_) {}
+
+    for (final String engine in engines) {
+      try {
+        await _tts.setEngine(engine);
+        final dynamic langs = await _tts.getLanguages;
+        final Set<String> set = <String>{};
+        if (langs is List) {
+          for (final dynamic l in langs) {
+            set.add(l.toString().toLowerCase());
+          }
+        }
+        _engineLangs[engine] = set;
+      } catch (_) {
+        _engineLangs[engine] = <String>{};
       }
-    } catch (_) {
-      // engine selection is best-effort
     }
+    // Leave the plugin on a sensible engine (preferred > default > google).
+    final String? initial = _preferredEngine ?? _defaultEngine ??
+        (_engineLangs.containsKey(googleEngine) ? googleEngine : null);
+    if (initial != null) {
+      await _setEngine(initial);
+    }
+  }
+
+  Future<void> _setEngine(String engine) async {
+    if (_activeEngine == engine) return;
+    try {
+      await _tts.setEngine(engine);
+      _activeEngine = engine;
+    } catch (_) {}
+  }
+
+  /// Human label for a known engine package.
+  static String labelFor(String id) {
+    if (id == googleEngine) return 'Google';
+    if (id.contains('samsung')) return 'Samsung';
+    if (id.contains('pico')) return 'Pico';
+    final List<String> parts = id.split('.');
+    return parts.isEmpty ? id : parts.last;
+  }
+
+  bool _supports(String engine, String locale) {
+    final Set<String>? set = _engineLangs[engine];
+    if (set == null) return false;
+    final String l = locale.toLowerCase();
+    if (set.contains(l)) return true;
+    final String lang = l.split('-').first;
+    return set.any((String s) => s == lang || s.startsWith('$lang-'));
+  }
+
+  /// Choose the best engine for [locale]: preferred (if it supports it), else
+  /// Google, else any engine that supports it, else null (unsupported anywhere).
+  String? _engineFor(String locale) {
+    if (_preferredEngine != null && _supports(_preferredEngine!, locale)) {
+      return _preferredEngine;
+    }
+    if (_supports(googleEngine, locale)) return googleEngine;
+    if (_defaultEngine != null && _supports(_defaultEngine!, locale)) {
+      return _defaultEngine;
+    }
+    for (final String e in _engineLangs.keys) {
+      if (_supports(e, locale)) return e;
+    }
+    return null;
   }
 
   /// Pick a TTS locale from the content (Devanagari -> hi-IN, else en-US).
@@ -42,27 +136,47 @@ class TtsService {
     return 'en-US';
   }
 
-  /// Whether [locale] (e.g. 'hi-IN') is available on the current engine.
-  Future<bool> isLanguageAvailable(String locale) async {
-    try {
-      final dynamic r = await _tts.isLanguageAvailable(locale);
-      return r == true || r == 1;
-    } catch (_) {
-      return false;
-    }
+  // ─── Engine info + preference (for settings UI) ────────────────────────────
+
+  Future<List<TtsEngineInfo>> availableEngines() async {
+    await _initFuture;
+    return _engineLangs.entries.map((MapEntry<String, Set<String>> e) {
+      return TtsEngineInfo(
+        id: e.key,
+        label: labelFor(e.key),
+        isDefault: e.key == _defaultEngine,
+        supportsHindi: _supports(e.key, 'hi-IN'),
+        supportsEnglish: _supports(e.key, 'en-US'),
+        languageCount: e.value.length,
+      );
+    }).toList()
+      ..sort((TtsEngineInfo a, TtsEngineInfo b) => a.label.compareTo(b.label));
+  }
+
+  String? get preferredEngine => _preferredEngine;
+
+  Future<void> setPreferredEngine(String? engine) async {
+    _preferredEngine = engine;
+    if (engine != null) await _setEngine(engine);
+  }
+
+  /// True if some installed engine can speak Hindi.
+  Future<bool> hindiAvailableAnywhere() async {
+    await _initFuture;
+    return _engineFor('hi-IN') != null;
   }
 
   Future<void> _configure(String locale, double rate, double pitch) async {
+    final String? engine = _engineFor(locale);
+    if (engine != null) await _setEngine(engine);
     await _tts.setLanguage(locale);
     await _tts.setSpeechRate(rate);
     await _tts.setPitch(pitch);
     await _tts.setVolume(1.0);
   }
 
-  /// Speak [lines] starting at [startIndex]. Awaits until finished, cancelled,
-  /// or paused. [onLine] fires as each line begins; [onDone] when all lines are
-  /// spoken (not on pause/stop). [onHindiUnavailable] fires once, before
-  /// speaking, if the content needs Hindi but hi-IN isn't installed.
+  /// Speak [lines] from [startIndex]. [onHindiUnavailable] fires once, before
+  /// speaking, only if the content needs Hindi and no installed engine has it.
   Future<void> speakLines(
     List<String> lines, {
     int startIndex = 0,
@@ -76,7 +190,7 @@ class TtsService {
     await _initFuture;
 
     final bool needsHindi = lines.any((String l) => localeFor(l) == 'hi-IN');
-    if (needsHindi && !await isLanguageAvailable('hi-IN')) {
+    if (needsHindi && _engineFor('hi-IN') == null) {
       onHindiUnavailable?.call();
     }
 
@@ -96,20 +210,13 @@ class TtsService {
     if (!_cancelled) onDone();
   }
 
-  /// Pause: stops the engine but remembers the current line for resume().
   Future<void> pause() async {
     _cancelled = true;
     _isSpeaking = false;
     await _tts.stop();
   }
 
-  /// Stop and reset to the beginning.
   Future<void> stop() async {
-    if (!_isSpeaking && _currentLine == 0) {
-      // Nothing playing; still ensure the engine is quiet.
-      await _tts.stop();
-      return;
-    }
     _cancelled = true;
     _isSpeaking = false;
     _currentLine = 0;

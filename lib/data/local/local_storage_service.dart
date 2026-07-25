@@ -18,6 +18,7 @@ class LocalStorageService {
   static const String _bibleHistoryKey = 'bible.history';
   static const String _weatherCacheKey = 'weather.cache';
   static const String _weatherCityKey = 'weather.manual_city';
+  static const String _ttsEngineKey = 'tts.preferred_engine';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -185,6 +186,20 @@ class LocalStorageService {
       await prefs.remove(_weatherCityKey);
     } else {
       await prefs.setString(_weatherCityKey, city);
+    }
+  }
+
+  /// Preferred TTS engine package id (null = auto).
+  Future<String?> getTtsEngine() async {
+    return (await _prefs).getString(_ttsEngineKey);
+  }
+
+  Future<void> setTtsEngine(String? engine) async {
+    final prefs = await _prefs;
+    if (engine == null || engine.isEmpty) {
+      await prefs.remove(_ttsEngineKey);
+    } else {
+      await prefs.setString(_ttsEngineKey, engine);
     }
   }
 }

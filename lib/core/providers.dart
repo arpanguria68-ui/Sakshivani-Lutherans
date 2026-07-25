@@ -134,6 +134,10 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
 
   await ref.read(themeModeControllerProvider.notifier).load();
   await ref.read(readerSettingsControllerProvider.notifier).load();
+  // Apply the saved TTS engine preference (engine scan runs lazily in bg).
+  await ref
+      .read(ttsServiceProvider)
+      .setPreferredEngine(await ref.read(localStorageServiceProvider).getTtsEngine());
   await ref.read(authControllerProvider.notifier).initialize();
 
   final NotificationService notifications = ref.read(notificationServiceProvider);
