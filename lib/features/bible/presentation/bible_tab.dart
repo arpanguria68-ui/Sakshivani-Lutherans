@@ -5,6 +5,9 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers.dart';
 import '../../../data/models/bible_verse.dart';
+import '../../reader/controller/reader_settings_controller.dart';
+import '../../reader/domain/reader_settings.dart';
+import '../../reader/presentation/reader_settings_sheet.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
 
@@ -21,12 +24,42 @@ class _BibleTabState extends ConsumerState<BibleTab> {
   int _chapterIndex = 0;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _isReading = false;
 
   @override
   void dispose() {
+    ref.read(ttsServiceProvider).stop();
     _searchController.dispose();
     super.dispose();
   }
+
+  Future<void> _readChapter(List<BibleVerse> verses, ReaderSettings settings) async {
+    final tts = ref.read(ttsServiceProvider);
+    if (_isReading) {
+      await tts.pause();
+      if (mounted) setState(() => _isReading = false);
+      return;
+    }
+    if (verses.isEmpty) return;
+    setState(() => _isReading = true);
+    await tts.speakLines(
+      verses.map((BibleVerse v) => v.text).toList(growable: false),
+      rate: settings.ttsRate,
+      pitch: settings.ttsPitch,
+      onLine: (_) {},
+      onDone: () {
+        if (mounted) setState(() => _isReading = false);
+      },
+    );
+  }
+
+  TextStyle _verseStyle(ReaderSettings s) => TextStyle(
+        fontFamily: s.fontFamily,
+        fontSize: s.fontSize,
+        height: s.lineHeight,
+        letterSpacing: s.letterSpacing,
+        wordSpacing: s.wordSpacing,
+      );
 
   Future<void> _nextChapter() async {
     final List<String> names = await ref.read(bibleBooksProvider(_language).future);
@@ -79,6 +112,8 @@ class _BibleTabState extends ConsumerState<BibleTab> {
     final AsyncValue<List<BibleVerse>> searchResults = ref.watch(
       bibleSearchProvider(BibleSearchRequest(language: _language, query: _searchQuery)),
     );
+    final ReaderSettings settings = ref.watch(readerSettingsControllerProvider);
+    final TextStyle verseStyle = _verseStyle(settings);
 
     return SafeArea(
       child: ListView(
@@ -156,7 +191,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
                           children: <Widget>[
                             Text(verse.reference, style: Theme.of(context).textTheme.titleMedium),
                             const SizedBox(height: 6),
-                            SelectableText(verse.text),
+                            SelectableText(verse.text, style: verseStyle),
                             const SizedBox(height: 8),
                             Row(
                               children: <Widget>[
@@ -267,7 +302,24 @@ class _BibleTabState extends ConsumerState<BibleTab> {
               error: (Object e, StackTrace _) => Text('Could not load chapter: $e'),
               data: (List<BibleVerse> chapterVerses) {
                 return Column(
-                  children: chapterVerses.map((BibleVerse verse) {
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        FilledButton.tonalIcon(
+                          onPressed: () => _readChapter(chapterVerses, settings),
+                          icon: Icon(_isReading ? Icons.pause : Icons.volume_up),
+                          label: Text(_isReading ? 'Pause' : 'Read chapter'),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          tooltip: 'Reading settings',
+                          icon: const Icon(Icons.text_fields),
+                          onPressed: () => showReaderSettingsSheet(context),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    ...chapterVerses.map((BibleVerse verse) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: GlassCard(
@@ -276,7 +328,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
                           children: <Widget>[
                             Text('${verse.verse}', style: Theme.of(context).textTheme.labelLarge),
                             const SizedBox(height: 4),
-                            SelectableText(verse.text),
+                            SelectableText(verse.text, style: verseStyle),
                             const SizedBox(height: 8),
                             Wrap(
                               spacing: 6,
@@ -309,6 +361,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
                       ),
                     );
                   }).toList(growable: false),
+                  ],
                 );
               },
             ),
