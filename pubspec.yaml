@@ -51,6 +51,7 @@ flutter:
     - quiz_data.json
     - bible_db.zip
     - assets/sounds/page_turn.wav
+    - assets/sounds/page_flip.mp3
 
   fonts:
     - family: NotoSansDevanagari

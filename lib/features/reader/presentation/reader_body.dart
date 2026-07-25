@@ -46,7 +46,7 @@ class _ReaderBodyState extends State<ReaderBody> {
     if (widget.settings.pageTurnSound) {
       HapticFeedback.selectionClick();
       // Fire-and-forget; ignore playback errors (no engine, muted, etc.).
-      _pagePlayer.play(AssetSource('sounds/page_turn.wav'), volume: 0.7).catchError((_) {});
+      _pagePlayer.play(AssetSource('sounds/page_flip.mp3'), volume: 0.9).catchError((_) {});
     }
   }
 
