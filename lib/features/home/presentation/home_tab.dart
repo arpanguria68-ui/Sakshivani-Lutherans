@@ -112,6 +112,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                 eyebrow: 'आज का वचन',
                 quote: verse.text,
                 onTap: () => context.go('/tab/bible'),
+                accentSrc: 'assets/3d-icons/dove_bird.png',
               );
             },
           ),
@@ -226,7 +227,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                   children: <Widget>[
                     Expanded(
                       child: BentoCard(
-                        icon: Icons.library_music_outlined,
+                        claySrc: 'assets/3d-icons/musical_note.png',
                         title: 'गीत पुस्तक',
                         description: '353 हिंदी + 660 मुंडारी भजन',
                         footerLabel: 'Songs',
@@ -237,7 +238,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                     const SizedBox(width: 1),
                     Expanded(
                       child: BentoCard(
-                        icon: Icons.menu_book_outlined,
+                        claySrc: 'assets/3d-icons/holy_bible.png',
                         title: 'धर्मशिक्षा',
                         description: 'Study pages & catechism',
                         footerLabel: 'Catechism',
@@ -253,7 +254,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                   children: <Widget>[
                     Expanded(
                       child: BentoCard(
-                        icon: Icons.event_available_outlined,
+                        claySrc: 'assets/3d-icons/journal_notebook.png',
                         title: 'पठन योजना',
                         description: 'Bible reading plans & streaks',
                         footerLabel: 'Planner',
@@ -266,7 +267,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                     const SizedBox(width: 1),
                     Expanded(
                       child: BentoCard(
-                        icon: Icons.quiz_outlined,
+                        claySrc: 'assets/3d-icons/christian_cross.png',
                         title: 'बाइबल प्रश्नोत्तरी',
                         description: 'Test and learn scripture',
                         footerLabel: 'Quiz',

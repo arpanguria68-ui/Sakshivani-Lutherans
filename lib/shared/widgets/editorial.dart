@@ -91,11 +91,15 @@ class VersePlate extends StatelessWidget {
     required this.eyebrow,
     required this.quote,
     this.onTap,
+    this.accentSrc,
   });
 
   final String eyebrow;
   final String quote;
   final VoidCallback? onTap;
+
+  /// Optional clay/3D icon watermark in the top-right corner.
+  final String? accentSrc;
 
   @override
   Widget build(BuildContext context) {
@@ -120,28 +124,41 @@ class VersePlate extends StatelessWidget {
                 ],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  EyebrowLabel(eyebrow, color: colors.onSurface.withValues(alpha: 0.55)),
-                  const SizedBox(height: 14),
-                  Text(
-                    '"$quote"',
-                    textAlign: TextAlign.center,
-                    style: text.headlineSmall?.copyWith(
-                      fontStyle: FontStyle.italic,
-                      height: 1.35,
-                      color: colors.onSurface,
+            child: Stack(
+              children: <Widget>[
+                if (accentSrc != null)
+                  Positioned(
+                    top: 10,
+                    right: 14,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Image.asset(accentSrc!, width: 40, height: 40, fit: BoxFit.contain),
                     ),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 14),
-                  Container(width: 1, height: 28, color: colors.primary.withValues(alpha: 0.4)),
-                ],
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      EyebrowLabel(eyebrow, color: colors.onSurface.withValues(alpha: 0.55)),
+                      const SizedBox(height: 14),
+                      Text(
+                        '"$quote"',
+                        textAlign: TextAlign.center,
+                        style: text.headlineSmall?.copyWith(
+                          fontStyle: FontStyle.italic,
+                          height: 1.35,
+                          color: colors.onSurface,
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 14),
+                      Container(width: 1, height: 28, color: colors.primary.withValues(alpha: 0.4)),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -156,7 +173,8 @@ class VersePlate extends StatelessWidget {
 class BentoCard extends StatelessWidget {
   const BentoCard({
     super.key,
-    required this.icon,
+    this.icon,
+    this.claySrc,
     required this.title,
     required this.description,
     required this.footerLabel,
@@ -164,9 +182,14 @@ class BentoCard extends StatelessWidget {
     required this.onTap,
     this.tone,
     this.iconColor,
-  });
+  }) : assert(icon != null || claySrc != null, 'Provide icon or claySrc');
 
-  final IconData icon;
+  /// Material glyph, used when [claySrc] is not provided.
+  final IconData? icon;
+
+  /// Path to a bundled clay/3D icon asset — takes priority over [icon] when set.
+  final String? claySrc;
+
   final String title;
   final String description;
   final String footerLabel;
@@ -188,7 +211,9 @@ class BentoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(icon, color: iconColor ?? colors.primary, size: 28),
+          claySrc != null
+              ? Image.asset(claySrc!, width: 44, height: 44, fit: BoxFit.contain)
+              : Icon(icon, color: iconColor ?? colors.primary, size: 28),
           const SizedBox(height: 18),
           Text(
             title,
