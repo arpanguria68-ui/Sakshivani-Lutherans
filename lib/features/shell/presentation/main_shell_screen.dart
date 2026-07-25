@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/shell_tabs_provider.dart';
 import '../../../shared/widgets/app_backdrop.dart';
+import '../../../shared/widgets/editorial.dart';
 
 class MainShellScreen extends ConsumerStatefulWidget {
   const MainShellScreen({super.key, this.initialIndex = 0});
@@ -14,14 +15,22 @@ class MainShellScreen extends ConsumerStatefulWidget {
   ConsumerState<MainShellScreen> createState() => _MainShellScreenState();
 }
 
+class _NavItem {
+  const _NavItem(this.icon, this.activeIcon, this.label, this.route);
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final String route;
+}
+
 class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   late int _index;
 
-  static const List<String> _tabTitles = <String>[
-    'Home',
-    'Songs',
-    'Bible',
-    'My Journey',
+  static const List<_NavItem> _items = <_NavItem>[
+    _NavItem(Icons.home_outlined, Icons.home, 'Home', '/tab/home'),
+    _NavItem(Icons.library_music_outlined, Icons.library_music, 'Songs', '/tab/songs'),
+    _NavItem(Icons.menu_book_outlined, Icons.menu_book, 'Bible', '/tab/bible'),
+    _NavItem(Icons.insights_outlined, Icons.insights, 'Journey', '/tab/journey'),
   ];
 
   @override
@@ -34,23 +43,14 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   Widget build(BuildContext context) {
     final List<Widget> tabs = ref.watch(shellTabsProvider);
     final ColorScheme colors = Theme.of(context).colorScheme;
-    final Color navSurface = Color.fromRGBO(
-      colors.surface.red,
-      colors.surface.green,
-      colors.surface.blue,
-      0.88,
-    );
-    final Color navBorder = Color.fromRGBO(
-      colors.outlineVariant.red,
-      colors.outlineVariant.green,
-      colors.outlineVariant.blue,
-      0.5,
-    );
 
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: Text(_tabTitles[_index]),
+        title: Text(
+          _index == 0 ? 'साक्षी वाणी' : _items[_index].label,
+          style: Theme.of(context).appBarTheme.titleTextStyle,
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search),
@@ -63,48 +63,79 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
         ],
       ),
       body: AppBackdrop(child: tabs[_index]),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: navSurface,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: navBorder),
-          ),
-          child: NavigationBar(
-            selectedIndex: _index,
-            height: 72,
-            backgroundColor: Colors.transparent,
-            indicatorColor: colors.primaryContainer,
-            onDestinationSelected: (int idx) {
-              if (idx == _index) {
-                return;
-              }
-              setState(() {
-                _index = idx;
-              });
-              switch (idx) {
-                case 0:
-                  context.go('/tab/home');
-                  break;
-                case 1:
-                  context.go('/tab/songs');
-                  break;
-                case 2:
-                  context.go('/tab/bible');
-                  break;
-                case 3:
-                  context.go('/tab/journey');
-                  break;
-              }
-            },
-            destinations: const <NavigationDestination>[
-              NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
-              NavigationDestination(icon: Icon(Icons.library_music_outlined), selectedIcon: Icon(Icons.library_music), label: 'Songs'),
-              NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'Bible'),
-              NavigationDestination(icon: Icon(Icons.insights_outlined), selectedIcon: Icon(Icons.insights), label: 'Journey'),
-            ],
-          ),
+      bottomNavigationBar: _EditorialNavBar(
+        items: _items,
+        index: _index,
+        onSelect: (int idx) {
+          if (idx == _index) return;
+          setState(() => _index = idx);
+          context.go(_items[idx].route);
+        },
+        surfaceColor: colors.surface,
+        borderColor: colors.outlineVariant.withValues(alpha: 0.35),
+      ),
+    );
+  }
+}
+
+class _EditorialNavBar extends StatelessWidget {
+  const _EditorialNavBar({
+    required this.items,
+    required this.index,
+    required this.onSelect,
+    required this.surfaceColor,
+    required this.borderColor,
+  });
+
+  final List<_NavItem> items;
+  final int index;
+  final ValueChanged<int> onSelect;
+  final Color surfaceColor;
+  final Color borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: surfaceColor.withValues(alpha: 0.92),
+          border: Border(top: BorderSide(color: borderColor)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List<Widget>.generate(items.length, (int i) {
+            final bool selected = i == index;
+            final ColorScheme colors = Theme.of(context).colorScheme;
+            return Expanded(
+              child: InkWell(
+                onTap: () => onSelect(i),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: selected ? colors.primary.withValues(alpha: 0.08) : null,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(
+                        selected ? items[i].activeIcon : items[i].icon,
+                        size: 22,
+                        color: selected ? colors.primary : colors.onSurfaceVariant,
+                      ),
+                      const SizedBox(height: 4),
+                      EyebrowLabel(
+                        items[i].label,
+                        fontSize: 9,
+                        color: selected ? colors.primary : colors.onSurfaceVariant,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );

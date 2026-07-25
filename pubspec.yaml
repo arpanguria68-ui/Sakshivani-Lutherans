@@ -66,3 +66,11 @@ flutter:
           weight: 400
         - asset: sakshivani-rn/assets/fonts/NotoSerifDevanagari-SemiBold.ttf
           weight: 600
+    - family: Newsreader
+      fonts:
+        - asset: assets/fonts/newsreader/Newsreader-Regular.ttf
+        - asset: assets/fonts/newsreader/Newsreader-Italic.ttf
+          style: italic
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-Regular.ttf

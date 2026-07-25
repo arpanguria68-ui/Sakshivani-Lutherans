@@ -11,6 +11,7 @@ import '../../planner/domain/reading_plan.dart';
 import '../../planner/presentation/planner_screen.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../../services/church_courtesy_service.dart';
+import '../../../shared/widgets/editorial.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
 
@@ -90,156 +91,246 @@ class _HomeTabState extends ConsumerState<HomeTab> {
   Widget build(BuildContext context) {
     final AsyncValue<BibleVerse?> dailyVerse = ref.watch(dailyVerseProvider);
     final AsyncValue<ProgressStats> stats = ref.watch(progressStatsProvider);
+    final AsyncValue<ActivePlan?> activePlan = ref.watch(activePlanProvider);
     final ColorScheme colors = Theme.of(context).colorScheme;
     final TextTheme text = Theme.of(context).textTheme;
 
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 120),
         children: <Widget>[
-          Text('साक्षी वाणी', style: text.displaySmall),
-          const SizedBox(height: 4),
-          Text('गीत • वचन • धर्मशिक्षा • यात्रा', style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant)),
-          const SizedBox(height: 16),
-          const WeatherCard(),
-          const SizedBox(height: 14),
-          GlassCard(
-            onTap: () => context.go('/tab/bible'),
-            child: dailyVerse.when(
-              loading: () => const SizedBox(height: 120, child: Center(child: CircularProgressIndicator())),
-              error: (_, _) => const Text('आज का वचन उपलब्ध नहीं है।'),
-              data: (BibleVerse? verse) {
-                if (verse == null) {
-                  return const Text('आज का वचन उपलब्ध नहीं है।');
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          // ── Hero verse plate ──────────────────────────────────────────
+          dailyVerse.when(
+            loading: () => const AspectRatio(
+              aspectRatio: 21 / 12,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            error: (_, _) => const SizedBox.shrink(),
+            data: (BibleVerse? verse) {
+              if (verse == null) return const SizedBox.shrink();
+              return VersePlate(
+                eyebrow: 'आज का वचन',
+                quote: verse.text,
+                onTap: () => context.go('/tab/bible'),
+              );
+            },
+          ),
+          dailyVerse.maybeWhen(
+            data: (BibleVerse? verse) {
+              if (verse == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: Row(
                   children: <Widget>[
-                    Text('आज का वचन', style: text.titleLarge),
-                    const SizedBox(height: 8),
-                    Text(
-                      '"${verse.text}"',
-                      style: text.bodyLarge?.copyWith(fontSize: 20, height: 1.6),
+                    Expanded(
+                      child: Text(
+                        verse.reference,
+                        style: text.labelMedium?.copyWith(
+                          color: colors.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(verse.reference, style: text.bodyMedium?.copyWith(color: colors.primary, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 8,
-                      children: <Widget>[
-                        OutlinedButton.icon(
-                          onPressed: () => Share.share('${verse.reference}\n${verse.text}'),
-                          icon: const Icon(Icons.share),
-                          label: const Text('Share'),
-                        ),
-                        OutlinedButton.icon(
-                          onPressed: () async {
-                            await ref.read(favoritesRepositoryProvider).toggleFavorite(
-                                  itemType: 'verse',
-                                  itemRef: verse.id,
-                                );
-                            if (!mounted) {
-                              return;
-                            }
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Daily verse favorite updated')),
+                    IconButton(
+                      tooltip: 'Share',
+                      onPressed: () => Share.share('${verse.reference}\n${verse.text}'),
+                      icon: const Icon(Icons.share_outlined, size: 18),
+                    ),
+                    IconButton(
+                      tooltip: 'Favorite',
+                      onPressed: () async {
+                        await ref.read(favoritesRepositoryProvider).toggleFavorite(
+                              itemType: 'verse',
+                              itemRef: verse.id,
                             );
-                          },
-                          icon: const Icon(Icons.favorite_border),
-                          label: const Text('Favorite'),
-                        ),
-                      ],
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Daily verse favorite updated')),
+                        );
+                      },
+                      icon: const Icon(Icons.favorite_border, size: 18),
                     ),
                   ],
-                );
-              },
+                ),
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // ── Greeting + progress ──────────────────────────────────
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            _greeting(),
+                            style: text.headlineSmall?.copyWith(
+                              fontStyle: FontStyle.italic,
+                              color: colors.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'गीत • वचन • धर्मशिक्षा • यात्रा',
+                            style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    activePlan.maybeWhen(
+                      data: (ActivePlan? plan) {
+                        if (plan == null) return const SizedBox.shrink();
+                        final ReadingPlan rp = ReadingPlans.build(plan.planKey);
+                        final int day = PlannerRepository.currentDayIndex(plan.startDate)
+                            .clamp(0, rp.totalDays - 1);
+                        final double progress =
+                            rp.totalDays == 0 ? 0 : (day + 1) / rp.totalDays;
+                        return Expanded(
+                          flex: 2,
+                          child: ThinProgressLine(label: 'पठन प्रगति', value: progress),
+                        );
+                      },
+                      orElse: () => const SizedBox.shrink(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const WeatherCard(),
+                const SizedBox(height: 14),
+                const _TodayReadingCard(),
+              ],
             ),
           ),
+
+          const SizedBox(height: 28),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const SectionHeading(title: 'त्वरित पहुँच', subtitle: 'Quick access'),
+          ),
           const SizedBox(height: 14),
-          const _TodayReadingCard(),
-          const SizedBox(height: 18),
-          const SectionHeading(title: 'Quick Access'),
-          const SizedBox(height: 12),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.library_music,
-                  title: 'Songs',
-                  subtitle: '353+ hymns',
-                  onTap: () => context.go('/tab/songs'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.menu_book,
-                  title: 'Catechism',
-                  subtitle: 'Study pages',
-                  onTap: () => context.push('/catechism'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.quiz,
-                  title: 'Bible Quiz',
-                  subtitle: 'Test and learn',
-                  onTap: () => context.push('/quiz'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.event_available,
-                  title: 'Planner',
-                  subtitle: 'Reading plans',
-                  onTap: () => context.push('/planner'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          const SectionHeading(title: 'Journey Snapshot'),
-          const SizedBox(height: 12),
-          stats.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, _) => const Text('Progress unavailable right now.'),
-            data: (ProgressStats value) => Row(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
               children: <Widget>[
-                Expanded(
-                  child: _StatCard(
-                    label: 'Streak',
-                    value: '${value.currentStreak}',
-                    icon: Icons.local_fire_department,
-                  ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BentoCard(
+                        icon: Icons.library_music_outlined,
+                        title: 'गीत पुस्तक',
+                        description: '353 हिंदी + 660 मुंडारी भजन',
+                        footerLabel: 'Songs',
+                        actionLabel: 'Open',
+                        onTap: () => context.go('/tab/songs'),
+                      ),
+                    ),
+                    const SizedBox(width: 1),
+                    Expanded(
+                      child: BentoCard(
+                        icon: Icons.menu_book_outlined,
+                        title: 'धर्मशिक्षा',
+                        description: 'Study pages & catechism',
+                        footerLabel: 'Catechism',
+                        actionLabel: 'Study',
+                        onTap: () => context.push('/catechism'),
+                        tone: colors.surfaceContainerLowest,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatCard(
-                    label: 'Prayer Count',
-                    value: '${value.totalPrayerCount}',
-                    icon: Icons.self_improvement,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StatCard(
-                    label: 'Prayer Days',
-                    value: '${value.totalPrayerDays}',
-                    icon: Icons.calendar_month,
-                  ),
+                const SizedBox(height: 1),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: BentoCard(
+                        icon: Icons.event_available_outlined,
+                        title: 'पठन योजना',
+                        description: 'Bible reading plans & streaks',
+                        footerLabel: 'Planner',
+                        actionLabel: 'Plan',
+                        onTap: () => context.push('/planner'),
+                        tone: colors.secondaryContainer.withValues(alpha: 0.35),
+                        iconColor: colors.secondary,
+                      ),
+                    ),
+                    const SizedBox(width: 1),
+                    Expanded(
+                      child: BentoCard(
+                        icon: Icons.quiz_outlined,
+                        title: 'बाइबल प्रश्नोत्तरी',
+                        description: 'Test and learn scripture',
+                        footerLabel: 'Quiz',
+                        actionLabel: 'Play',
+                        onTap: () => context.push('/quiz'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
+            ),
+          ),
+
+          const SizedBox(height: 28),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const SectionHeading(title: 'यात्रा', subtitle: 'Journey snapshot'),
+          ),
+          const SizedBox(height: 14),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: stats.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, _) => const Text('Progress unavailable right now.'),
+              data: (ProgressStats value) => Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _StatCard(
+                      label: 'Streak',
+                      value: '${value.currentStreak}',
+                      icon: Icons.local_fire_department_outlined,
+                    ),
+                  ),
+                  const SizedBox(width: 1),
+                  Expanded(
+                    child: _StatCard(
+                      label: 'Prayer Count',
+                      value: '${value.totalPrayerCount}',
+                      icon: Icons.self_improvement_outlined,
+                    ),
+                  ),
+                  const SizedBox(width: 1),
+                  Expanded(
+                    child: _StatCard(
+                      label: 'Prayer Days',
+                      value: '${value.totalPrayerDays}',
+                      icon: Icons.calendar_month_outlined,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _greeting() {
+    final int hour = DateTime.now().hour;
+    if (hour < 5) return 'शुभ रात्रि';
+    if (hour < 12) return 'सुप्रभात';
+    if (hour < 17) return 'नमस्ते';
+    return 'शुभ संध्या';
   }
 }
 
@@ -270,13 +361,14 @@ class _TodayReadingCard extends ConsumerWidget {
             onTap: () => context.push('/planner'),
             child: Row(
               children: <Widget>[
-                const Icon(Icons.event_available),
+                const Icon(Icons.event_available_outlined),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Start a reading plan', style: text.titleMedium),
+                      Text('Start a reading plan',
+                          style: text.titleMedium?.copyWith(fontStyle: FontStyle.italic)),
                       Text('Daily Bible readings with progress', style: text.bodySmall),
                     ],
                   ),
@@ -296,7 +388,7 @@ class _TodayReadingCard extends ConsumerWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  const Icon(Icons.event_available, size: 18),
+                  const Icon(Icons.event_available_outlined, size: 18),
                   const SizedBox(width: 6),
                   Text("Today's reading · Day ${day + 1}", style: text.titleMedium),
                 ],
@@ -310,38 +402,6 @@ class _TodayReadingCard extends ConsumerWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _QuickActionCard extends StatelessWidget {
-  const _QuickActionCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final TextTheme text = Theme.of(context).textTheme;
-    return GlassCard(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(icon),
-          const SizedBox(height: 8),
-          Text(title, style: text.titleMedium),
-          const SizedBox(height: 2),
-          Text(subtitle, style: text.bodySmall),
-        ],
-      ),
     );
   }
 }
@@ -360,15 +420,17 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
     return GlassCard(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(icon, size: 20),
-          const SizedBox(height: 8),
-          Text(value, style: text.titleLarge),
+          Icon(icon, size: 18, color: colors.primary),
+          const SizedBox(height: 10),
+          Text(value, style: text.headlineSmall?.copyWith(fontStyle: FontStyle.italic)),
           const SizedBox(height: 2),
-          Text(label, style: text.bodySmall),
+          EyebrowLabel(label, fontSize: 9),
         ],
       ),
     );

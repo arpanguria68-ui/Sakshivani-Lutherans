@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 
+/// "The Sacred Gallery" editorial theme — ported from the premium PWA design
+/// (New design ui/code.html): warm cream surfaces, italic serif headlines,
+/// razor-sharp (zero radius) cards and controls, uppercase tracked labels,
+/// and thin hairline dividers instead of chunky Material defaults.
 class AppTheme {
   const AppTheme._();
 
   static const Color _seed = Color(0xFF93452B);
+
+  /// Editorial headline face (English/Latin); Devanagari falls back to the
+  /// bundled Noto faces automatically via [_devanagariHeadingFallback].
+  static const String headlineFont = 'Newsreader';
+  static const String labelFont = 'Inter';
+
+  static const List<String> _devanagariHeadingFallback = <String>['NotoSerifDevanagari'];
+  static const List<String> _devanagariLabelFallback = <String>['NotoSansDevanagari'];
 
   static ThemeData get lightTheme {
     final scheme = ColorScheme.fromSeed(
@@ -12,6 +24,7 @@ class AppTheme {
     ).copyWith(
       secondary: const Color(0xFF76546A),
       tertiary: const Color(0xFFB25D41),
+      surface: const Color(0xFFFCF9F4),
     );
 
     return _baseTheme(
@@ -49,23 +62,41 @@ class AppTheme {
       fontFamily: 'NotoSansDevanagari',
     );
 
+    TextStyle heading(TextStyle? s) => (s ?? const TextStyle()).copyWith(
+          fontFamily: headlineFont,
+          fontFamilyFallback: _devanagariHeadingFallback,
+          fontWeight: FontWeight.w500,
+          letterSpacing: -0.2,
+        );
+
+    TextStyle label(TextStyle? s) => (s ?? const TextStyle()).copyWith(
+          fontFamily: labelFont,
+          fontFamilyFallback: _devanagariLabelFallback,
+          letterSpacing: 0.6,
+        );
+
+    const BorderRadius zero = BorderRadius.zero;
+    final OutlineInputBorder inputBorder = OutlineInputBorder(
+      borderRadius: zero,
+      borderSide: BorderSide(color: scheme.outlineVariant),
+    );
+
     return base.copyWith(
       extensions: <ThemeExtension<dynamic>>[
         AppBackgroundTheme(gradient: backgroundGradient),
       ],
       textTheme: base.textTheme.copyWith(
-        displaySmall: base.textTheme.displaySmall?.copyWith(
-          fontWeight: FontWeight.w700,
-          fontFamily: 'NotoSansDevanagari',
-        ),
-        headlineMedium: base.textTheme.headlineMedium?.copyWith(
-          fontWeight: FontWeight.w700,
-          fontFamily: 'NotoSansDevanagari',
-        ),
-        titleLarge: base.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w700,
-          fontFamily: 'NotoSansDevanagari',
-        ),
+        displayLarge: heading(base.textTheme.displayLarge),
+        displayMedium: heading(base.textTheme.displayMedium),
+        displaySmall: heading(base.textTheme.displaySmall),
+        headlineLarge: heading(base.textTheme.headlineLarge),
+        headlineMedium: heading(base.textTheme.headlineMedium),
+        headlineSmall: heading(base.textTheme.headlineSmall),
+        titleLarge: heading(base.textTheme.titleLarge)
+            .copyWith(fontWeight: FontWeight.w600),
+        titleMedium: heading(base.textTheme.titleMedium)
+            .copyWith(fontWeight: FontWeight.w600, letterSpacing: -0.1),
+        titleSmall: base.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
         bodyLarge: base.textTheme.bodyLarge?.copyWith(
           fontFamily: 'NotoSerifDevanagari',
           height: 1.5,
@@ -74,40 +105,90 @@ class AppTheme {
           fontFamily: 'NotoSerifDevanagari',
           height: 1.45,
         ),
+        labelLarge: label(base.textTheme.labelLarge),
+        labelMedium: label(base.textTheme.labelMedium),
+        labelSmall: label(base.textTheme.labelSmall)?.copyWith(letterSpacing: 1.1),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: _withAlpha(scheme.surface, brightness == Brightness.light ? 0.86 : 0.64),
+        color: _withAlpha(scheme.surfaceContainerLow, 1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(22),
-          side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.45)),
+          borderRadius: zero,
+          side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.4)),
         ),
       ),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
+        scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: scheme.onSurface,
+        titleTextStyle: heading(base.textTheme.headlineSmall)?.copyWith(
+          fontStyle: FontStyle.italic,
+          color: scheme.primary,
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        indicatorShape: const RoundedRectangleBorder(borderRadius: zero),
+        labelTextStyle: WidgetStatePropertyAll<TextStyle>(
+          label(base.textTheme.labelSmall)!.copyWith(fontSize: 10, letterSpacing: 1.2),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          shape: const RoundedRectangleBorder(borderRadius: zero),
+          elevation: 0,
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          shape: const RoundedRectangleBorder(borderRadius: zero),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          shape: const RoundedRectangleBorder(borderRadius: zero),
+          side: BorderSide(color: scheme.primary),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          shape: const RoundedRectangleBorder(borderRadius: zero),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: zero,
+          side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.5)),
+        ),
+        side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.5)),
+        backgroundColor: scheme.surfaceContainerLow,
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: SegmentedButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: zero)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: _withAlpha(scheme.surfaceContainerHighest, 0.55),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: scheme.outlineVariant),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: scheme.outlineVariant),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+        fillColor: scheme.surfaceContainerLow,
+        border: inputBorder,
+        enabledBorder: inputBorder,
+        focusedBorder: inputBorder.copyWith(
           borderSide: BorderSide(color: scheme.primary, width: 1.2),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: const RoundedRectangleBorder(borderRadius: zero),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: _withAlpha(scheme.outlineVariant, 0.35),
+        thickness: 1,
+        space: 1,
       ),
     );
   }
