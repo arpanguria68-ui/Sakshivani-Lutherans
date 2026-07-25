@@ -18,6 +18,7 @@ import '../services/church_courtesy_service.dart';
 import '../services/notification_service.dart';
 import '../services/sync_service.dart';
 import '../services/tts_service.dart';
+import '../services/weather_service.dart';
 import '../features/reader/controller/reader_settings_controller.dart';
 import 'app_runtime.dart';
 import 'bootstrap/firebase_bootstrap.dart';
@@ -119,6 +120,11 @@ final Provider<TtsService> ttsServiceProvider =
   final TtsService service = TtsService();
   ref.onDispose(service.dispose);
   return service;
+});
+
+final Provider<WeatherService> weatherServiceProvider =
+    Provider<WeatherService>((ProviderRef<WeatherService> ref) {
+  return WeatherService(ref.read(localStorageServiceProvider));
 });
 
 final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FutureProviderRef<void> ref) async {

@@ -16,6 +16,8 @@ class LocalStorageService {
   static const String _reminderMinuteKey = 'settings.daily_reminder_minute';
   static const String _bibleLastReadKey = 'bible.last_read';
   static const String _bibleHistoryKey = 'bible.history';
+  static const String _weatherCacheKey = 'weather.cache';
+  static const String _weatherCityKey = 'weather.manual_city';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -155,5 +157,34 @@ class LocalStorageService {
     final List<Map<String, dynamic>> capped =
         history.length > 20 ? history.sublist(0, 20) : history;
     await (await _prefs).setString(_bibleHistoryKey, jsonEncode(capped));
+  }
+
+  // ─── Weather ───────────────────────────────────────────────────────────────
+
+  Future<Map<String, dynamic>?> getWeatherCache() async {
+    final String? raw = (await _prefs).getString(_weatherCacheKey);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return jsonDecode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> setWeatherCache(Map<String, dynamic> data) async {
+    await (await _prefs).setString(_weatherCacheKey, jsonEncode(data));
+  }
+
+  Future<String?> getManualCity() async {
+    return (await _prefs).getString(_weatherCityKey);
+  }
+
+  Future<void> setManualCity(String? city) async {
+    final prefs = await _prefs;
+    if (city == null || city.isEmpty) {
+      await prefs.remove(_weatherCityKey);
+    } else {
+      await prefs.setString(_weatherCityKey, city);
+    }
   }
 }

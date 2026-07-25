@@ -9,6 +9,7 @@ import '../../../data/repositories/planner_repository.dart';
 import '../../../data/repositories/progress_repository.dart';
 import '../../planner/domain/reading_plan.dart';
 import '../../planner/presentation/planner_screen.dart';
+import '../../weather/presentation/weather_card.dart';
 import '../../../services/church_courtesy_service.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
@@ -100,6 +101,8 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           const SizedBox(height: 4),
           Text('गीत • वचन • धर्मशिक्षा • यात्रा', style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant)),
           const SizedBox(height: 16),
+          const WeatherCard(),
+          const SizedBox(height: 14),
           GlassCard(
             onTap: () => context.go('/tab/bible'),
             child: dailyVerse.when(
