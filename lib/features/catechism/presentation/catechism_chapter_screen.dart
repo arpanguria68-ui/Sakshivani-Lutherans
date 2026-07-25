@@ -84,6 +84,7 @@ class _CatechismChapterScreenState extends ConsumerState<CatechismChapterScreen>
       strong: body.copyWith(fontWeight: FontWeight.w700),
       em: body.copyWith(fontStyle: FontStyle.italic),
       blockquote: body.copyWith(color: palette.subtle),
+      a: body.copyWith(color: const Color(0xFF93452B), decoration: TextDecoration.underline),
       textAlign: switch (s.align) {
         ReaderAlign.center => WrapAlignment.center,
         ReaderAlign.justify => WrapAlignment.spaceBetween,
@@ -128,10 +129,12 @@ class _CatechismChapterScreenState extends ConsumerState<CatechismChapterScreen>
                 total: items.length,
                 paper: paper,
                 palette: palette,
-                onPrev: index == 0 ? null : () => context.go('/catechism/${items[index - 1].id}'),
+                onPrev: index == 0
+                    ? null
+                    : () => context.pushReplacement('/catechism/${items[index - 1].id}'),
                 onNext: index == items.length - 1
                     ? null
-                    : () => context.go('/catechism/${items[index + 1].id}'),
+                    : () => context.pushReplacement('/catechism/${items[index + 1].id}'),
               ),
             ],
           );
