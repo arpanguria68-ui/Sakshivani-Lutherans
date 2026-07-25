@@ -10,6 +10,7 @@ import '../../../data/models/bible_verse.dart';
 import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
+import '../../reader/presentation/tts_feedback.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
 
@@ -52,6 +53,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
       onDone: () {
         if (mounted) setState(() => _isReading = false);
       },
+      onHindiUnavailable: () => warnHindiVoiceMissing(context),
     );
   }
 

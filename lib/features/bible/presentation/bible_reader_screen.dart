@@ -8,6 +8,7 @@ import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_body.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
+import '../../reader/presentation/tts_feedback.dart';
 import 'bible_tab.dart' show bibleVersesProvider, BibleLocation;
 
 /// Full-screen chapter reader with e-ink/scroll modes, TTS, and chapter
@@ -112,6 +113,7 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
           _activeLine = null;
         });
       },
+      onHindiUnavailable: () => warnHindiVoiceMissing(context),
     );
   }
 

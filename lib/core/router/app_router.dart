@@ -14,13 +14,34 @@ import '../../features/search/presentation/global_search_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/shell/presentation/main_shell_screen.dart';
 import '../../features/songs/presentation/song_reader_screen.dart';
+import '../../services/tts_service.dart';
 import '../providers.dart';
+
+/// Stops any read-aloud when the user navigates between full-screen routes
+/// (leaving a reader by push or pop). Ignores popups (dialogs / bottom sheets)
+/// so opening the reader settings sheet doesn't cut playback.
+class _TtsStopObserver extends NavigatorObserver {
+  _TtsStopObserver(this._tts);
+  final TtsService _tts;
+
+  void _stopFor(Route<dynamic>? route) {
+    if (route is PageRoute) _tts.stop();
+  }
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) => _stopFor(route);
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) => _stopFor(route);
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) => _stopFor(newRoute);
+}
 
 final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ProviderRef<GoRouter> ref) {
   final AuthState authState = ref.watch(authControllerProvider);
 
   return GoRouter(
     initialLocation: '/',
+    observers: <NavigatorObserver>[_TtsStopObserver(ref.read(ttsServiceProvider))],
     redirect: (BuildContext context, GoRouterState state) {
       final bool authRoute = state.matchedLocation.startsWith('/auth');
       if (authRoute && authState.isAuthenticated) {

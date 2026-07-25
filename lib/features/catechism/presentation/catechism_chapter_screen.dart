@@ -9,6 +9,7 @@ import '../../../data/models/catechism_chapter.dart';
 import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
+import '../../reader/presentation/tts_feedback.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import 'catechism_screen.dart';
 
@@ -61,6 +62,7 @@ class _CatechismChapterScreenState extends ConsumerState<CatechismChapterScreen>
       onDone: () {
         if (mounted) setState(() => _isPlaying = false);
       },
+      onHindiUnavailable: () => warnHindiVoiceMissing(context),
     );
   }
 

@@ -8,6 +8,7 @@ import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_body.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
+import '../../reader/presentation/tts_feedback.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -59,6 +60,7 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
           _activeLine = null;
         });
       },
+      onHindiUnavailable: () => warnHindiVoiceMissing(context),
     );
   }
 
