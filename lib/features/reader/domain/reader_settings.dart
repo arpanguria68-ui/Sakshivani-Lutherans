@@ -23,6 +23,7 @@ class ReaderSettings {
     this.paginated = false,
     this.paperTexture = true,
     this.pageTurnSound = true,
+    this.pageFlip = true,
     this.ttsRate = 0.48,
     this.ttsPitch = 1.0,
   });
@@ -37,6 +38,7 @@ class ReaderSettings {
   final bool paginated;
   final bool paperTexture;
   final bool pageTurnSound;
+  final bool pageFlip;
   final double ttsRate;
   final double ttsPitch;
 
@@ -66,6 +68,7 @@ class ReaderSettings {
     bool? paginated,
     bool? paperTexture,
     bool? pageTurnSound,
+    bool? pageFlip,
     double? ttsRate,
     double? ttsPitch,
   }) {
@@ -80,6 +83,7 @@ class ReaderSettings {
       paginated: paginated ?? this.paginated,
       paperTexture: paperTexture ?? this.paperTexture,
       pageTurnSound: pageTurnSound ?? this.pageTurnSound,
+      pageFlip: pageFlip ?? this.pageFlip,
       ttsRate: ttsRate ?? this.ttsRate,
       ttsPitch: ttsPitch ?? this.ttsPitch,
     );
@@ -96,6 +100,7 @@ class ReaderSettings {
         'paginated': paginated,
         'paperTexture': paperTexture,
         'pageTurnSound': pageTurnSound,
+        'pageFlip': pageFlip,
         'ttsRate': ttsRate,
         'ttsPitch': ttsPitch,
       };
@@ -116,6 +121,7 @@ class ReaderSettings {
       paginated: m['paginated'] as bool? ?? false,
       paperTexture: m['paperTexture'] as bool? ?? true,
       pageTurnSound: m['pageTurnSound'] as bool? ?? true,
+      pageFlip: m['pageFlip'] as bool? ?? true,
       ttsRate: (m['ttsRate'] as num?)?.toDouble() ?? 0.48,
       ttsPitch: (m['ttsPitch'] as num?)?.toDouble() ?? 1.0,
     );

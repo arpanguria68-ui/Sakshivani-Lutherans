@@ -178,13 +178,16 @@ class _ReaderBodyState extends State<ReaderBody> {
               itemCount: _pages.length,
               onPageChanged: _onPageTurned,
               itemBuilder: (BuildContext context, int p) {
-                return Padding(
+                final Widget page = Padding(
                   padding: widget.padding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: _pages[p].map((int i) => _lineWidget(i, style)).toList(),
                   ),
                 );
+                return widget.settings.pageFlip
+                    ? _flipPage(p, constraints.maxWidth, page)
+                    : page;
               },
             ),
             // Tap zones: left third = previous page, right third = next page.
@@ -201,6 +204,42 @@ class _ReaderBodyState extends State<ReaderBody> {
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  /// EasyFlipViewPager-style page flip, reimplemented natively: pin the page
+  /// against the PageView slide, then rotate it around its inner edge with
+  /// perspective. Adjacent pages fade at the edge-on angle to avoid mirroring.
+  Widget _flipPage(int p, double width, Widget child) {
+    return AnimatedBuilder(
+      animation: _pageController,
+      child: child,
+      builder: (BuildContext context, Widget? c) {
+        double page;
+        if (_pageController.hasClients &&
+            _pageController.position.hasContentDimensions &&
+            _pageController.page != null) {
+          page = _pageController.page!;
+        } else {
+          page = _currentPage.toDouble();
+        }
+        final double value = (p - page).clamp(-1.0, 1.0);
+        final bool leaving = value <= 0;
+        final Alignment alignment =
+            leaving ? Alignment.centerRight : Alignment.centerLeft;
+        final double angle = value * (math.pi / 2);
+        final double opacity = (1 - value.abs()).clamp(0.0, 1.0);
+        final Matrix4 flip = Matrix4.identity()
+          ..setEntry(3, 2, 0.0012)
+          ..rotateY(angle);
+        return Transform.translate(
+          offset: Offset(-value * width, 0),
+          child: Opacity(
+            opacity: opacity,
+            child: Transform(alignment: alignment, transform: flip, child: c),
+          ),
         );
       },
     );

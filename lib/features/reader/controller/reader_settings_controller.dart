@@ -33,6 +33,7 @@ class ReaderSettingsController extends StateNotifier<ReaderSettings> {
   Future<void> setPaginated(bool p) => update(state.copyWith(paginated: p));
   Future<void> setPaperTexture(bool p) => update(state.copyWith(paperTexture: p));
   Future<void> setPageTurnSound(bool p) => update(state.copyWith(pageTurnSound: p));
+  Future<void> setPageFlip(bool p) => update(state.copyWith(pageFlip: p));
   Future<void> setTtsRate(double v) => update(state.copyWith(ttsRate: v));
 }
 

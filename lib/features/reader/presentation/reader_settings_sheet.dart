@@ -120,6 +120,13 @@ class _ReaderSettingsSheet extends ConsumerWidget {
               ),
               SwitchListTile.adaptive(
                 contentPadding: EdgeInsets.zero,
+                title: const Text('Page-flip animation'),
+                subtitle: const Text('3D page turn (vs. plain slide)'),
+                value: s.pageFlip,
+                onChanged: c.setPageFlip,
+              ),
+              SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
                 title: const Text('Paper texture'),
                 subtitle: const Text('Subtle grain on the reading surface'),
                 value: s.paperTexture,
