@@ -46,6 +46,7 @@ flutter:
 
   assets:
     - assets/Sakshivani_Unicode_Clean.db
+    - assets/durang_puthi.json
     - catechism.json
     - quiz_data.json
     - bible_db.zip

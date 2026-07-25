@@ -34,10 +34,11 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ProviderRef<GoR
         builder: (BuildContext context, GoRouterState state) => const MainShellScreen(),
       ),
       GoRoute(
-        path: '/song/:songId',
+        path: '/song/:book/:songId',
         builder: (BuildContext context, GoRouterState state) {
+          final String book = state.pathParameters['book'] ?? 'sakshivani';
           final String songId = state.pathParameters['songId'] ?? '1';
-          return SongReaderScreen(songId: int.tryParse(songId) ?? 1);
+          return SongReaderScreen(book: book, songId: int.tryParse(songId) ?? 1);
         },
       ),
       GoRoute(

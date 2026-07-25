@@ -12,9 +12,14 @@ import '../../../shared/widgets/app_backdrop.dart';
 import '../../../shared/widgets/glass_card.dart';
 
 class SongReaderScreen extends ConsumerStatefulWidget {
-  const SongReaderScreen({super.key, required this.songId});
+  const SongReaderScreen({
+    super.key,
+    required this.songId,
+    this.book = 'sakshivani',
+  });
 
   final int songId;
+  final String book;
 
   @override
   ConsumerState<SongReaderScreen> createState() => _SongReaderScreenState();
@@ -67,7 +72,8 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<Song?> song = ref.watch(songByIdProvider(widget.songId));
+    final AsyncValue<Song?> song =
+        ref.watch(songByIdProvider((book: widget.book, id: widget.songId)));
     final ReaderSettings settings = ref.watch(readerSettingsControllerProvider);
     final ReaderPalette palette =
         ReaderPalette.resolve(settings, Theme.of(context).brightness);
@@ -90,7 +96,7 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
             onPressed: () async {
               await ref
                   .read(favoritesRepositoryProvider)
-                  .toggleFavorite(itemType: 'song', itemRef: widget.songId.toString());
+                  .toggleFavorite(itemType: 'song', itemRef: '${widget.book}:${widget.songId}');
               ref.invalidate(favoriteSongsProvider);
               if (!mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
@@ -228,8 +234,10 @@ class _PlaybackBar extends StatelessWidget {
   }
 }
 
-final songByIdProvider = FutureProvider.family<Song?, int>((ref, int songId) async {
-  return ref.read(contentRepositoryProvider).getSongById(songId);
+typedef SongRef = ({String book, int id});
+
+final songByIdProvider = FutureProvider.family<Song?, SongRef>((ref, SongRef r) async {
+  return ref.read(contentRepositoryProvider).getSongById(r.id, book: r.book);
 });
 
 final favoriteSongsProvider =

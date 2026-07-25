@@ -7,6 +7,13 @@ class AppConstants {
   static const String firebaseProjectHint = 'sakshi-vani';
 
   static const String songsDbAssetPath = 'assets/Sakshivani_Unicode_Clean.db';
+  static const String durangAssetPath = 'assets/durang_puthi.json';
+
+  // Song book identifiers.
+  static const String bookSakshivani = 'sakshivani';
+  static const String bookDurang = 'durang';
+  static const String bookSakshivaniLabel = 'साक्षी वाणी';
+  static const String bookDurangLabel = 'दुरंग पुथी';
   static const String catechismAssetPath = 'catechism.json';
   static const String quizAssetPath = 'quiz_data.json';
   static const String bibleZipAssetPath = 'bible_db.zip';

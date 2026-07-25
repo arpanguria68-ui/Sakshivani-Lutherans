@@ -79,7 +79,7 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
                         ...data.songs.map((Song song) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: GlassCard(
-                                onTap: () => context.push('/song/${song.id}'),
+                                onTap: () => context.push('/song/${song.book}/${song.id}'),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -178,7 +178,7 @@ final globalSearchProvider = FutureProvider.family<GlobalSearchResult, String>(
     }
 
     final searchRepo = ref.read(searchRepositoryProvider);
-    final songHits = await searchRepo.searchSongs(q, limit: 20);
+    final songHits = await searchRepo.searchAllSongs(q, limit: 20);
     final songs = songHits.map((h) => h.ref).toList(growable: false);
     final verseHits = await searchRepo.searchVersesAllLanguages(q, limit: 20);
     final verses = verseHits.map((h) => h.ref).toList(growable: false);

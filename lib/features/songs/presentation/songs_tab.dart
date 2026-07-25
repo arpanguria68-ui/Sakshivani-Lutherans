@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/providers.dart';
 import '../../../data/models/song.dart';
 import '../../../data/search/search_engine.dart';
@@ -24,11 +25,11 @@ class _SongsTabState extends ConsumerState<SongsTab> {
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
   String _query = '';
+  String _book = AppConstants.bookSakshivani;
 
   @override
   void initState() {
     super.initState();
-    // Warm the song index shortly after first frame so the first query is fast.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(searchRepositoryProvider).warmUp(languages: const <String>[]);
     });
@@ -55,6 +56,10 @@ class _SongsTabState extends ConsumerState<SongsTab> {
     setState(() => _query = '');
   }
 
+  void _setBook(String book) {
+    setState(() => _book = book);
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool searching = _query.isNotEmpty;
@@ -71,7 +76,22 @@ class _SongsTabState extends ConsumerState<SongsTab> {
               children: <Widget>[
                 const SectionHeading(
                   title: 'गीत पुस्तक',
-                  subtitle: 'Smart search — title, lyric, category, or romanised Hindi',
+                  subtitle: 'Smart search — title, lyric, or romanised Hindi',
+                ),
+                const SizedBox(height: 10),
+                SegmentedButton<String>(
+                  segments: const <ButtonSegment<String>>[
+                    ButtonSegment<String>(
+                      value: AppConstants.bookSakshivani,
+                      label: Text(AppConstants.bookSakshivaniLabel),
+                    ),
+                    ButtonSegment<String>(
+                      value: AppConstants.bookDurang,
+                      label: Text(AppConstants.bookDurangLabel),
+                    ),
+                  ],
+                  selected: <String>{_book},
+                  onSelectionChanged: (Set<String> v) => _setBook(v.first),
                 ),
                 const SizedBox(height: 12),
                 TextField(
@@ -82,10 +102,7 @@ class _SongsTabState extends ConsumerState<SongsTab> {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: _searchController.text.isEmpty
                         ? null
-                        : IconButton(
-                            onPressed: _clear,
-                            icon: const Icon(Icons.close),
-                          ),
+                        : IconButton(onPressed: _clear, icon: const Icon(Icons.close)),
                   ),
                   onChanged: _onQueryChanged,
                 ),
@@ -103,7 +120,7 @@ class _SongsTabState extends ConsumerState<SongsTab> {
   }
 
   Widget _buildBrowseList(Set<String> favoriteIds) {
-    final AsyncValue<List<Song>> songs = ref.watch(songsProvider(''));
+    final AsyncValue<List<Song>> songs = ref.watch(songsProvider((book: _book, query: '')));
     return songs.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (Object e, StackTrace _) => Center(child: Text('Could not load songs: $e')),
@@ -119,7 +136,9 @@ class _SongsTabState extends ConsumerState<SongsTab> {
             final Song song = items[index];
             return _SongCard(
               song: song,
-              isFavorite: favoriteIds.contains(song.id.toString()),
+              isFavorite: favoriteIds.contains('${song.book}:${song.id}') ||
+                  (song.book == AppConstants.bookSakshivani &&
+                      favoriteIds.contains(song.id.toString())),
               matchedTerms: const <String>{},
             );
           },
@@ -130,7 +149,7 @@ class _SongsTabState extends ConsumerState<SongsTab> {
 
   Widget _buildSearchResults(Set<String> favoriteIds) {
     final AsyncValue<List<SearchHit<Song>>> results =
-        ref.watch(songSearchProvider(_query));
+        ref.watch(songSearchProvider((book: _book, query: _query)));
     return results.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (Object e, StackTrace _) => Center(child: Text('Search failed: $e')),
@@ -154,7 +173,9 @@ class _SongsTabState extends ConsumerState<SongsTab> {
             final SearchHit<Song> hit = hits[index];
             return _SongCard(
               song: hit.ref,
-              isFavorite: favoriteIds.contains(hit.ref.id.toString()),
+              isFavorite: favoriteIds.contains('${hit.ref.book}:${hit.ref.id}') ||
+                  (hit.ref.book == AppConstants.bookSakshivani &&
+                      favoriteIds.contains(hit.ref.id.toString())),
               matchedTerms: hit.matchedTerms,
             );
           },
@@ -178,7 +199,7 @@ class _SongCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      onTap: () => context.push('/song/${song.id}'),
+      onTap: () => context.push('/song/${song.book}/${song.id}'),
       child: Row(
         children: <Widget>[
           CircleAvatar(child: Text('${song.id}')),
@@ -217,6 +238,6 @@ class _SongCard extends StatelessWidget {
   }
 }
 
-final songsProvider = FutureProvider.family<List<Song>, String>((ref, String query) async {
-  return ref.read(contentRepositoryProvider).getSongs(query: query);
+final songsProvider = FutureProvider.family<List<Song>, SongQuery>((ref, SongQuery q) async {
+  return ref.read(contentRepositoryProvider).getSongs(query: q.query, book: q.book);
 });

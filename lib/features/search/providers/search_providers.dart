@@ -8,11 +8,19 @@ import '../../../data/models/bible_verse.dart';
 import '../../../data/models/song.dart';
 import '../../../data/search/search_engine.dart';
 
-/// Ranked hymn search. Empty query yields no hits (browse list handled by the
-/// tab itself). Debouncing is done at the widget layer.
+/// Key for a per-book song search.
+typedef SongQuery = ({String book, String query});
+
+/// Ranked hymn search within one book.
 final songSearchProvider =
+    FutureProvider.family<List<SearchHit<Song>>, SongQuery>((ref, SongQuery q) async {
+  return ref.read(searchRepositoryProvider).searchSongs(q.query, book: q.book, limit: 80);
+});
+
+/// Ranked hymn search across both books (used by global search).
+final allSongsSearchProvider =
     FutureProvider.family<List<SearchHit<Song>>, String>((ref, String query) async {
-  return ref.read(searchRepositoryProvider).searchSongs(query, limit: 80);
+  return ref.read(searchRepositoryProvider).searchAllSongs(query, limit: 40);
 });
 
 /// Ranked Bible verse search across Hindi + English.

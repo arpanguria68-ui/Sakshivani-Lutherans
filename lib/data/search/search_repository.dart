@@ -2,6 +2,7 @@
 /// and exposes ranked search over them.
 library;
 
+import '../../core/constants/app_constants.dart';
 import '../models/bible_verse.dart';
 import '../models/song.dart';
 import '../repositories/bible_repository.dart';
@@ -14,7 +15,7 @@ class SearchRepository {
   final ContentRepository _content;
   final BibleRepository _bible;
 
-  SearchEngine<Song>? _songIndex;
+  final Map<String, SearchEngine<Song>> _songIndex = <String, SearchEngine<Song>>{};
   final Map<String, SearchEngine<BibleVerse>> _verseIndex =
       <String, SearchEngine<BibleVerse>>{};
 
@@ -32,10 +33,10 @@ class SearchRepository {
     SearchField('text', 1.0),
   ];
 
-  Future<SearchEngine<Song>> _songs() async {
-    final SearchEngine<Song>? cached = _songIndex;
+  Future<SearchEngine<Song>> _songs(String book) async {
+    final SearchEngine<Song>? cached = _songIndex[book];
     if (cached != null) return cached;
-    final List<Song> songs = await _content.getSongs();
+    final List<Song> songs = await _content.getSongs(book: book);
     final SearchEngine<Song> engine = SearchEngine<Song>.build(
       songs
           .map((Song s) => SearchDoc<Song>(
@@ -45,7 +46,7 @@ class SearchRepository {
           .toList(growable: false),
       _songFields,
     );
-    _songIndex = engine;
+    _songIndex[book] = engine;
     return engine;
   }
 
@@ -64,10 +65,26 @@ class SearchRepository {
     return engine;
   }
 
-  /// Ranked hymn search (title-weighted, phonetic + transliteration aware).
-  Future<List<SearchHit<Song>>> searchSongs(String query, {int limit = 60}) async {
+  /// Ranked hymn search within one book (title-weighted, phonetic + translit).
+  Future<List<SearchHit<Song>>> searchSongs(
+    String query, {
+    int limit = 60,
+    String book = AppConstants.bookSakshivani,
+  }) async {
     if (query.trim().isEmpty) return const <SearchHit<Song>>[];
-    return (await _songs()).search(query, limit: limit);
+    return (await _songs(book)).search(query, limit: limit);
+  }
+
+  /// Ranked hymn search across both books, merged by score.
+  Future<List<SearchHit<Song>>> searchAllSongs(String query, {int limit = 40}) async {
+    if (query.trim().isEmpty) return const <SearchHit<Song>>[];
+    final List<SearchHit<Song>> a =
+        (await _songs(AppConstants.bookSakshivani)).search(query, limit: limit);
+    final List<SearchHit<Song>> b =
+        (await _songs(AppConstants.bookDurang)).search(query, limit: limit);
+    final List<SearchHit<Song>> merged = <SearchHit<Song>>[...a, ...b]
+      ..sort((SearchHit<Song> x, SearchHit<Song> y) => y.score.compareTo(x.score));
+    return merged.length <= limit ? merged : merged.sublist(0, limit);
   }
 
   /// Ranked verse search for one language.
@@ -98,7 +115,7 @@ class SearchRepository {
 
   /// Warm the indexes ahead of first use (e.g. after first frame).
   Future<void> warmUp({bool songs = true, List<String> languages = const <String>['hi']}) async {
-    if (songs) await _songs();
+    if (songs) await _songs(AppConstants.bookSakshivani);
     for (final String lang in languages) {
       await _verses(lang);
     }

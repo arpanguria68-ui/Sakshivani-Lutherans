@@ -12,9 +12,38 @@ class ContentRepository {
   ContentRepository(this._database);
 
   final AppDatabase _database;
+  List<Song>? _durangCache;
 
-  Future<List<Song>> getSongs({String query = ''}) async {
+  /// Load the bundled Mundari Durang Puthi songbook (660 hymns), cached.
+  Future<List<Song>> _loadDurang() async {
+    final List<Song>? cached = _durangCache;
+    if (cached != null) return cached;
+    final String raw = await rootBundle.loadString(AppConstants.durangAssetPath);
+    final List<dynamic> decoded = json.decode(raw) as List<dynamic>;
+    final List<Song> songs = decoded
+        .whereType<Map<String, dynamic>>()
+        .map(Song.fromDurangJson)
+        .toList(growable: false);
+    _durangCache = songs;
+    return songs;
+  }
+
+  Future<List<Song>> getSongs({
+    String query = '',
+    String book = AppConstants.bookSakshivani,
+  }) async {
     final String sanitized = query.trim();
+
+    if (book == AppConstants.bookDurang) {
+      final List<Song> all = await _loadDurang();
+      if (sanitized.isEmpty) return all;
+      final String q = sanitized.toLowerCase();
+      return all
+          .where((Song s) =>
+              s.title.toLowerCase().contains(q) || s.lyrics.toLowerCase().contains(q))
+          .toList(growable: false);
+    }
+
     final List<Map<String, Object?>> rows;
     if (sanitized.isEmpty) {
       rows = await _database.songsDb.query(
@@ -40,7 +69,15 @@ class ContentRepository {
     return rows.map(Song.fromDb).toList();
   }
 
-  Future<Song?> getSongById(int id) async {
+  Future<Song?> getSongById(int id, {String book = AppConstants.bookSakshivani}) async {
+    if (book == AppConstants.bookDurang) {
+      final List<Song> all = await _loadDurang();
+      for (final Song s in all) {
+        if (s.id == id) return s;
+      }
+      return null;
+    }
+
     final List<Map<String, Object?>> rows = await _database.songsDb.query(
       'songs',
       columns: <String>['song_id', 'title', 'lyrics', 'category', 'reference'],
