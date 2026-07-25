@@ -7,6 +7,7 @@ import '../../features/auth/presentation/auth_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/catechism/presentation/catechism_chapter_screen.dart';
 import '../../features/catechism/presentation/catechism_screen.dart';
+import '../../features/bible/presentation/bible_reader_screen.dart';
 import '../../features/planner/presentation/planner_screen.dart';
 import '../../features/quiz/presentation/quiz_screen.dart';
 import '../../features/search/presentation/global_search_screen.dart';
@@ -57,6 +58,16 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ProviderRef<GoR
       GoRoute(
         path: '/planner',
         builder: (BuildContext context, GoRouterState state) => const PlannerScreen(),
+      ),
+      GoRoute(
+        path: '/bible/read/:lang/:book/:chapter',
+        builder: (BuildContext context, GoRouterState state) {
+          return BibleReaderScreen(
+            language: state.pathParameters['lang'] ?? 'hi',
+            bookIndex: int.tryParse(state.pathParameters['book'] ?? '0') ?? 0,
+            chapterIndex: int.tryParse(state.pathParameters['chapter'] ?? '0') ?? 0,
+          );
+        },
       ),
       GoRoute(
         path: '/settings',

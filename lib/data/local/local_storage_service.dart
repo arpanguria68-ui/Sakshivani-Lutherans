@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -12,6 +14,8 @@ class LocalStorageService {
   static const String _reminderEnabledKey = 'settings.daily_reminder_enabled';
   static const String _reminderHourKey = 'settings.daily_reminder_hour';
   static const String _reminderMinuteKey = 'settings.daily_reminder_minute';
+  static const String _bibleLastReadKey = 'bible.last_read';
+  static const String _bibleHistoryKey = 'bible.history';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -98,5 +102,58 @@ class LocalStorageService {
     final prefs = await _prefs;
     await prefs.setInt(_reminderHourKey, hour);
     await prefs.setInt(_reminderMinuteKey, minute);
+  }
+
+  // ─── Bible last-read + reading history ─────────────────────────────────────
+
+  /// Last read position as {language, bookIndex, chapterIndex}, or null.
+  Future<Map<String, dynamic>?> getBibleLastRead() async {
+    final String? raw = (await _prefs).getString(_bibleLastReadKey);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return jsonDecode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> setBibleLastRead(String language, int bookIndex, int chapterIndex) async {
+    await (await _prefs).setString(
+      _bibleLastReadKey,
+      jsonEncode(<String, dynamic>{
+        'language': language,
+        'bookIndex': bookIndex,
+        'chapterIndex': chapterIndex,
+      }),
+    );
+  }
+
+  /// Recent chapters, most-recent-first, de-duplicated, capped at 20.
+  Future<List<Map<String, dynamic>>> getBibleHistory() async {
+    final String? raw = (await _prefs).getString(_bibleHistoryKey);
+    if (raw == null || raw.isEmpty) return <Map<String, dynamic>>[];
+    try {
+      final List<dynamic> list = jsonDecode(raw) as List<dynamic>;
+      return list.whereType<Map<String, dynamic>>().toList(growable: false);
+    } catch (_) {
+      return <Map<String, dynamic>>[];
+    }
+  }
+
+  Future<void> pushBibleHistory(String language, int bookIndex, int chapterIndex) async {
+    final List<Map<String, dynamic>> history = await getBibleHistory();
+    history.removeWhere((Map<String, dynamic> e) =>
+        e['language'] == language &&
+        e['bookIndex'] == bookIndex &&
+        e['chapterIndex'] == chapterIndex);
+    history.insert(0, <String, dynamic>{
+      'language': language,
+      'bookIndex': bookIndex,
+      'chapterIndex': chapterIndex,
+      'ts': DateTime.now().toIso8601String(),
+    });
+    final List<Map<String, dynamic>> capped =
+        history.length > 20 ? history.sublist(0, 20) : history;
+    await (await _prefs).setString(_bibleHistoryKey, jsonEncode(capped));
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers.dart';
+import '../../../data/bible/bible_books.dart';
 import '../../../data/models/bible_verse.dart';
 import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
@@ -60,6 +62,92 @@ class _BibleTabState extends ConsumerState<BibleTab> {
         letterSpacing: s.letterSpacing,
         wordSpacing: s.wordSpacing,
       );
+
+  void _openReader(int book, int chapter, {String? language}) {
+    context
+        .push('/bible/read/${language ?? _language}/$book/$chapter')
+        .then((_) {
+      if (!mounted) return;
+      ref.invalidate(bibleLastReadProvider);
+      ref.invalidate(bibleHistoryProvider);
+    });
+  }
+
+  /// "Continue reading" card + a horizontal strip of recent chapters.
+  Widget _continueAndRecent() {
+    final AsyncValue<Map<String, dynamic>?> last = ref.watch(bibleLastReadProvider);
+    final AsyncValue<List<Map<String, dynamic>>> history = ref.watch(bibleHistoryProvider);
+
+    final Map<String, dynamic>? lastRead = last.value;
+    final List<Map<String, dynamic>> recents = history.value ?? const <Map<String, dynamic>>[];
+    if (lastRead == null && recents.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    String labelFor(Map<String, dynamic> e) {
+      final String lang = e['language'] as String? ?? 'hi';
+      final int b = (e['bookIndex'] as num?)?.toInt() ?? 0;
+      final int c = (e['chapterIndex'] as num?)?.toInt() ?? 0;
+      return '${BibleBooks.name(b, lang)} ${c + 1}';
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (lastRead != null) ...<Widget>[
+          GlassCard(
+            onTap: () => _openReader(
+              (lastRead['bookIndex'] as num?)?.toInt() ?? 0,
+              (lastRead['chapterIndex'] as num?)?.toInt() ?? 0,
+              language: lastRead['language'] as String? ?? 'hi',
+            ),
+            child: Row(
+              children: <Widget>[
+                const Icon(Icons.play_circle_fill),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Continue reading', style: Theme.of(context).textTheme.bodySmall),
+                      Text(labelFor(lastRead),
+                          style: Theme.of(context).textTheme.titleMedium),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+        if (recents.isNotEmpty) ...<Widget>[
+          Text('Recent', style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 6),
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: recents.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (BuildContext context, int i) {
+                final Map<String, dynamic> e = recents[i];
+                return ActionChip(
+                  label: Text(labelFor(e)),
+                  onPressed: () => _openReader(
+                    (e['bookIndex'] as num?)?.toInt() ?? 0,
+                    (e['chapterIndex'] as num?)?.toInt() ?? 0,
+                    language: e['language'] as String? ?? 'hi',
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+      ],
+    );
+  }
 
   Future<void> _nextChapter() async {
     final List<String> names = await ref.read(bibleBooksProvider(_language).future);
@@ -228,6 +316,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
               },
             )
           else ...<Widget>[
+            _continueAndRecent(),
             books.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (Object e, StackTrace _) => Text('Could not load books: $e'),
@@ -241,6 +330,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
                     Expanded(
                       flex: 3,
                       child: DropdownButtonFormField<int>(
+                        key: ValueKey<String>('book-$_language-$_bookIndex'),
                         initialValue: _bookIndex,
                         items: items,
                         decoration: const InputDecoration(labelText: 'Book'),
@@ -303,14 +393,21 @@ class _BibleTabState extends ConsumerState<BibleTab> {
               data: (List<BibleVerse> chapterVerses) {
                 return Column(
                   children: <Widget>[
-                    Row(
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: <Widget>[
+                        FilledButton.icon(
+                          onPressed: () => _openReader(_bookIndex, _chapterIndex),
+                          icon: const Icon(Icons.auto_stories),
+                          label: const Text('Open reader'),
+                        ),
                         FilledButton.tonalIcon(
                           onPressed: () => _readChapter(chapterVerses, settings),
                           icon: Icon(_isReading ? Icons.pause : Icons.volume_up),
-                          label: Text(_isReading ? 'Pause' : 'Read chapter'),
+                          label: Text(_isReading ? 'Pause' : 'Read aloud'),
                         ),
-                        const Spacer(),
                         IconButton(
                           tooltip: 'Reading settings',
                           icon: const Icon(Icons.text_fields),
@@ -412,6 +509,16 @@ class BibleSearchRequest {
 
 final bibleBooksProvider = FutureProvider.family<List<String>, String>((ref, String language) async {
   return ref.read(bibleRepositoryProvider).getBooks(language);
+});
+
+/// Last-read {language, bookIndex, chapterIndex}, or null.
+final bibleLastReadProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
+  return ref.read(localStorageServiceProvider).getBibleLastRead();
+});
+
+/// Recent chapters (most-recent-first).
+final bibleHistoryProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  return ref.read(localStorageServiceProvider).getBibleHistory();
 });
 
 final bibleVersesProvider = FutureProvider.family<List<BibleVerse>, BibleLocation>(
