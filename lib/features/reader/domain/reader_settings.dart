@@ -21,6 +21,8 @@ class ReaderSettings {
     this.align = ReaderAlign.start,
     this.theme = ReaderTheme.system,
     this.paginated = false,
+    this.paperTexture = true,
+    this.pageTurnSound = true,
     this.ttsRate = 0.48,
     this.ttsPitch = 1.0,
   });
@@ -33,6 +35,8 @@ class ReaderSettings {
   final ReaderAlign align;
   final ReaderTheme theme;
   final bool paginated;
+  final bool paperTexture;
+  final bool pageTurnSound;
   final double ttsRate;
   final double ttsPitch;
 
@@ -60,6 +64,8 @@ class ReaderSettings {
     ReaderAlign? align,
     ReaderTheme? theme,
     bool? paginated,
+    bool? paperTexture,
+    bool? pageTurnSound,
     double? ttsRate,
     double? ttsPitch,
   }) {
@@ -72,6 +78,8 @@ class ReaderSettings {
       align: align ?? this.align,
       theme: theme ?? this.theme,
       paginated: paginated ?? this.paginated,
+      paperTexture: paperTexture ?? this.paperTexture,
+      pageTurnSound: pageTurnSound ?? this.pageTurnSound,
       ttsRate: ttsRate ?? this.ttsRate,
       ttsPitch: ttsPitch ?? this.ttsPitch,
     );
@@ -86,6 +94,8 @@ class ReaderSettings {
         'align': align.name,
         'theme': theme.name,
         'paginated': paginated,
+        'paperTexture': paperTexture,
+        'pageTurnSound': pageTurnSound,
         'ttsRate': ttsRate,
         'ttsPitch': ttsPitch,
       };
@@ -104,6 +114,8 @@ class ReaderSettings {
       align: byName(ReaderAlign.values, m['align'], ReaderAlign.start),
       theme: byName(ReaderTheme.values, m['theme'], ReaderTheme.system),
       paginated: m['paginated'] as bool? ?? false,
+      paperTexture: m['paperTexture'] as bool? ?? true,
+      pageTurnSound: m['pageTurnSound'] as bool? ?? true,
       ttsRate: (m['ttsRate'] as num?)?.toDouble() ?? 0.48,
       ttsPitch: (m['ttsPitch'] as num?)?.toDouble() ?? 1.0,
     );

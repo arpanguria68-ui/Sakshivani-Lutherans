@@ -1,4 +1,8 @@
+import 'dart:math' as math;
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../domain/reader_settings.dart';
 
@@ -32,8 +36,19 @@ class _ReaderBodyState extends State<ReaderBody> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   final Map<int, GlobalKey> _lineKeys = <int, GlobalKey>{};
+  final AudioPlayer _pagePlayer = AudioPlayer(playerId: 'page_turn')
+    ..setReleaseMode(ReleaseMode.stop);
   List<List<int>> _pages = <List<int>>[];
   int _currentPage = 0;
+
+  void _onPageTurned(int page) {
+    setState(() => _currentPage = page);
+    if (widget.settings.pageTurnSound) {
+      HapticFeedback.selectionClick();
+      // Fire-and-forget; ignore playback errors (no engine, muted, etc.).
+      _pagePlayer.play(AssetSource('sounds/page_turn.wav'), volume: 0.7).catchError((_) {});
+    }
+  }
 
   @override
   void didUpdateWidget(covariant ReaderBody old) {
@@ -47,6 +62,7 @@ class _ReaderBodyState extends State<ReaderBody> {
   void dispose() {
     _pageController.dispose();
     _scrollController.dispose();
+    _pagePlayer.dispose();
     super.dispose();
   }
 
@@ -89,9 +105,29 @@ class _ReaderBodyState extends State<ReaderBody> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: widget.palette.background,
-      child: widget.settings.paginated ? _buildPaginated() : _buildScroll(),
+    final Widget content =
+        widget.settings.paginated ? _buildPaginated() : _buildScroll();
+    if (!widget.settings.paperTexture) {
+      return ColoredBox(color: widget.palette.background, child: content);
+    }
+    return DecoratedBox(
+      decoration: BoxDecoration(color: widget.palette.background),
+      child: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _PaperTexturePainter(
+                base: widget.palette.background,
+                ink: widget.palette.text,
+                // E-ink stays nearly flat; sepia/system get a richer grain.
+                grain: widget.palette.flat ? 0.012 : 0.05,
+                seed: widget.settings.paginated ? _currentPage : 0,
+              ),
+            ),
+          ),
+          Positioned.fill(child: content),
+        ],
+      ),
     );
   }
 
@@ -140,7 +176,7 @@ class _ReaderBodyState extends State<ReaderBody> {
             PageView.builder(
               controller: _pageController,
               itemCount: _pages.length,
-              onPageChanged: (int p) => setState(() => _currentPage = p),
+              onPageChanged: _onPageTurned,
               itemBuilder: (BuildContext context, int p) {
                 return Padding(
                   padding: widget.padding,
@@ -227,4 +263,50 @@ class _ReaderBodyState extends State<ReaderBody> {
     // +2 for the per-line vertical padding used in _lineWidget.
     return tp.height + 2;
   }
+}
+
+/// A cheap procedural paper grain: faint deterministic speckle + soft vignette.
+/// Deterministic per [seed] so it stays stable within a page (no shimmer on
+/// rebuild) but subtly differs page to page.
+class _PaperTexturePainter extends CustomPainter {
+  _PaperTexturePainter({
+    required this.base,
+    required this.ink,
+    required this.grain,
+    required this.seed,
+  });
+
+  final Color base;
+  final Color ink;
+  final double grain;
+  final int seed;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.isEmpty) return;
+    final math.Random rng = math.Random(seed * 7919 + 17);
+    final Paint dot = Paint();
+    final int marks =
+        ((size.width * size.height) / 1400).clamp(120, 900).toInt();
+    for (int i = 0; i < marks; i++) {
+      final double dx = rng.nextDouble() * size.width;
+      final double dy = rng.nextDouble() * size.height;
+      final double a = grain * (0.15 + 0.55 * rng.nextDouble());
+      dot.color = ink.withValues(alpha: a);
+      final double r = 0.4 + rng.nextDouble() * 0.9;
+      canvas.drawCircle(Offset(dx, dy), r, dot);
+    }
+    // Soft edge vignette for a page-in-hand feel.
+    final Paint vignette = Paint()
+      ..shader = RadialGradient(
+        colors: <Color>[Colors.transparent, ink.withValues(alpha: 0.05)],
+        stops: const <double>[0.72, 1.0],
+        radius: 0.9,
+      ).createShader(Offset.zero & size);
+    canvas.drawRect(Offset.zero & size, vignette);
+  }
+
+  @override
+  bool shouldRepaint(_PaperTexturePainter old) =>
+      old.base != base || old.ink != ink || old.grain != grain || old.seed != seed;
 }

@@ -31,6 +31,7 @@ dependencies:
   timezone: ^0.10.1
   share_plus: ^10.1.4
   flutter_tts: ^4.2.0
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +46,7 @@ flutter:
     - catechism.json
     - quiz_data.json
     - bible_db.zip
+    - assets/sounds/page_turn.wav
 
   fonts:
     - family: NotoSansDevanagari

@@ -118,6 +118,20 @@ class _ReaderSettingsSheet extends ConsumerWidget {
                 value: s.paginated,
                 onChanged: c.setPaginated,
               ),
+              SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Paper texture'),
+                subtitle: const Text('Subtle grain on the reading surface'),
+                value: s.paperTexture,
+                onChanged: c.setPaperTexture,
+              ),
+              SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Page-turn sound & haptics'),
+                subtitle: const Text('A soft rustle + tap when turning pages'),
+                value: s.pageTurnSound,
+                onChanged: c.setPageTurnSound,
+              ),
 
               const SizedBox(height: 4),
               _sliderRow(
