@@ -26,5 +26,6 @@ final allSongsSearchProvider =
 /// Ranked Bible verse search across Hindi + English.
 final verseSearchProvider =
     FutureProvider.family<List<SearchHit<BibleVerse>>, String>((ref, String query) async {
+  await ref.watch(bibleAssetReadyProvider.future);
   return ref.read(searchRepositoryProvider).searchVersesAllLanguages(query, limit: 60);
 });

@@ -371,6 +371,9 @@ class _HomeTabState extends ConsumerState<HomeTab> {
 
 final FutureProvider<BibleVerse?> dailyVerseProvider =
     FutureProvider<BibleVerse?>((FutureProviderRef<BibleVerse?> ref) async {
+  if (!await ref.read(bibleAssetServiceProvider).isDownloaded()) {
+    return null;
+  }
   return ref.read(bibleRepositoryProvider).getDailyVerse(language: 'hi');
 });
 

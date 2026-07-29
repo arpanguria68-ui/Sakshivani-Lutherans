@@ -63,7 +63,6 @@ flutter:
     - assets/durang_puthi.json
     - catechism.json
     - quiz_data.json
-    - bible_db.zip
     - assets/sounds/page_turn.wav
     - assets/sounds/page_flip.mp3
     - assets/3d-icons/musical_note.png

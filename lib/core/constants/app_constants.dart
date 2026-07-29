@@ -20,6 +20,10 @@ class AppConstants {
   static const String hindiBibleEntryPath = 'Bible-Database_godlytalias-master/Hindi/bible.json';
   static const String englishBibleEntryPath = 'Bible-Database_godlytalias-master/English/bible.json';
 
+  /// Hosted on the main branch — not bundled in the app binary (~42 MB saved).
+  static const String bibleZipDownloadUrl =
+      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/raw/main/bible_db.zip';
+
   static const int songMinTextSize = 14;
   static const int songMaxTextSize = 34;
   static const int songDefaultTextSize = 20;

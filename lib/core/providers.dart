@@ -22,6 +22,7 @@ import '../services/analytics_service.dart';
 import '../services/church_courtesy_service.dart';
 import '../services/notification_service.dart';
 import '../services/purchase_service.dart';
+import '../services/bible_asset_service.dart';
 import '../services/sync_service.dart';
 import '../services/tts_service.dart';
 import '../services/weather_service.dart';
@@ -70,9 +71,18 @@ final Provider<ContentRepository> contentRepositoryProvider =
   return ContentRepository(ref.read(databaseProvider));
 });
 
+final Provider<BibleAssetService> bibleAssetServiceProvider =
+    Provider<BibleAssetService>((Ref ref) {
+  return BibleAssetService();
+});
+
+final FutureProvider<void> bibleAssetReadyProvider = FutureProvider<void>((Ref ref) async {
+  await ref.read(bibleAssetServiceProvider).ensureDownloaded();
+});
+
 final Provider<BibleRepository> bibleRepositoryProvider =
-    Provider<BibleRepository>((ProviderRef<BibleRepository> ref) {
-  return BibleRepository();
+    Provider<BibleRepository>((Ref ref) {
+  return BibleRepository(assetService: ref.read(bibleAssetServiceProvider));
 });
 
 final Provider<SearchRepository> searchRepositoryProvider =

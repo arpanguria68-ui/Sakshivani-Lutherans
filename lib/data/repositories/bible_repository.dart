@@ -4,9 +4,14 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../services/bible_asset_service.dart';
 import '../models/bible_verse.dart';
 
 class BibleRepository {
+  BibleRepository({BibleAssetService? assetService})
+      : _assetService = assetService ?? BibleAssetService();
+
+  final BibleAssetService _assetService;
   final Map<String, String> _assetCache = <String, String>{};
   final Map<String, Map<String, dynamic>> _cache = <String, Map<String, dynamic>>{};
 
@@ -346,8 +351,11 @@ class BibleRepository {
   }
 
   Future<String> _extractFromZip(String entryPath) async {
-    final ByteData data = await rootBundle.load(AppConstants.bibleZipAssetPath);
-    final Uint8List bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final File zipFile = await _assetService.localZipFile();
+    if (!await zipFile.exists()) {
+      throw StateError('Bible data is not downloaded yet.');
+    }
+    final Uint8List bytes = await zipFile.readAsBytes();
 
     const List<int> signature = <int>[0x50, 0x4B, 0x03, 0x04];
     final List<int> sig = signature;

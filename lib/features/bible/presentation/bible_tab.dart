@@ -336,8 +336,36 @@ class _BibleTabState extends ConsumerState<BibleTab> {
           else ...<Widget>[
             _continueAndRecent(),
             books.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (Object e, StackTrace _) => Text('Could not load books: $e'),
+              loading: () => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Column(
+                  children: <Widget>[
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 12),
+                    Text(
+                      ref.watch(bibleAssetReadyProvider).isLoading
+                          ? 'Downloading Bible data (one-time, ~40 MB)…'
+                          : 'Loading Bible…',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              error: (Object e, StackTrace _) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Could not load Bible: $e'),
+                  const SizedBox(height: 8),
+                  FilledButton.icon(
+                    onPressed: () {
+                      ref.invalidate(bibleAssetReadyProvider);
+                      ref.invalidate(bibleBooksProvider(_language));
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Retry download'),
+                  ),
+                ],
+              ),
               data: (List<String> names) {
                 final List<DropdownMenuItem<int>> items = List<DropdownMenuItem<int>>.generate(
                   names.length,
@@ -547,6 +575,7 @@ class BibleSearchRequest {
 }
 
 final bibleBooksProvider = FutureProvider.family<List<String>, String>((ref, String language) async {
+  await ref.watch(bibleAssetReadyProvider.future);
   return ref.read(bibleRepositoryProvider).getBooks(language);
 });
 
@@ -562,6 +591,7 @@ final bibleHistoryProvider = FutureProvider<List<Map<String, dynamic>>>((ref) as
 
 final bibleVersesProvider = FutureProvider.family<List<BibleVerse>, BibleLocation>(
   (ref, BibleLocation location) async {
+    await ref.watch(bibleAssetReadyProvider.future);
     return ref.read(bibleRepositoryProvider).getVerses(
           language: location.language,
           bookIndex: location.bookIndex,
@@ -572,6 +602,7 @@ final bibleVersesProvider = FutureProvider.family<List<BibleVerse>, BibleLocatio
 
 final bibleSearchProvider = FutureProvider.family<List<BibleVerse>, BibleSearchRequest>(
   (ref, BibleSearchRequest query) async {
+    await ref.watch(bibleAssetReadyProvider.future);
     final hits = await ref
         .read(searchRepositoryProvider)
         .searchVerses(query.language, query.query, limit: 80);
