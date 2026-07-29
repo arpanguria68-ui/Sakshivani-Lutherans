@@ -21,17 +21,17 @@ class VerseBackgroundSettings {
   // (truncated) upstream in the web repo's assets/backgrounds; re-add once
   // it's re-exported.
   static const List<String> defaultOrder = <String>[
-    'assets/backgrounds/spring.png',
-    'assets/backgrounds/green_hills.png',
-    'assets/backgrounds/gel_church.png',
-    'assets/backgrounds/monsoon.png',
-    'assets/backgrounds/waterfall.png',
-    'assets/backgrounds/autumn.png',
-    'assets/backgrounds/full_moon.png',
-    'assets/backgrounds/gel_church_sunset.png',
-    'assets/backgrounds/parchment.png',
-    'assets/backgrounds/gel_church_full_view.png',
-    'assets/backgrounds/obsidian.png',
+    'assets/backgrounds/spring.webp',
+    'assets/backgrounds/green_hills.webp',
+    'assets/backgrounds/gel_church.webp',
+    'assets/backgrounds/monsoon.webp',
+    'assets/backgrounds/waterfall.webp',
+    'assets/backgrounds/autumn.webp',
+    'assets/backgrounds/full_moon.webp',
+    'assets/backgrounds/gel_church_sunset.webp',
+    'assets/backgrounds/parchment.webp',
+    'assets/backgrounds/gel_church_full_view.webp',
+    'assets/backgrounds/obsidian.webp',
   ];
 
   static const int defaultRotateHours = 24;

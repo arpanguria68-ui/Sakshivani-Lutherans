@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/providers.dart';
 import '../../../features/auth/domain/auth_state.dart';
 import '../../bible/presentation/bible_tab.dart' show bibleHistoryProvider, bibleLastReadProvider;
@@ -132,6 +134,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     await ref.read(onboardingControllerProvider.notifier).reset();
     if (!mounted) return;
     context.go('/onboarding');
+  }
+
+  Future<void> _openPrivacyPolicy() async {
+    final Uri uri = Uri.parse(AppConstants.privacyPolicyUrl);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open the privacy policy.')),
+      );
+    }
   }
 
   Future<void> _resetApp() async {
@@ -532,6 +544,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 8),
+                    Text('Legal', style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.privacy_tip_outlined),
+                      title: const Text('Privacy policy'),
+                      subtitle: const Text('How we handle your data'),
+                      trailing: const Icon(Icons.open_in_new, size: 18),
+                      onTap: _openPrivacyPolicy,
+                    ),
+                    const SizedBox(height: 8),
                     Text('Danger zone', style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 4),
                     Text(
@@ -643,7 +666,7 @@ class _RemoveAdsCard extends StatelessWidget {
 }
 
 String _backgroundLabel(String assetPath) {
-  final String fileName = assetPath.split('/').last.replaceAll('.png', '');
+  final String fileName = assetPath.split('/').last.replaceAll(RegExp(r'\.(png|webp)$'), '');
   final List<String> words = fileName.split('_');
   return words.map((String w) => w[0].toUpperCase() + w.substring(1)).join(' ');
 }

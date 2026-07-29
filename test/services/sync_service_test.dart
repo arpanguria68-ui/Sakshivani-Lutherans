@@ -51,4 +51,8 @@ void main() {
   test('deleteCloudUserData is a no-op when Firebase is disabled', () async {
     await service.deleteCloudUserData();
   });
+
+  test('maxQueueRetries is a positive guard constant', () {
+    expect(SyncService.maxQueueRetries, greaterThan(0));
+  });
 }

@@ -153,12 +153,14 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                     IconButton(
                       tooltip: 'Favorite',
                       onPressed: () async {
+                        final ScaffoldMessengerState messenger =
+                            ScaffoldMessenger.of(context);
                         await ref.read(favoritesRepositoryProvider).toggleFavorite(
                               itemType: 'verse',
                               itemRef: verse.id,
                             );
                         if (!mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        messenger.showSnackBar(
                           const SnackBar(content: Text('Daily verse favorite updated')),
                         );
                       },

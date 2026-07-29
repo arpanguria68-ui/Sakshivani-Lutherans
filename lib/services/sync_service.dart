@@ -17,6 +17,10 @@ class SyncService {
   /// splash screen instead of just skipping sync for this launch.
   static const Duration _networkTimeout = Duration(seconds: 8);
 
+  /// After this many failed pushes, drop the queue item instead of retrying
+  /// forever — prevents a permanently-bad payload from blocking the outbox.
+  static const int maxQueueRetries = 5;
+
   SyncService({
     required SyncQueueRepository syncQueueRepository,
     required FavoritesRepository favoritesRepository,
@@ -79,11 +83,20 @@ class SyncService {
     final List<SyncQueueItem> pending = await _syncQueueRepository.pending(limit: 100);
 
     for (final SyncQueueItem item in pending) {
+      if (item.retries >= maxQueueRetries) {
+        await _syncQueueRepository.removeById(item.id);
+        continue;
+      }
       try {
         await _applyItem(user.uid, firestore, item).timeout(_networkTimeout);
         await _syncQueueRepository.removeById(item.id);
       } catch (_) {
-        await _syncQueueRepository.incrementRetry(item.id);
+        final int nextRetries = item.retries + 1;
+        if (nextRetries >= maxQueueRetries) {
+          await _syncQueueRepository.removeById(item.id);
+        } else {
+          await _syncQueueRepository.incrementRetry(item.id);
+        }
       }
     }
   }

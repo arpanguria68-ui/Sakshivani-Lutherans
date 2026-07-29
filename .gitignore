@@ -53,3 +53,4 @@ android/.kotlin/
 android/.gradle/
 **/*.keystore
 **/*.jks
+*.db.bak

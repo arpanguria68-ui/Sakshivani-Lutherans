@@ -111,12 +111,13 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
             tooltip: 'Favorite',
             icon: const Icon(Icons.favorite_border),
             onPressed: () async {
+              final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
               await ref
                   .read(favoritesRepositoryProvider)
                   .toggleFavorite(itemType: 'song', itemRef: '${widget.book}:${widget.songId}');
               ref.invalidate(favoriteSongsProvider);
               if (!mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 const SnackBar(content: Text('Song favorite updated')));
             },
           ),

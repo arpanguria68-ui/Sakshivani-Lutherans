@@ -301,13 +301,15 @@ class _BibleTabState extends ConsumerState<BibleTab> {
                               children: <Widget>[
                                 TextButton.icon(
                                   onPressed: () async {
+                                    final ScaffoldMessengerState messenger =
+                                        ScaffoldMessenger.of(context);
                                     await Clipboard.setData(
                                       ClipboardData(text: '${verse.reference}\n${verse.text}'),
                                     );
                                     if (!mounted) {
                                       return;
                                     }
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    messenger.showSnackBar(
                                       const SnackBar(content: Text('Verse copied')),
                                     );
                                   },

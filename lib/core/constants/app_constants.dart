@@ -35,4 +35,8 @@ class AppConstants {
 
   /// `cloudflare/email-otp-worker` deployment (no trailing slash).
   static const String emailOtpWorkerUrl = 'https://sakshivani-email-otp.neelimaguria42.workers.dev';
+
+  /// Public privacy policy (hosted on GitHub until a dedicated site is available).
+  static const String privacyPolicyUrl =
+      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY.md';
 }

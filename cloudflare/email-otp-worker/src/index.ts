@@ -7,6 +7,11 @@ export interface Env {
 }
 
 const CODE_TTL_SECONDS = 600; // 10 minutes
+const SEND_LIMIT_PER_EMAIL = 3;
+const SEND_LIMIT_PER_IP = 10;
+const SEND_WINDOW_SECONDS = 3600;
+const VERIFY_MAX_ATTEMPTS = 5;
+const VERIFY_LOCKOUT_SECONDS = 900;
 
 function randomCode(): string {
   const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
@@ -15,6 +20,27 @@ function randomCode(): string {
 
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function clientIp(request: Request): string {
+  return request.headers.get('CF-Connecting-IP') ?? 'unknown';
+}
+
+/// Increment a KV counter with a TTL window. Returns false when the limit is
+/// already reached (counter is not incremented further).
+async function consumeRateLimit(
+  kv: KVNamespace,
+  key: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<boolean> {
+  const raw = await kv.get(key);
+  const count = raw ? Number.parseInt(raw, 10) : 0;
+  if (count >= limit) {
+    return false;
+  }
+  await kv.put(key, String(count + 1), { expirationTtl: windowSeconds });
+  return true;
 }
 
 /// Deterministic Firebase uid for a given email, so repeat sign-ins with the
@@ -118,8 +144,27 @@ export default {
         return json({ error: 'invalid-email' }, 400);
       }
 
+      const ip = clientIp(request);
+      const emailAllowed = await consumeRateLimit(
+        env.OTP_KV,
+        `rate:send:email:${email}`,
+        SEND_LIMIT_PER_EMAIL,
+        SEND_WINDOW_SECONDS,
+      );
+      const ipAllowed = await consumeRateLimit(
+        env.OTP_KV,
+        `rate:send:ip:${ip}`,
+        SEND_LIMIT_PER_IP,
+        SEND_WINDOW_SECONDS,
+      );
+      if (!emailAllowed || !ipAllowed) {
+        return json({ error: 'rate-limited' }, 429);
+      }
+
       const code = randomCode();
       await env.OTP_KV.put(`otp:${email}`, code, { expirationTtl: CODE_TTL_SECONDS });
+      // Reset verify-attempt counter whenever a fresh code is issued.
+      await env.OTP_KV.delete(`verify-attempts:${email}`);
 
       try {
         await sendCodeEmail(env, email, code);
@@ -139,12 +184,23 @@ export default {
         return json({ error: 'invalid-request' }, 400);
       }
 
+      const attemptsKey = `verify-attempts:${email}`;
+      const attemptsRaw = await env.OTP_KV.get(attemptsKey);
+      const attempts = attemptsRaw ? Number.parseInt(attemptsRaw, 10) : 0;
+      if (attempts >= VERIFY_MAX_ATTEMPTS) {
+        return json({ error: 'too-many-attempts' }, 429);
+      }
+
       const key = `otp:${email}`;
       const stored = await env.OTP_KV.get(key);
       if (!stored || stored !== code) {
+        await env.OTP_KV.put(attemptsKey, String(attempts + 1), {
+          expirationTtl: VERIFY_LOCKOUT_SECONDS,
+        });
         return json({ error: 'invalid-code' }, 401);
       }
       await env.OTP_KV.delete(key);
+      await env.OTP_KV.delete(attemptsKey);
 
       const token = await createFirebaseCustomToken(env, uidForEmail(email));
       return json({ token });
