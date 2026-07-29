@@ -7,10 +7,13 @@ import '../../../core/providers.dart';
 import '../../../data/models/bible_verse.dart';
 import '../../../data/repositories/planner_repository.dart';
 import '../../../data/repositories/progress_repository.dart';
+import '../../auth/domain/auth_state.dart';
+import '../domain/verse_background_settings.dart';
 import '../../planner/domain/reading_plan.dart';
 import '../../planner/presentation/planner_screen.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../../services/church_courtesy_service.dart';
+import '../../../shared/widgets/ad_banner.dart';
 import '../../../shared/widgets/editorial.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
@@ -24,6 +27,7 @@ class HomeTab extends ConsumerStatefulWidget {
 
 class _HomeTabState extends ConsumerState<HomeTab> {
   bool _checkedCourtesyPrompt = false;
+  bool _syncNudgeDismissed = false;
 
   @override
   void didChangeDependencies() {
@@ -89,9 +93,17 @@ class _HomeTabState extends ConsumerState<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue<BibleVerse?>>(dailyVerseProvider, (AsyncValue<BibleVerse?>? previous, AsyncValue<BibleVerse?> next) {
+      final BibleVerse? verse = next.valueOrNull;
+      if (verse != null) {
+        ref.read(analyticsServiceProvider).logDailyVerseViewed(reference: verse.reference);
+      }
+    });
     final AsyncValue<BibleVerse?> dailyVerse = ref.watch(dailyVerseProvider);
+    final VerseBackgroundSettings bgSettings = ref.watch(verseBackgroundControllerProvider);
     final AsyncValue<ProgressStats> stats = ref.watch(progressStatsProvider);
     final AsyncValue<ActivePlan?> activePlan = ref.watch(activePlanProvider);
+    final AuthState authState = ref.watch(authControllerProvider);
     final ColorScheme colors = Theme.of(context).colorScheme;
     final TextTheme text = Theme.of(context).textTheme;
 
@@ -113,6 +125,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                 quote: verse.text,
                 onTap: () => context.go('/tab/bible'),
                 accentSrc: 'assets/3d-icons/dove_bird.png',
+                backgroundSrc: bgSettings.resolve(DateTime.now()),
               );
             },
           ),
@@ -233,9 +246,10 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                         footerLabel: 'Songs',
                         actionLabel: 'Open',
                         onTap: () => context.go('/tab/songs'),
+                        accent: true,
                       ),
                     ),
-                    const SizedBox(width: 1),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: BentoCard(
                         claySrc: 'assets/3d-icons/holy_bible.png',
@@ -244,12 +258,11 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                         footerLabel: 'Catechism',
                         actionLabel: 'Study',
                         onTap: () => context.push('/catechism'),
-                        tone: colors.surfaceContainerLowest,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 1),
+                const SizedBox(height: 12),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -260,11 +273,11 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                         footerLabel: 'Planner',
                         actionLabel: 'Plan',
                         onTap: () => context.push('/planner'),
-                        tone: colors.secondaryContainer.withValues(alpha: 0.35),
+                        accent: true,
                         iconColor: colors.secondary,
                       ),
                     ),
-                    const SizedBox(width: 1),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: BentoCard(
                         claySrc: 'assets/3d-icons/christian_cross.png',
@@ -321,6 +334,25 @@ class _HomeTabState extends ConsumerState<HomeTab> {
               ),
             ),
           ),
+          stats.maybeWhen(
+            data: (ProgressStats value) {
+              final bool worthNudging = value.currentStreak >= 7 && !authState.isAuthenticated;
+              if (!worthNudging || _syncNudgeDismissed) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: _SyncNudgeCard(
+                  streak: value.currentStreak,
+                  onSignIn: () => context.push('/auth'),
+                  onDismiss: () => setState(() => _syncNudgeDismissed = true),
+                ),
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
+          ),
+          const SizedBox(height: 16),
+          const AdBannerWidget(),
         ],
       ),
     );
@@ -403,6 +435,59 @@ class _TodayReadingCard extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// A dismissible loss-aversion nudge: shown to anonymous/local-guest users
+/// once their prayer streak is meaningful (7+ days) but not yet backed up
+/// to the cloud. Dismissal is session-only (a plain [State] field, not
+/// persisted) — it can reappear next app open rather than being silenced
+/// forever after one tap, since the streak (and thus the risk of losing it)
+/// keeps growing.
+class _SyncNudgeCard extends StatelessWidget {
+  const _SyncNudgeCard({
+    required this.streak,
+    required this.onSignIn,
+    required this.onDismiss,
+  });
+
+  final int streak;
+  final VoidCallback onSignIn;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    return GlassCard(
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.local_fire_department, color: colors.primary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '$streak-day streak — don\'t lose it',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Sign in to back up your streak, favorites, and reflections.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+          TextButton(onPressed: onSignIn, child: const Text('Sign in')),
+          IconButton(
+            tooltip: 'Dismiss',
+            icon: const Icon(Icons.close, size: 18),
+            onPressed: onDismiss,
+          ),
+        ],
+      ),
     );
   }
 }

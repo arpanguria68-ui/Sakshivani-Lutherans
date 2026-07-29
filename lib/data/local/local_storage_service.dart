@@ -19,6 +19,13 @@ class LocalStorageService {
   static const String _weatherCacheKey = 'weather.cache';
   static const String _weatherCityKey = 'weather.manual_city';
   static const String _ttsEngineKey = 'tts.preferred_engine';
+  static const String _onboardedKey = 'onboarding.completed';
+  static const String _verseBgModeKey = 'settings.verse_bg_mode';
+  static const String _verseBgOrderKey = 'settings.verse_bg_order';
+  static const String _verseBgRotateHoursKey = 'settings.verse_bg_rotate_hours';
+  static const String _verseBgManualKey = 'settings.verse_bg_manual';
+  static const String _adFreeKey = 'monetization.ad_free';
+  static const String _syncEntitlementKey = 'entitlements.cloud_sync_enabled';
 
   Future<SharedPreferences> get _prefs async => SharedPreferences.getInstance();
 
@@ -69,6 +76,12 @@ class LocalStorageService {
 
   Future<void> setLocalGuestUid(String uid) async {
     await (await _prefs).setString(_localGuestUidKey, uid);
+  }
+
+  /// Drops the local-guest identity so the next lookup mints a fresh one —
+  /// used by "reset app" / account deletion to return to a true first-run state.
+  Future<void> clearLocalGuestUid() async {
+    await (await _prefs).remove(_localGuestUidKey);
   }
 
   Future<double> getSongReaderFontSize() async {
@@ -143,6 +156,14 @@ class LocalStorageService {
     }
   }
 
+  /// Clears last-read position and recent-chapter history — used by "reset
+  /// app" and account deletion alongside [AppDatabase.wipeUserData].
+  Future<void> clearBibleReadingState() async {
+    final prefs = await _prefs;
+    await prefs.remove(_bibleLastReadKey);
+    await prefs.remove(_bibleHistoryKey);
+  }
+
   Future<void> pushBibleHistory(String language, int bookIndex, int chapterIndex) async {
     final List<Map<String, dynamic>> history = await getBibleHistory();
     history.removeWhere((Map<String, dynamic> e) =>
@@ -201,5 +222,76 @@ class LocalStorageService {
     } else {
       await prefs.setString(_ttsEngineKey, engine);
     }
+  }
+
+  Future<bool> getOnboarded() async {
+    return (await _prefs).getBool(_onboardedKey) ?? false;
+  }
+
+  Future<void> setOnboarded(bool value) async {
+    await (await _prefs).setBool(_onboardedKey, value);
+  }
+
+  // ─── Verse-plate background (screensaver-style rotation) ───────────────────
+
+  /// 'auto' or 'manual'; null = not set yet.
+  Future<String?> getVerseBackgroundMode() async {
+    return (await _prefs).getString(_verseBgModeKey);
+  }
+
+  Future<void> setVerseBackgroundMode(String value) async {
+    await (await _prefs).setString(_verseBgModeKey, value);
+  }
+
+  /// User-arranged rotation order (asset paths); null = not customized yet.
+  Future<List<String>?> getVerseBackgroundOrder() async {
+    return (await _prefs).getStringList(_verseBgOrderKey);
+  }
+
+  Future<void> setVerseBackgroundOrder(List<String> order) async {
+    await (await _prefs).setStringList(_verseBgOrderKey, order);
+  }
+
+  Future<int?> getVerseBackgroundRotateHours() async {
+    return (await _prefs).getInt(_verseBgRotateHoursKey);
+  }
+
+  Future<void> setVerseBackgroundRotateHours(int hours) async {
+    await (await _prefs).setInt(_verseBgRotateHoursKey, hours);
+  }
+
+  Future<String?> getVerseBackgroundManualImage() async {
+    return (await _prefs).getString(_verseBgManualKey);
+  }
+
+  Future<void> setVerseBackgroundManualImage(String assetPath) async {
+    await (await _prefs).setString(_verseBgManualKey, assetPath);
+  }
+
+  // ─── Monetization ───────────────────────────────────────────────────────────
+
+  /// True once the "Remove Ads / Supporter" purchase has been made — checked
+  /// synchronously-ish (still async, but no network) before showing any ad.
+  Future<bool> getAdFree() async {
+    return (await _prefs).getBool(_adFreeKey) ?? false;
+  }
+
+  Future<void> setAdFree(bool value) async {
+    await (await _prefs).setBool(_adFreeKey, value);
+  }
+
+  // ─── Entitlements ───────────────────────────────────────────────────────────
+
+  /// True only for a real signed-in account (email/Google) — never for local
+  /// guests or anonymous Firebase users, which never sync. Cached locally so
+  /// UI can read it instantly without waiting on the auth stream; the
+  /// source of truth is still Firebase Auth's live state, this just mirrors it
+  /// (and Firestore, via `SyncService.setSyncEnabled`) for fast/offline reads.
+  Future<bool> getCloudSyncEntitlement() async {
+    return (await _prefs).getBool(_syncEntitlementKey) ?? false;
+  }
+
+  Future<void> setCloudSyncEntitlement(bool value) async {
+    await (await _prefs).setBool(_syncEntitlementKey, value);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart' as geo;
@@ -40,9 +41,22 @@ class WeatherService {
     }
 
     try {
-      final Position pos = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.low),
-      );
+      Position? pos;
+      try {
+        // A hard GPS lock can take a long time (or never resolve) indoors;
+        // bail out to the last-known fix rather than leaving the UI stuck.
+        pos = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.low,
+            timeLimit: Duration(seconds: 8),
+          ),
+        );
+      } on TimeoutException {
+        pos = await Geolocator.getLastKnownPosition();
+      }
+      if (pos == null) {
+        return _cityFallback(WeatherError.network);
+      }
       final String place = await _reverseGeocode(pos.latitude, pos.longitude);
       final Weather? w = await _fetchForecast(pos.latitude, pos.longitude, place);
       return w == null

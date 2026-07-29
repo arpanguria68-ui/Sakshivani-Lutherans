@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_theme.dart';
-import 'glass_card.dart';
+
+/// Clay palette for [BentoCard] — matches the dashboard-web prototype's
+/// `.bento-card` / `.bento-card.accent` gradients exactly.
+class _ClayColors {
+  static const Color cream = Color(0xFFFDF7F2);
+  static const Color creamDeep = Color(0xFFEEDDD0);
+  static const Color accentLt = Color(0xFFFFF0EA);
+  static const Color accentDp = Color(0xFFF5D5C4);
+  static const Color primary = Color(0xFF93452B);
+
+  /// Fixed dark ink for text painted on the clay card — the card is always
+  /// light regardless of app theme brightness, so text must not follow it.
+  static const Color ink = Color(0xFF2A1810);
+}
 
 /// Small uppercase, letter-spaced label — the "eyebrow" text used throughout
 /// the editorial design (e.g. "THE DAILY REMEMBRANCE", "SPIRITUALITY PROGRESS").
@@ -92,6 +105,7 @@ class VersePlate extends StatelessWidget {
     required this.quote,
     this.onTap,
     this.accentSrc,
+    this.backgroundSrc,
   });
 
   final String eyebrow;
@@ -100,6 +114,10 @@ class VersePlate extends StatelessWidget {
 
   /// Optional clay/3D icon watermark in the top-right corner.
   final String? accentSrc;
+
+  /// Optional photo background (e.g. `assets/backgrounds/sunrise.png`).
+  /// Falls back to the plain tinted gradient when omitted.
+  final String? backgroundSrc;
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +132,39 @@ class VersePlate extends StatelessWidget {
           aspectRatio: 21 / 12,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  colors.primary.withValues(alpha: 0.16),
-                  colors.tertiary.withValues(alpha: 0.10),
-                  colors.surfaceContainerLow,
-                ],
-              ),
+              image: backgroundSrc != null
+                  ? DecorationImage(image: AssetImage(backgroundSrc!), fit: BoxFit.cover)
+                  : null,
+              gradient: backgroundSrc != null
+                  ? null
+                  : LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        colors.primary.withValues(alpha: 0.16),
+                        colors.tertiary.withValues(alpha: 0.10),
+                        colors.surfaceContainerLow,
+                      ],
+                    ),
             ),
             child: Stack(
               children: <Widget>[
+                if (backgroundSrc != null)
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            Colors.black.withValues(alpha: 0.45),
+                            Colors.black.withValues(alpha: 0.22),
+                            Colors.black.withValues(alpha: 0.50),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 if (accentSrc != null)
                   Positioned(
                     top: 10,
@@ -140,7 +179,12 @@ class VersePlate extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      EyebrowLabel(eyebrow, color: colors.onSurface.withValues(alpha: 0.55)),
+                      EyebrowLabel(
+                        eyebrow,
+                        color: backgroundSrc != null
+                            ? Colors.white.withValues(alpha: 0.75)
+                            : colors.onSurface.withValues(alpha: 0.55),
+                      ),
                       const SizedBox(height: 14),
                       Text(
                         '"$quote"',
@@ -148,13 +192,19 @@ class VersePlate extends StatelessWidget {
                         style: text.headlineSmall?.copyWith(
                           fontStyle: FontStyle.italic,
                           height: 1.35,
-                          color: colors.onSurface,
+                          color: backgroundSrc != null ? Colors.white : colors.onSurface,
                         ),
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 14),
-                      Container(width: 1, height: 28, color: colors.primary.withValues(alpha: 0.4)),
+                      Container(
+                        width: 1,
+                        height: 28,
+                        color: backgroundSrc != null
+                            ? Colors.white.withValues(alpha: 0.5)
+                            : colors.primary.withValues(alpha: 0.4),
+                      ),
                     ],
                   ),
                 ),
@@ -180,7 +230,7 @@ class BentoCard extends StatelessWidget {
     required this.footerLabel,
     required this.actionLabel,
     required this.onTap,
-    this.tone,
+    this.accent = false,
     this.iconColor,
   }) : assert(icon != null || claySrc != null, 'Provide icon or claySrc');
 
@@ -195,59 +245,102 @@ class BentoCard extends StatelessWidget {
   final String footerLabel;
   final String actionLabel;
   final VoidCallback onTap;
-  final Color? tone;
+
+  /// Peach/rose clay tint instead of the plain cream card — mirrors the
+  /// prototype's alternating `.bento-card.accent` styling.
+  final bool accent;
   final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
     final TextTheme text = Theme.of(context).textTheme;
+    final Color tint = iconColor ?? _ClayColors.primary;
 
-    return GlassCard(
-      onTap: onTap,
-      tone: tone,
-      padding: const EdgeInsets.all(22),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          claySrc != null
-              ? Image.asset(claySrc!, width: 44, height: 44, fit: BoxFit.contain)
-              : Icon(icon, color: iconColor ?? colors.primary, size: 28),
-          const SizedBox(height: 18),
-          Text(
-            title,
-            style: text.titleLarge?.copyWith(fontStyle: FontStyle.italic),
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(22),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: accent
+                  ? const <Color>[_ClayColors.accentLt, _ClayColors.accentDp]
+                  : const <Color>[_ClayColors.cream, _ClayColors.creamDeep],
+            ),
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: <BoxShadow>[
+              BoxShadow(color: _ClayColors.primary.withValues(alpha: 0.14), blurRadius: 14, offset: const Offset(5, 6)),
+              BoxShadow(color: Colors.white.withValues(alpha: 0.75), blurRadius: 8, offset: const Offset(-3, -3)),
+            ],
           ),
-          const SizedBox(height: 6),
-          Text(
-            description,
-            style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant, height: 1.4),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Flexible(child: EyebrowLabel(footerLabel)),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  '$actionLabel →',
-                  style: TextStyle(
-                    fontFamily: AppTheme.labelFont,
-                    fontFamilyFallback: const <String>['NotoSansDevanagari'],
-                    fontSize: 10,
-                    letterSpacing: 1.4,
-                    fontWeight: FontWeight.w700,
-                    color: iconColor ?? colors.primary,
-                  ),
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: tint.withValues(alpha: 0.13),
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: claySrc != null
+                      ? Image.asset(claySrc!, fit: BoxFit.contain)
+                      : Icon(icon, color: tint, size: 22),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                title,
+                style: text.titleLarge?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  // Card surface is always the light cream/peach clay tint —
+                  // pin ink colors instead of inheriting the app theme, or
+                  // dark mode's near-white default text goes invisible here.
+                  color: _ClayColors.ink,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                description,
+                style: text.bodySmall?.copyWith(
+                  color: _ClayColors.ink.withValues(alpha: 0.72),
+                  height: 1.4,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(child: EyebrowLabel(footerLabel, color: _ClayColors.primary.withValues(alpha: 0.85))),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      '$actionLabel →',
+                      style: TextStyle(
+                        fontFamily: AppTheme.labelFont,
+                        fontFamilyFallback: const <String>['NotoSansDevanagari'],
+                        fontSize: 10,
+                        letterSpacing: 1.4,
+                        fontWeight: FontWeight.w700,
+                        color: tint,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

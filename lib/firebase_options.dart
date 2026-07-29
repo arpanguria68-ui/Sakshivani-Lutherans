@@ -14,10 +14,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAukQjjZSelinaRkuHO_5teNSDGbojKQ3A',
-    appId: '1:508965701606:android:9f56a2d4a6c8c5c421f827',
-    messagingSenderId: '508965701606',
-    projectId: 'sakshivani-lutherans',
-    storageBucket: 'sakshivani-lutherans.firebasestorage.app',
+    apiKey: 'AIzaSyDJXfVC9kTHTdg2u6h_E_Aefp0aVeVay0o',
+    appId: '1:251389252229:android:26264732346534cfa08fec',
+    messagingSenderId: '251389252229',
+    projectId: 'sakshivani-60029',
+    storageBucket: 'sakshivani-60029.firebasestorage.app',
   );
 }

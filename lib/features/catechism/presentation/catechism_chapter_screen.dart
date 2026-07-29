@@ -10,6 +10,7 @@ import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
 import '../../reader/presentation/tts_feedback.dart';
+import '../../../services/tts_service.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import 'catechism_screen.dart';
 
@@ -24,10 +25,19 @@ class CatechismChapterScreen extends ConsumerStatefulWidget {
 
 class _CatechismChapterScreenState extends ConsumerState<CatechismChapterScreen> {
   bool _isPlaying = false;
+  TtsService? _ttsService;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Capture the service reference while `ref` is still valid — reading a
+    // provider from dispose() throws "Cannot use ref after disposed".
+    _ttsService = ref.read(ttsServiceProvider);
+  }
 
   @override
   void dispose() {
-    ref.read(ttsServiceProvider).stop();
+    _ttsService?.stop();
     super.dispose();
   }
 

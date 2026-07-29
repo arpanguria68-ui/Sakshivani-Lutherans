@@ -16,9 +16,11 @@ class StreakHeatmap extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
     final DateTime today = _dateOnly(DateTime.now());
-    // Start on the Monday of the earliest visible week.
-    final int totalDays = weeks * 7;
-    final DateTime start = today.subtract(Duration(days: totalDays - 1));
+    // Start on the Monday of the earliest visible week: back up to this
+    // week's Monday first (DateTime.weekday is 1=Mon..7=Sun), then by whole
+    // weeks, so every column is a real Mon-Sun calendar week.
+    final DateTime thisMonday = today.subtract(Duration(days: today.weekday - 1));
+    final DateTime start = thisMonday.subtract(Duration(days: (weeks - 1) * 7));
 
     final List<Widget> columns = <Widget>[];
     for (int w = 0; w < weeks; w++) {

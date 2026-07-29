@@ -1,3 +1,4 @@
+import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 import '../local/app_database.dart';
@@ -74,5 +75,28 @@ class FavoritesRepository {
         'created_at': item.createdAt,
       },
     );
+  }
+
+  /// Merge favorites pulled from Firestore into the local DB — restores
+  /// favorites on a new device/reinstall. Skips ones already present
+  /// locally; does not re-enqueue a sync push.
+  Future<void> mergeFromCloud(List<Map<String, dynamic>> items) async {
+    for (final Map<String, dynamic> item in items) {
+      final String itemType = item['item_type'] as String? ?? '';
+      final String itemRef = item['item_ref'] as String? ?? '';
+      if (itemType.isEmpty || itemRef.isEmpty) continue;
+      if (await isFavorite(itemType: itemType, itemRef: itemRef)) continue;
+      await _database.db.insert(
+        'favorites',
+        <String, Object?>{
+          'id': item['id'] as String? ?? _uuid.v4(),
+          'item_type': itemType,
+          'item_ref': itemRef,
+          'created_at':
+              item['created_at'] as String? ?? DateTime.now().toUtc().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
   }
 }

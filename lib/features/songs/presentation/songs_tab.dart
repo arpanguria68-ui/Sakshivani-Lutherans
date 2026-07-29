@@ -10,6 +10,7 @@ import '../../../data/models/song.dart';
 import '../../../data/search/search_engine.dart';
 import '../../search/providers/search_providers.dart';
 import 'song_reader_screen.dart' show favoriteSongsProvider;
+import '../../../shared/widgets/ad_banner.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/highlighted_text.dart';
 import '../../../shared/widgets/section_heading.dart';
@@ -114,6 +115,7 @@ class _SongsTabState extends ConsumerState<SongsTab> {
                 ? _buildSearchResults(favoriteIds)
                 : _buildBrowseList(favoriteIds),
           ),
+          const AdBannerWidget(),
         ],
       ),
     );

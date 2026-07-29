@@ -42,7 +42,6 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabs = ref.watch(shellTabsProvider);
-    final ColorScheme colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       extendBody: true,
@@ -63,7 +62,7 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
         ],
       ),
       body: AppBackdrop(child: tabs[_index]),
-      bottomNavigationBar: _EditorialNavBar(
+      bottomNavigationBar: _ClayNavBar(
         items: _items,
         index: _index,
         onSelect: (int idx) {
@@ -71,71 +70,104 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
           setState(() => _index = idx);
           context.go(_items[idx].route);
         },
-        surfaceColor: colors.surface,
-        borderColor: colors.outlineVariant.withValues(alpha: 0.35),
       ),
     );
   }
 }
 
-class _EditorialNavBar extends StatelessWidget {
-  const _EditorialNavBar({
+/// Floating rounded pill nav — mirrors the dashboard-web prototype's
+/// `.sv-nav` bar, with the Songs tab rendered as an emphasized circular hub.
+class _ClayNavBar extends StatelessWidget {
+  const _ClayNavBar({
     required this.items,
     required this.index,
     required this.onSelect,
-    required this.surfaceColor,
-    required this.borderColor,
   });
 
   final List<_NavItem> items;
   final int index;
   final ValueChanged<int> onSelect;
-  final Color surfaceColor;
-  final Color borderColor;
+
+  static const Color _primary = Color(0xFF93452B);
+  static const Color _cream = Color(0xFFFDF7F2);
+  static const Color _creamDeep = Color(0xFFF0E2D4);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: surfaceColor.withValues(alpha: 0.92),
-          border: Border(top: BorderSide(color: borderColor)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List<Widget>.generate(items.length, (int i) {
-            final bool selected = i == index;
-            final ColorScheme colors = Theme.of(context).colorScheme;
-            return Expanded(
-              child: InkWell(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[_cream, _creamDeep],
+            ),
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: <BoxShadow>[
+              BoxShadow(color: _primary.withValues(alpha: 0.20), blurRadius: 20, offset: const Offset(0, 8)),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List<Widget>.generate(items.length, (int i) {
+              final bool selected = i == index;
+              final bool emphasized = items[i].label == 'Songs';
+
+              if (emphasized) {
+                return GestureDetector(
+                  onTap: () => onSelect(i),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[Color(0xFFC26040), _primary],
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(color: _primary.withValues(alpha: 0.4), blurRadius: 14, offset: const Offset(0, 4)),
+                      ],
+                    ),
+                    child: Icon(selected ? items[i].activeIcon : items[i].icon, color: Colors.white, size: 20),
+                  ),
+                );
+              }
+
+              return GestureDetector(
                 onTap: () => onSelect(i),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: selected ? colors.primary.withValues(alpha: 0.08) : null,
+                    color: selected ? _primary.withValues(alpha: 0.10) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Icon(
                         selected ? items[i].activeIcon : items[i].icon,
-                        size: 22,
-                        color: selected ? colors.primary : colors.onSurfaceVariant,
+                        size: 20,
+                        color: selected ? _primary : const Color(0xFF88726C),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       EyebrowLabel(
                         items[i].label,
-                        fontSize: 9,
-                        color: selected ? colors.primary : colors.onSurfaceVariant,
+                        fontSize: 8.5,
+                        color: selected ? _primary : const Color(0xFF88726C),
                       ),
                     ],
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+          ),
         ),
       ),
     );

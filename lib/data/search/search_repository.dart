@@ -2,12 +2,27 @@
 /// and exposes ranked search over them.
 library;
 
+import 'package:flutter/foundation.dart' show compute;
+
 import '../../core/constants/app_constants.dart';
 import '../models/bible_verse.dart';
 import '../models/song.dart';
 import '../repositories/bible_repository.dart';
 import '../repositories/content_repository.dart';
 import 'search_engine.dart';
+
+/// Building the ~31k-verse index is CPU-heavy (tokenizing + postings lists);
+/// running it via [compute] keeps it off the UI isolate so first search /
+/// app-start doesn't drop frames.
+class _EngineBuildArgs<T> {
+  const _EngineBuildArgs(this.docs, this.fields);
+  final List<SearchDoc<T>> docs;
+  final List<SearchField> fields;
+}
+
+SearchEngine<T> _buildEngineIsolate<T>(_EngineBuildArgs<T> args) {
+  return SearchEngine<T>.build(args.docs, args.fields);
+}
 
 class SearchRepository {
   SearchRepository(this._content, this._bible);
@@ -37,14 +52,17 @@ class SearchRepository {
     final SearchEngine<Song>? cached = _songIndex[book];
     if (cached != null) return cached;
     final List<Song> songs = await _content.getSongs(book: book);
-    final SearchEngine<Song> engine = SearchEngine<Song>.build(
-      songs
-          .map((Song s) => SearchDoc<Song>(
-                s,
-                <String>[s.title, s.category, s.reference ?? '', s.lyrics],
-              ))
-          .toList(growable: false),
-      _songFields,
+    final SearchEngine<Song> engine = await compute(
+      _buildEngineIsolate<Song>,
+      _EngineBuildArgs<Song>(
+        songs
+            .map((Song s) => SearchDoc<Song>(
+                  s,
+                  <String>[s.title, s.category, s.reference ?? '', s.lyrics],
+                ))
+            .toList(growable: false),
+        _songFields,
+      ),
     );
     _songIndex[book] = engine;
     return engine;
@@ -54,12 +72,15 @@ class SearchRepository {
     final SearchEngine<BibleVerse>? cached = _verseIndex[language];
     if (cached != null) return cached;
     final List<BibleVerse> verses = await _bible.getAllVerses(language);
-    final SearchEngine<BibleVerse> engine = SearchEngine<BibleVerse>.build(
-      verses
-          .map((BibleVerse v) =>
-              SearchDoc<BibleVerse>(v, <String>[v.book, v.text]))
-          .toList(growable: false),
-      _verseFields,
+    final SearchEngine<BibleVerse> engine = await compute(
+      _buildEngineIsolate<BibleVerse>,
+      _EngineBuildArgs<BibleVerse>(
+        verses
+            .map((BibleVerse v) =>
+                SearchDoc<BibleVerse>(v, <String>[v.book, v.text]))
+            .toList(growable: false),
+        _verseFields,
+      ),
     );
     _verseIndex[language] = engine;
     return engine;

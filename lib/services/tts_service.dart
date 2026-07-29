@@ -156,6 +156,10 @@ class TtsService {
   String? get preferredEngine => _preferredEngine;
 
   Future<void> setPreferredEngine(String? engine) async {
+    // _scanEngines() probes every installed engine (calling setEngine on each
+    // in turn) and then settles the plugin on a default at the end; letting
+    // a manual pick race that would just get overwritten by the scan's tail.
+    await _initFuture;
     _preferredEngine = engine;
     if (engine != null) await _setEngine(engine);
   }

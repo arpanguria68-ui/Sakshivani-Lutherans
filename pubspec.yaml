@@ -16,6 +16,8 @@ dependencies:
   firebase_core: ^3.13.0
   firebase_auth: ^5.5.3
   cloud_firestore: ^5.6.7
+  firebase_analytics: ^11.4.3
+  firebase_crashlytics: ^4.3.3
   google_sign_in: ^6.3.0
   shared_preferences: ^2.5.3
   sqflite: ^2.4.2
@@ -35,12 +37,16 @@ dependencies:
   http: ^1.2.2
   geolocator: ^13.0.2
   geocoding: ^3.0.0
+  google_mobile_ads: ^5.2.0
+  in_app_purchase: ^3.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
+  sqflite_common_ffi: ^2.3.4+4
+  mocktail: ^1.0.4
 
 flutter_launcher_icons:
   android: true
@@ -68,6 +74,13 @@ flutter:
     - assets/3d-icons/smiling_sun.png
     - assets/3d-icons/dove_bird.png
     - assets/3d-icons/lutheran_church.png
+    - "assets/3d-icons/BG removed icons/SV_birefnet.png"
+    - "assets/3d-icons/BG removed icons/jesus and people_birefnet.png"
+    - "assets/3d-icons/BG removed icons/prayer_hands_inspyrenet.png"
+    - "assets/3d-icons/BG removed icons/musical_note_u2net.png"
+    - "assets/3d-icons/BG removed icons/church going family_isnet-general-use.png"
+    - "assets/3d-icons/BG removed icons/gossnercht.png"
+    - assets/backgrounds/
 
   fonts:
     - family: NotoSansDevanagari

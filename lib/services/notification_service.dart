@@ -74,35 +74,11 @@ class NotificationService {
       'Worship time is near. Consider enabling silent mode.',
       tz.TZDateTime.from(next, tz.local),
       details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      // A worship-time nudge doesn't need to-the-second precision; inexact
+      // avoids requiring the restricted SCHEDULE_EXACT_ALARM/USE_EXACT_ALARM
+      // permissions (Play Store scrutinizes those for non-alarm/calendar apps).
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-    );
-  }
-
-  Future<void> scheduleDailyVerseReminder() async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'daily_verse',
-      'Daily Verse',
-      channelDescription: 'Daily verse reading reminders.',
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
-    );
-
-    const NotificationDetails details = NotificationDetails(android: androidDetails);
-    final DateTime now = DateTime.now();
-    DateTime next = DateTime(now.year, now.month, now.day, 6, 30);
-    if (next.isBefore(now)) {
-      next = next.add(const Duration(days: 1));
-    }
-
-    await _plugin.zonedSchedule(
-      1002,
-      'Sakshi Vani',
-      'आज का वचन पढ़ने के लिए खोलें',
-      tz.TZDateTime.from(next, tz.local),
-      details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }

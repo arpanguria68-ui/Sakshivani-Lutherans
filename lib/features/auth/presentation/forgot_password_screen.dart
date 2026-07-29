@@ -13,6 +13,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final TextEditingController _email = TextEditingController();
   bool _submitted = false;
+  bool _sending = false;
+  String? _error;
 
   @override
   void dispose() {
@@ -44,15 +46,28 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             ),
             const SizedBox(height: 12),
             FilledButton.icon(
-              onPressed: _send,
+              onPressed: _sending ? null : _send,
               icon: const Icon(Icons.send),
               label: const Text('Send reset link'),
             ),
+            if (_sending)
+              const Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Center(child: CircularProgressIndicator()),
+              ),
             if (_submitted)
               const Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: Text(
                   'If this email exists, password reset instructions have been sent.',
+                ),
+              ),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  _error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
           ],
@@ -66,12 +81,19 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     if (email.isEmpty) {
       return;
     }
-    await ref.read(authControllerProvider.notifier).sendPasswordReset(email);
+    setState(() {
+      _sending = true;
+      _submitted = false;
+      _error = null;
+    });
+    final bool ok = await ref.read(authControllerProvider.notifier).sendPasswordReset(email);
     if (!mounted) {
       return;
     }
     setState(() {
-      _submitted = true;
+      _sending = false;
+      _submitted = ok;
+      _error = ok ? null : ref.read(authControllerProvider).errorMessage;
     });
   }
 }

@@ -75,6 +75,7 @@ class _PlanPicker extends StatelessWidget {
               child: GlassCard(
                 onTap: () async {
                   await ref.read(plannerRepositoryProvider).startPlan(p.key);
+                  await ref.read(analyticsServiceProvider).logReadingPlanStarted(planKey: p.key);
                   ref.invalidate(activePlanProvider);
                 },
                 child: Column(
@@ -233,7 +234,16 @@ class _DayTile extends StatelessWidget {
           IconButton(
             tooltip: 'Open Bible',
             icon: const Icon(Icons.menu_book),
-            onPressed: () => context.go('/tab/bible'),
+            onPressed: () {
+              if (day.chapters.isEmpty) {
+                context.go('/tab/bible');
+                return;
+              }
+              // ChapterRef.chapter is 1-based; the reader route/screen takes
+              // a 0-based chapterIndex.
+              final ChapterRef first = day.chapters.first;
+              context.push('/bible/read/hi/${first.bookIndex}/${first.chapter - 1}');
+            },
           ),
         ],
       ),

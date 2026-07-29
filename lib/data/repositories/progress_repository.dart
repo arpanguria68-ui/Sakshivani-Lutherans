@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../local/app_database.dart';
 import '../models/prayer_log.dart';
@@ -81,6 +82,47 @@ class ProgressRepository {
         'updated_at': now,
       },
     );
+  }
+
+  /// Merge prayer logs pulled from Firestore into the local DB ("cloud
+  /// wins" on overlapping dates). `prayer_logs` has no unique index on
+  /// `date_iso`, so this looks up by date first rather than using
+  /// [ConflictAlgorithm.replace]. Does not re-enqueue a sync push.
+  Future<void> mergeFromCloud(List<Map<String, dynamic>> items) async {
+    for (final Map<String, dynamic> item in items) {
+      final String? isoDate = item['date_iso'] as String?;
+      if (isoDate == null || isoDate.isEmpty) continue;
+      final DateTime? date = DateTime.tryParse(isoDate);
+      if (date == null) continue;
+
+      final int count = (item['count'] as num?)?.toInt() ?? 0;
+      final String notes = item['notes'] as String? ?? '';
+      final String updatedAt =
+          item['updated_at'] as String? ?? DateTime.now().toUtc().toIso8601String();
+
+      final PrayerLog? existing = await getPrayerLogForDate(date);
+      if (existing == null) {
+        await _database.db.insert('prayer_logs', <String, Object?>{
+          'date_iso': isoDate,
+          'count': count,
+          'notes': notes,
+          'synced': 1,
+          'updated_at': updatedAt,
+        });
+      } else {
+        await _database.db.update(
+          'prayer_logs',
+          <String, Object?>{
+            'count': count,
+            'notes': notes,
+            'synced': 1,
+            'updated_at': updatedAt,
+          },
+          where: 'id = ?',
+          whereArgs: <Object?>[existing.id],
+        );
+      }
+    }
   }
 
   Future<List<PrayerLog>> getRecentPrayerLogs({int limit = 30}) async {

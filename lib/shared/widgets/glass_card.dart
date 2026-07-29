@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Editorial card: sharp corners, flat tinted surface, hairline border.
-/// Ported from the premium "Sacred Gallery" design — no blur, no heavy
-/// shadow; a subtle background shift on tap is the only affordance.
+/// Editorial card: softly rounded corners, flat tinted surface, hairline
+/// border, gentle lift shadow. Ported from the "Sacred Gallery" / dashboard
+/// prototype — a subtle background shift on tap is the only extra affordance.
 class GlassCard extends StatelessWidget {
   const GlassCard({
     super.key,
@@ -10,6 +10,7 @@ class GlassCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(20),
     this.onTap,
     this.tone,
+    this.borderRadius = const BorderRadius.all(Radius.circular(22)),
   });
 
   final Widget child;
@@ -19,6 +20,8 @@ class GlassCard extends StatelessWidget {
   /// Optional background tint override (e.g. secondaryContainer for an
   /// accent card). Defaults to surfaceContainerLow.
   final Color? tone;
+
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,8 @@ class GlassCard extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
+      borderRadius: borderRadius,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         hoverColor: colors.primary.withValues(alpha: 0.04),
@@ -41,7 +46,15 @@ class GlassCard extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             color: background,
+            borderRadius: borderRadius,
             border: Border.all(color: border),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: colors.primary.withValues(alpha: 0.08),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: Padding(
             padding: padding,

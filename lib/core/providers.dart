@@ -14,13 +14,20 @@ import '../data/repositories/sync_queue_repository.dart';
 import '../data/search/search_repository.dart';
 import '../features/auth/controller/auth_controller.dart';
 import '../features/auth/domain/auth_state.dart';
+import '../features/home/controller/verse_background_controller.dart';
+import '../features/home/domain/verse_background_settings.dart';
+import '../features/onboarding/controller/onboarding_controller.dart';
+import '../services/ad_service.dart';
+import '../services/analytics_service.dart';
 import '../services/church_courtesy_service.dart';
 import '../services/notification_service.dart';
+import '../services/purchase_service.dart';
 import '../services/sync_service.dart';
 import '../services/tts_service.dart';
 import '../services/weather_service.dart';
 import '../features/reader/controller/reader_settings_controller.dart';
 import 'app_runtime.dart';
+import 'bootstrap/crashlytics_bootstrap.dart';
 import 'bootstrap/firebase_bootstrap.dart';
 import 'theme/theme_mode_controller.dart';
 
@@ -36,6 +43,17 @@ final StateNotifierProvider<ThemeModeController, ThemeMode> themeModeControllerP
 
 final Provider<ThemeMode> themeModeProvider = Provider<ThemeMode>((ProviderRef<ThemeMode> ref) {
   return ref.watch(themeModeControllerProvider);
+});
+
+final StateNotifierProvider<VerseBackgroundController, VerseBackgroundSettings>
+    verseBackgroundControllerProvider =
+    StateNotifierProvider<VerseBackgroundController, VerseBackgroundSettings>((ref) {
+  return VerseBackgroundController(ref.read(localStorageServiceProvider));
+});
+
+final StateNotifierProvider<OnboardingController, bool> onboardingControllerProvider =
+    StateNotifierProvider<OnboardingController, bool>((ref) {
+  return OnboardingController(ref.read(localStorageServiceProvider));
 });
 
 final Provider<AppDatabase> databaseProvider = Provider<AppDatabase>((ProviderRef<AppDatabase> ref) {
@@ -88,6 +106,9 @@ final Provider<FavoritesRepository> favoritesRepositoryProvider =
 final Provider<SyncService> syncServiceProvider = Provider<SyncService>((ProviderRef<SyncService> ref) {
   return SyncService(
     syncQueueRepository: ref.read(syncQueueRepositoryProvider),
+    favoritesRepository: ref.read(favoritesRepositoryProvider),
+    reflectionRepository: ref.read(reflectionRepositoryProvider),
+    progressRepository: ref.read(progressRepositoryProvider),
     firebaseEnabled: AppRuntime.firebaseEnabled,
   );
 });
@@ -102,7 +123,11 @@ final Provider<AuthRepository> authRepositoryProvider =
 
 final StateNotifierProvider<AuthController, AuthState> authControllerProvider =
     StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref.read(authRepositoryProvider), ref.read(syncServiceProvider));
+  return AuthController(
+    ref.read(authRepositoryProvider),
+    ref.read(syncServiceProvider),
+    ref.read(localStorageServiceProvider),
+  );
 });
 
 final Provider<ChurchCourtesyService> churchCourtesyServiceProvider =
@@ -127,12 +152,35 @@ final Provider<WeatherService> weatherServiceProvider =
   return WeatherService(ref.read(localStorageServiceProvider));
 });
 
+final Provider<AnalyticsService> analyticsServiceProvider =
+    Provider<AnalyticsService>((ProviderRef<AnalyticsService> ref) {
+  return AnalyticsService(firebaseEnabled: AppRuntime.firebaseEnabled);
+});
+
+final Provider<AdService> adServiceProvider = Provider<AdService>((ProviderRef<AdService> ref) {
+  final AdService service = AdService(ref.read(localStorageServiceProvider));
+  ref.onDispose(service.dispose);
+  return service;
+});
+
+final Provider<PurchaseService> purchaseServiceProvider =
+    Provider<PurchaseService>((ProviderRef<PurchaseService> ref) {
+  final PurchaseService service = PurchaseService(ref.read(localStorageServiceProvider));
+  ref.onDispose(service.dispose);
+  return service;
+});
+
 final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FutureProviderRef<void> ref) async {
   AppRuntime.firebaseEnabled = await FirebaseBootstrap.initialize();
+  if (AppRuntime.firebaseEnabled) {
+    CrashlyticsBootstrap.wireErrorReporting();
+  }
   final AppDatabase database = await AppDatabase.open();
   AppRuntime.setDatabase(database);
 
   await ref.read(themeModeControllerProvider.notifier).load();
+  await ref.read(verseBackgroundControllerProvider.notifier).load();
+  await ref.read(onboardingControllerProvider.notifier).load();
   await ref.read(readerSettingsControllerProvider.notifier).load();
   // Apply the saved TTS engine preference (engine scan runs lazily in bg).
   await ref
@@ -148,4 +196,7 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
     await notifications.scheduleDailyVerseReminderAt(hour: h, minute: m);
   }
   await notifications.scheduleChurchCourtesyReminder();
+
+  await ref.read(purchaseServiceProvider).initialize();
+  await ref.read(adServiceProvider).initialize();
 });

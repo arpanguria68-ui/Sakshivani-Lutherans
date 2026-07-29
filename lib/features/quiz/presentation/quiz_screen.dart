@@ -37,6 +37,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       setState(() {
         _index = questions.length;
       });
+      ref.read(analyticsServiceProvider).logQuizCompleted(score: _score, total: questions.length);
+      ref.read(adServiceProvider).showInterstitialIfReady();
       return;
     }
     setState(() {

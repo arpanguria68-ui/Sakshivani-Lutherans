@@ -77,9 +77,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ),
             const SizedBox(height: 6),
             OutlinedButton.icon(
-              onPressed: state.status == AuthStatus.loading
-                  ? null
-                  : () => ref.read(authControllerProvider.notifier).signInGoogle(),
+              onPressed: state.status == AuthStatus.loading ? null : _submitGoogle,
               icon: const Icon(Icons.account_circle_outlined),
               label: const Text('Continue with Google'),
             ),
@@ -87,7 +85,21 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             OutlinedButton.icon(
               onPressed: state.status == AuthStatus.loading
                   ? null
-                  : () => ref.read(authControllerProvider.notifier).continueAnonymous(),
+                  : () => context.push('/auth/phone'),
+              icon: const Icon(Icons.phone_outlined),
+              label: const Text('Continue with Phone'),
+            ),
+            const SizedBox(height: 6),
+            OutlinedButton.icon(
+              onPressed: state.status == AuthStatus.loading
+                  ? null
+                  : () => context.push('/auth/email-code'),
+              icon: const Icon(Icons.mark_email_read_outlined),
+              label: const Text('Sign in with Email Code'),
+            ),
+            const SizedBox(height: 6),
+            OutlinedButton.icon(
+              onPressed: state.status == AuthStatus.loading ? null : _submitAnonymous,
               icon: const Icon(Icons.person_outline),
               label: const Text('Use Anonymous Cloud Session'),
             ),
@@ -131,11 +143,27 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     } else {
       await controller.signUpEmail(email: email, password: password);
     }
+    _leaveIfSignedIn();
+  }
 
+  Future<void> _submitGoogle() async {
+    await ref.read(authControllerProvider.notifier).signInGoogle();
+    _leaveIfSignedIn();
+  }
+
+  Future<void> _submitAnonymous() async {
+    await ref.read(authControllerProvider.notifier).continueAnonymous();
+    _leaveIfSignedIn();
+  }
+
+  /// The router's own redirect only leaves `/auth` for `AuthStatus.authenticated`
+  /// (a real account) — anonymous/local-guest sign-in succeeds but wouldn't
+  /// otherwise navigate anywhere, leaving the user stuck on this screen with
+  /// no error and no visible feedback. This covers those cases explicitly.
+  void _leaveIfSignedIn() {
     if (!mounted) {
       return;
     }
-
     final AuthState state = ref.read(authControllerProvider);
     if (state.isAuthenticated || state.status == AuthStatus.anonymous || state.status == AuthStatus.localGuest) {
       context.go('/');

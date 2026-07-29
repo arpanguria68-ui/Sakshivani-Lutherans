@@ -11,6 +11,7 @@ import '../../reader/controller/reader_settings_controller.dart';
 import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
 import '../../reader/presentation/tts_feedback.dart';
+import '../../../services/tts_service.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/section_heading.dart';
 
@@ -28,10 +29,19 @@ class _BibleTabState extends ConsumerState<BibleTab> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   bool _isReading = false;
+  TtsService? _ttsService;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Capture the service reference while `ref` is still valid — reading a
+    // provider from dispose() throws "Cannot use ref after disposed".
+    _ttsService = ref.read(ttsServiceProvider);
+  }
 
   @override
   void dispose() {
-    ref.read(ttsServiceProvider).stop();
+    _ttsService?.stop();
     _searchController.dispose();
     super.dispose();
   }
@@ -204,11 +214,15 @@ class _BibleTabState extends ConsumerState<BibleTab> {
     );
     final ReaderSettings settings = ref.watch(readerSettingsControllerProvider);
     final TextStyle verseStyle = _verseStyle(settings);
+    final bool searching = _searchQuery.trim().isNotEmpty;
 
     return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-        children: <Widget>[
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(<Widget>[
           const SectionHeading(title: 'Bible Reader', subtitle: 'Offline Hindi + English with share support'),
           const SizedBox(height: 12),
           Row(
@@ -257,7 +271,7 @@ class _BibleTabState extends ConsumerState<BibleTab> {
             },
           ),
           const SizedBox(height: 10),
-          if (_searchQuery.trim().isNotEmpty)
+          if (searching)
             searchResults.when(
               loading: () => const Padding(
                 padding: EdgeInsets.all(18),
@@ -390,82 +404,103 @@ class _BibleTabState extends ConsumerState<BibleTab> {
             ),
             const SizedBox(height: 10),
             verses.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Center(child: CircularProgressIndicator()),
+              ),
               error: (Object e, StackTrace _) => Text('Could not load chapter: $e'),
-              data: (List<BibleVerse> chapterVerses) {
-                return Column(
+              data: (List<BibleVerse> chapterVerses) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: <Widget>[
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 4,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        FilledButton.icon(
-                          onPressed: () => _openReader(_bookIndex, _chapterIndex),
-                          icon: const Icon(Icons.auto_stories),
-                          label: const Text('Open reader'),
-                        ),
-                        FilledButton.tonalIcon(
-                          onPressed: () => _readChapter(chapterVerses, settings),
-                          icon: Icon(_isReading ? Icons.pause : Icons.volume_up),
-                          label: Text(_isReading ? 'Pause' : 'Read aloud'),
-                        ),
-                        IconButton(
-                          tooltip: 'Reading settings',
-                          icon: const Icon(Icons.text_fields),
-                          onPressed: () => showReaderSettingsSheet(context),
-                        ),
-                      ],
+                    FilledButton.icon(
+                      onPressed: () => _openReader(_bookIndex, _chapterIndex),
+                      icon: const Icon(Icons.auto_stories),
+                      label: const Text('Open reader'),
                     ),
-                    const SizedBox(height: 8),
-                    ...chapterVerses.map((BibleVerse verse) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: GlassCard(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('${verse.verse}', style: Theme.of(context).textTheme.labelLarge),
-                            const SizedBox(height: 4),
-                            SelectableText(verse.text, style: verseStyle),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 6,
-                              children: <Widget>[
-                                ActionChip(
-                                  label: const Text('Copy'),
-                                  onPressed: () async {
-                                    await Clipboard.setData(
-                                      ClipboardData(text: '${verse.reference}\n${verse.text}'),
-                                    );
-                                  },
-                                ),
-                                ActionChip(
-                                  label: const Text('Share'),
-                                  onPressed: () => Share.share('${verse.reference}\n${verse.text}'),
-                                ),
-                                ActionChip(
-                                  label: const Text('Favorite'),
-                                  onPressed: () async {
-                                    await ref.read(favoritesRepositoryProvider).toggleFavorite(
-                                          itemType: 'verse',
-                                          itemRef: verse.id,
-                                        );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(growable: false),
+                    FilledButton.tonalIcon(
+                      onPressed: () => _readChapter(chapterVerses, settings),
+                      icon: Icon(_isReading ? Icons.pause : Icons.volume_up),
+                      label: Text(_isReading ? 'Pause' : 'Read aloud'),
+                    ),
+                    IconButton(
+                      tooltip: 'Reading settings',
+                      icon: const Icon(Icons.text_fields),
+                      onPressed: () => showReaderSettingsSheet(context),
+                    ),
                   ],
-                );
-              },
+                ),
+              ),
             ),
           ],
+              ]),
+            ),
+          ),
+          // Verse cards get their own lazily-built sliver — long chapters
+          // (Psalm 119 = 176 verses) used to unroll every GlassCard up front
+          // as part of one big Column, causing jank on open/scroll.
+          if (!searching)
+            verses.maybeWhen(
+              data: (List<BibleVerse> chapterVerses) => SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int i) => _verseCard(chapterVerses[i], verseStyle),
+                    childCount: chapterVerses.length,
+                  ),
+                ),
+              ),
+              orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+            )
+          else
+            const SliverToBoxAdapter(child: SizedBox(height: 120)),
         ],
+      ),
+    );
+  }
+
+  Widget _verseCard(BibleVerse verse, TextStyle verseStyle) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GlassCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('${verse.verse}', style: Theme.of(context).textTheme.labelLarge),
+            const SizedBox(height: 4),
+            SelectableText(verse.text, style: verseStyle),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              children: <Widget>[
+                ActionChip(
+                  label: const Text('Copy'),
+                  onPressed: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: '${verse.reference}\n${verse.text}'),
+                    );
+                  },
+                ),
+                ActionChip(
+                  label: const Text('Share'),
+                  onPressed: () => Share.share('${verse.reference}\n${verse.text}'),
+                ),
+                ActionChip(
+                  label: const Text('Favorite'),
+                  onPressed: () async {
+                    await ref.read(favoritesRepositoryProvider).toggleFavorite(
+                          itemType: 'verse',
+                          itemRef: verse.id,
+                        );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 import '../local/app_database.dart';
@@ -48,6 +49,29 @@ class ReflectionRepository {
         'updated_at': entry.updatedAt,
       },
     );
+  }
+
+  /// Merge reflections pulled from Firestore into the local DB ("cloud
+  /// wins" — overwrites any local row with the same id). Does not
+  /// re-enqueue a sync push; this data already came from the cloud.
+  Future<void> mergeFromCloud(List<Map<String, dynamic>> items) async {
+    for (final Map<String, dynamic> item in items) {
+      final String id = item['id'] as String? ?? '';
+      if (id.isEmpty) continue;
+      await _database.db.insert(
+        'reflections',
+        <String, Object?>{
+          'id': id,
+          'text': item['text'] as String? ?? '',
+          'verse': item['verse'] as String? ?? '',
+          'date_iso': item['date_iso'] as String? ?? '',
+          'is_private': (item['is_private'] as bool? ?? true) ? 1 : 0,
+          'synced': 1,
+          'updated_at': item['updated_at'] as String? ?? DateTime.now().toUtc().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
   }
 
   Future<void> deleteReflection(String id) async {

@@ -6,6 +6,7 @@ import '../../../core/providers.dart';
 import '../../../data/models/bible_verse.dart';
 import '../../../data/models/catechism_chapter.dart';
 import '../../../data/models/song.dart';
+import '../../../shared/widgets/ad_banner.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -32,6 +33,7 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Global Search')),
+      bottomNavigationBar: const SafeArea(top: false, child: AdBannerWidget()),
       body: AppBackdrop(
         child: SafeArea(
           child: ListView(

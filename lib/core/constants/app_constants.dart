@@ -23,4 +23,16 @@ class AppConstants {
   static const int songMinTextSize = 14;
   static const int songMaxTextSize = 34;
   static const int songDefaultTextSize = 20;
+
+  // AdMob — Sakshi Vani production account. Must match the
+  // <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID">
+  // entry in AndroidManifest.xml.
+  static const String admobAppId = 'ca-app-pub-6899681300834088~6904562491';
+  static const String admobBannerUnitId = 'ca-app-pub-6899681300834088/4487382791';
+  static const String admobInterstitialUnitId = 'ca-app-pub-6899681300834088/4278399158';
+
+  static const String iapRemoveAdsProductId = 'remove_ads_tier1';
+
+  /// `cloudflare/email-otp-worker` deployment (no trailing slash).
+  static const String emailOtpWorkerUrl = 'https://sakshivani-email-otp.neelimaguria42.workers.dev';
 }

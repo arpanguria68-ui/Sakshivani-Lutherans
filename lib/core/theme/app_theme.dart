@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// "The Sacred Gallery" editorial theme — ported from the premium PWA design
-/// (New design ui/code.html): warm cream surfaces, italic serif headlines,
-/// razor-sharp (zero radius) cards and controls, uppercase tracked labels,
-/// and thin hairline dividers instead of chunky Material defaults.
+/// "The Sacred Gallery" editorial theme — ported from the dashboard-web
+/// prototype: warm cream/clay surfaces, italic serif headlines, softly
+/// rounded cards and pill controls, uppercase tracked labels, and thin
+/// hairline dividers instead of chunky Material defaults.
 class AppTheme {
   const AppTheme._();
 
@@ -75,9 +75,11 @@ class AppTheme {
           letterSpacing: 0.6,
         );
 
-    const BorderRadius zero = BorderRadius.zero;
+    const BorderRadius card = BorderRadius.all(Radius.circular(22));
+    const BorderRadius pill = BorderRadius.all(Radius.circular(100));
+    const BorderRadius field = BorderRadius.all(Radius.circular(14));
     final OutlineInputBorder inputBorder = OutlineInputBorder(
-      borderRadius: zero,
+      borderRadius: field,
       borderSide: BorderSide(color: scheme.outlineVariant),
     );
 
@@ -107,13 +109,13 @@ class AppTheme {
         ),
         labelLarge: label(base.textTheme.labelLarge),
         labelMedium: label(base.textTheme.labelMedium),
-        labelSmall: label(base.textTheme.labelSmall)?.copyWith(letterSpacing: 1.1),
+        labelSmall: label(base.textTheme.labelSmall).copyWith(letterSpacing: 1.1),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
         color: _withAlpha(scheme.surfaceContainerLow, 1),
         shape: RoundedRectangleBorder(
-          borderRadius: zero,
+          borderRadius: card,
           side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.4)),
         ),
       ),
@@ -123,49 +125,49 @@ class AppTheme {
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: scheme.onSurface,
-        titleTextStyle: heading(base.textTheme.headlineSmall)?.copyWith(
+        titleTextStyle: heading(base.textTheme.headlineSmall).copyWith(
           fontStyle: FontStyle.italic,
           color: scheme.primary,
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        indicatorShape: const RoundedRectangleBorder(borderRadius: zero),
+        indicatorShape: const RoundedRectangleBorder(borderRadius: pill),
         labelTextStyle: WidgetStatePropertyAll<TextStyle>(
-          label(base.textTheme.labelSmall)!.copyWith(fontSize: 10, letterSpacing: 1.2),
+          label(base.textTheme.labelSmall).copyWith(fontSize: 10, letterSpacing: 1.2),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(borderRadius: zero),
+          shape: const RoundedRectangleBorder(borderRadius: pill),
           elevation: 0,
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          shape: const RoundedRectangleBorder(borderRadius: zero),
+          shape: const RoundedRectangleBorder(borderRadius: pill),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          shape: const RoundedRectangleBorder(borderRadius: zero),
+          shape: const RoundedRectangleBorder(borderRadius: pill),
           side: BorderSide(color: scheme.primary),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          shape: const RoundedRectangleBorder(borderRadius: zero),
+          shape: const RoundedRectangleBorder(borderRadius: pill),
         ),
       ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: zero,
+          borderRadius: pill,
           side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.5)),
         ),
         side: BorderSide(color: _withAlpha(scheme.outlineVariant, 0.5)),
         backgroundColor: scheme.surfaceContainerLow,
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
-        style: SegmentedButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: zero)),
+        style: SegmentedButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: pill)),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -178,11 +180,11 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(borderRadius: zero),
+        shape: const RoundedRectangleBorder(borderRadius: field),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
         ),
       ),
       dividerTheme: DividerThemeData(

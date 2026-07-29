@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +10,20 @@ import '../../core/constants/app_constants.dart';
 
 class AppDatabase {
   AppDatabase._(this.db);
+
+  /// Wraps an already-open [Database] (e.g. an in-memory sqflite_common_ffi
+  /// instance) for repository tests, bypassing the asset-bundle bootstrap
+  /// in [open]. Pair with [createSchemaForTest] to get the app's tables.
+  @visibleForTesting
+  factory AppDatabase.forTest(Database db) = AppDatabase._;
+
+  /// Runs the same table-creation DDL as [open] against [db], for use with
+  /// [AppDatabase.forTest] in repository tests.
+  @visibleForTesting
+  static Future<void> createSchemaForTest(Database db) async {
+    await _createV1(db);
+    await _createV2(db);
+  }
 
   static AppDatabase? _instance;
 
@@ -122,6 +137,25 @@ class AppDatabase {
         PRIMARY KEY (plan_key, day_index)
       )
     ''');
+  }
+
+  /// Deletes all per-user content (reflections, favorites, prayer logs,
+  /// reading-plan progress, and any queued-but-unsynced changes) — used by
+  /// "reset app" and account deletion. Leaves app-preference settings and
+  /// the static songs/Bible/catechism reference data untouched.
+  Future<void> wipeUserData() async {
+    final Batch batch = db.batch();
+    for (final String table in <String>[
+      'prayer_logs',
+      'reflections',
+      'favorites',
+      'sync_queue',
+      'active_plan',
+      'plan_completions',
+    ]) {
+      batch.delete(table);
+    }
+    await batch.commit(noResult: true);
   }
 
   static Future<String> _ensureSongsDb() async {

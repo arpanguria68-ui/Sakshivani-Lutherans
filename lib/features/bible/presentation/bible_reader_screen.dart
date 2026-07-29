@@ -9,6 +9,7 @@ import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_body.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
 import '../../reader/presentation/tts_feedback.dart';
+import '../../../services/tts_service.dart';
 import 'bible_tab.dart' show bibleVersesProvider, BibleLocation;
 
 /// Full-screen chapter reader with e-ink/scroll modes, TTS, and chapter
@@ -36,6 +37,7 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
   bool _isPlaying = false;
   int? _activeLine;
   List<String> _lines = const <String>[];
+  TtsService? _ttsService;
 
   @override
   void initState() {
@@ -44,8 +46,16 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Capture the service reference while `ref` is still valid — reading a
+    // provider from dispose() throws "Cannot use ref after disposed".
+    _ttsService = ref.read(ttsServiceProvider);
+  }
+
+  @override
   void dispose() {
-    ref.read(ttsServiceProvider).stop();
+    _ttsService?.stop();
     super.dispose();
   }
 
@@ -53,6 +63,11 @@ class _BibleReaderScreenState extends ConsumerState<BibleReaderScreen> {
     final storage = ref.read(localStorageServiceProvider);
     await storage.setBibleLastRead(_language, _book, _chapter);
     await storage.pushBibleHistory(_language, _book, _chapter);
+    await ref.read(analyticsServiceProvider).logBibleChapterRead(
+          language: _language,
+          bookIndex: _book,
+          chapterIndex: _chapter,
+        );
   }
 
   Future<void> _stopTts() async {

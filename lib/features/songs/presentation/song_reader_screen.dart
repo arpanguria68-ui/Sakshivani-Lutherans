@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/providers.dart';
 import '../../../data/models/song.dart';
@@ -9,6 +8,7 @@ import '../../reader/domain/reader_settings.dart';
 import '../../reader/presentation/reader_body.dart';
 import '../../reader/presentation/reader_settings_sheet.dart';
 import '../../reader/presentation/tts_feedback.dart';
+import '../../../services/tts_service.dart';
 import '../../../shared/widgets/app_backdrop.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -30,10 +30,19 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
   bool _isPlaying = false;
   int? _activeLine;
   List<String> _lines = const <String>[];
+  TtsService? _ttsService;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Capture the service reference while `ref` is still valid — reading a
+    // provider from dispose() throws "Cannot use ref after disposed".
+    _ttsService = ref.read(ttsServiceProvider);
+  }
 
   @override
   void dispose() {
-    ref.read(ttsServiceProvider).stop();
+    _ttsService?.stop();
     super.dispose();
   }
 
@@ -74,8 +83,14 @@ class _SongReaderScreenState extends ConsumerState<SongReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<Song?> song =
-        ref.watch(songByIdProvider((book: widget.book, id: widget.songId)));
+    final SongRef songRef = (book: widget.book, id: widget.songId);
+    ref.listen<AsyncValue<Song?>>(songByIdProvider(songRef), (AsyncValue<Song?>? previous, AsyncValue<Song?> next) {
+      final Song? loaded = next.valueOrNull;
+      if (loaded != null) {
+        ref.read(analyticsServiceProvider).logSongOpened(songId: loaded.id, book: widget.book);
+      }
+    });
+    final AsyncValue<Song?> song = ref.watch(songByIdProvider(songRef));
     final ReaderSettings settings = ref.watch(readerSettingsControllerProvider);
     final ReaderPalette palette =
         ReaderPalette.resolve(settings, Theme.of(context).brightness);

@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "508965701606",
-    "project_id": "sakshivani-lutherans",
-    "storage_bucket": "sakshivani-lutherans.firebasestorage.app"
+    "project_number": "251389252229",
+    "project_id": "sakshivani-60029",
+    "storage_bucket": "sakshivani-60029.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:508965701606:android:9f56a2d4a6c8c5c421f827",
+        "mobilesdk_app_id": "1:251389252229:android:26264732346534cfa08fec",
         "android_client_info": {
           "package_name": "com.sakshivani.Lutherans"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "251389252229-tmos3td4on6rq5vth7h5edk9jff3pdrl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sakshivani.Lutherans",
+            "certificate_hash": "9bbfb6278fadcba4846eeced46dcfd7707cb4390"
+          }
+        },
+        {
+          "client_id": "251389252229-m4psoiilfomasvai1fv9d2eucc6kf80h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAukQjjZSelinaRkuHO_5teNSDGbojKQ3A"
+          "current_key": "AIzaSyDJXfVC9kTHTdg2u6h_E_Aefp0aVeVay0o"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251389252229-m4psoiilfomasvai1fv9d2eucc6kf80h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
