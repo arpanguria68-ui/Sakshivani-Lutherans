@@ -35,6 +35,9 @@ class AppDatabase {
     }
 
     final String songsPath = await _ensureSongsDb();
+    // Open songs as a separate read-only connection. Do NOT also ATTACH the
+    // same file onto appDb — SQLite on Android rejects a second open of the
+    // same path ("database songsdb is already in use").
     final Database songsDb = await openDatabase(songsPath, readOnly: true);
 
     final Directory dir = await getApplicationDocumentsDirectory();
@@ -54,7 +57,6 @@ class AppDatabase {
       },
     );
 
-    await appDb.execute("ATTACH DATABASE '$songsPath' AS songsdb");
     _instance = AppDatabase._(appDb);
     _instance!._songsDb = songsDb;
     return _instance!;
