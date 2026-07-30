@@ -566,10 +566,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       contentPadding: EdgeInsets.zero,
                       dense: true,
                       leading: const Icon(Icons.open_in_new, size: 20),
-                      title: const Text('Open on GitHub (Play Store links)'),
-                      subtitle: const Text('Public URLs for reviewers'),
+                      title: const Text('Open website'),
+                      subtitle: const Text('Privacy & terms on GitHub Pages'),
                       onTap: () async {
-                        final Uri uri = Uri.parse(AppConstants.privacyPolicyUrl);
+                        final Uri uri = Uri.parse(AppConstants.siteBaseUrl);
                         await launchUrl(uri, mode: LaunchMode.externalApplication);
                       },
                     ),

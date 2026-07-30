@@ -142,8 +142,8 @@ Initial release of Sakshi Vani: Hindi hymns, Bible (on-demand download), catechi
 | Field | Suggested |
 |-------|-----------|
 | Email | Your support Gmail (same as Play developer account is fine) |
-| Website (optional) | https://github.com/arpanguria68-ui/Sakshivani-Lutherans |
-| Privacy policy | https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY.md |
+| Website (optional) | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/ |
+| Privacy policy | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/privacy/ |
 
 ---
 

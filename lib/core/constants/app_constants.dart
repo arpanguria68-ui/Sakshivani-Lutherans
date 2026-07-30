@@ -40,15 +40,13 @@ class AppConstants {
   /// `cloudflare/email-otp-worker` deployment (no trailing slash).
   static const String emailOtpWorkerUrl = 'https://sakshivani-email-otp.neelimaguria42.workers.dev';
 
-  /// Public privacy / terms (hosted on GitHub for Play Console URLs).
-  static const String privacyPolicyUrl =
-      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY.md';
-  static const String privacyPolicyHiUrl =
-      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY_HI.md';
-  static const String termsOfServiceUrl =
-      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/TERMS.md';
-  static const String termsOfServiceHiUrl =
-      'https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/TERMS_HI.md';
+  /// Public privacy / terms (GitHub Pages — free hosting for Play Console).
+  static const String siteBaseUrl =
+      'https://arpanguria68-ui.github.io/Sakshivani-Lutherans';
+  static const String privacyPolicyUrl = '$siteBaseUrl/privacy/';
+  static const String privacyPolicyHiUrl = '$siteBaseUrl/privacy/?lang=hi';
+  static const String termsOfServiceUrl = '$siteBaseUrl/terms/';
+  static const String termsOfServiceHiUrl = '$siteBaseUrl/terms/?lang=hi';
 
   /// Bundled copies for in-app reading (EN + HI).
   static const String privacyPolicyAssetEn = 'PRIVACY.md';
