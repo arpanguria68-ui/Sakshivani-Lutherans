@@ -1,0 +1,110 @@
+name: sakshi_vani
+description: Offline-first Sakshi Vani Flutter app with optional Firebase sync.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.8.1
+  firebase_core: ^3.13.0
+  firebase_auth: ^5.5.3
+  cloud_firestore: ^5.6.7
+  firebase_analytics: ^11.4.3
+  firebase_crashlytics: ^4.3.3
+  google_sign_in: ^6.3.0
+  shared_preferences: ^2.5.3
+  sqflite: ^2.4.2
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  flutter_local_notifications: ^19.1.0
+  intl: ^0.20.2
+  uuid: ^4.5.1
+  app_settings: ^5.1.1
+  flutter_markdown: ^0.7.7+1
+  volume_controller: ^2.0.8
+  timezone: ^0.10.1
+  share_plus: ^10.1.4
+  flutter_tts: ^4.2.0
+  audioplayers: ^6.1.0
+  http: ^1.2.2
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  google_mobile_ads: ^5.2.0
+  in_app_purchase: ^3.2.0
+  url_launcher: ^6.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
+  sqflite_common_ffi: ^2.3.4+4
+  mocktail: ^1.0.4
+
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#93452B"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  min_sdk_android: 23
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/Sakshivani_Unicode_Clean.db
+    - assets/durang_puthi.json
+    - catechism.json
+    - quiz_data.json
+    - PRIVACY.md
+    - PRIVACY_HI.md
+    - TERMS.md
+    - TERMS_HI.md
+    - assets/sounds/page_turn.wav
+    - assets/sounds/page_flip.mp3
+    - assets/3d-icons/musical_note.png
+    - assets/3d-icons/holy_bible.png
+    - assets/3d-icons/journal_notebook.png
+    - assets/3d-icons/christian_cross.png
+    - assets/3d-icons/prayer_hands.png
+    - assets/3d-icons/smiling_sun.png
+    - assets/3d-icons/dove_bird.png
+    - assets/3d-icons/lutheran_church.png
+    - "assets/3d-icons/BG removed icons/SV_birefnet.png"
+    - "assets/3d-icons/BG removed icons/jesus and people_birefnet.png"
+    - "assets/3d-icons/BG removed icons/prayer_hands_inspyrenet.png"
+    - "assets/3d-icons/BG removed icons/musical_note_u2net.png"
+    - "assets/3d-icons/BG removed icons/church going family_isnet-general-use.png"
+    - "assets/3d-icons/BG removed icons/gossnercht.png"
+    - assets/backgrounds/
+
+  fonts:
+    - family: NotoSansDevanagari
+      fonts:
+        - asset: sakshivani-rn/assets/fonts/NotoSansDevanagari-Regular.ttf
+          weight: 400
+        - asset: sakshivani-rn/assets/fonts/NotoSansDevanagari-Bold.ttf
+          weight: 700
+    - family: NotoSerifDevanagari
+      fonts:
+        - asset: sakshivani-rn/assets/fonts/NotoSerifDevanagari-Regular.ttf
+          weight: 400
+        - asset: sakshivani-rn/assets/fonts/NotoSerifDevanagari-SemiBold.ttf
+          weight: 600
+    - family: Newsreader
+      fonts:
+        - asset: assets/fonts/newsreader/Newsreader-Regular.ttf
+        - asset: assets/fonts/newsreader/Newsreader-Italic.ttf
+          style: italic
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-Regular.ttf
