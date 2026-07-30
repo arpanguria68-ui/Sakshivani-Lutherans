@@ -34,4 +34,6 @@ jobs:
 
       - name: Validate songs database
         run: python3 scripts/validate_songs_db.py
+
+      - name: Test
         run: flutter test
