@@ -1,13 +1,20 @@
 # Play Store readiness — Legal & Data safety
 
-Use these public URLs in Google Play Console → **App content** / **Store listing**:
+## Public site (GitHub Pages — free)
+
+After the Pages workflow runs once:
 
 | Field | URL |
 |-------|-----|
-| Privacy policy | https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY.md |
-| Privacy (Hindi) | https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/PRIVACY_HI.md |
-| Terms of service | https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/TERMS.md |
-| Terms (Hindi) | https://github.com/arpanguria68-ui/Sakshivani-Lutherans/blob/main/TERMS_HI.md |
+| Website | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/ |
+| Privacy policy | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/privacy/ |
+| Privacy (Hindi) | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/privacy/?lang=hi |
+| Terms of service | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/terms/ |
+| Terms (Hindi) | https://arpanguria68-ui.github.io/Sakshivani-Lutherans/terms/?lang=hi |
+
+Source files live in `docs/`. Deploy workflow: `.github/workflows/github-pages.yml`.
+
+**Enable once in GitHub:** Repo → Settings → Pages → Source: **GitHub Actions**.
 
 In-app: **Settings → Legal** (EN / हिंदी toggle). Auth screen links to Terms + Privacy.
 
