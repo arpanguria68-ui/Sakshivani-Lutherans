@@ -14,6 +14,7 @@ import '../../features/bible/presentation/bible_reader_screen.dart';
 import '../../features/planner/presentation/planner_screen.dart';
 import '../../features/quiz/presentation/quiz_screen.dart';
 import '../../features/search/presentation/global_search_screen.dart';
+import '../../features/settings/presentation/legal_document_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/shell/presentation/main_shell_screen.dart';
 import '../../features/songs/presentation/song_reader_screen.dart';
@@ -129,6 +130,18 @@ final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((ProviderRef<GoR
       GoRoute(
         path: '/settings',
         builder: (BuildContext context, GoRouterState state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/legal/privacy',
+        builder: (BuildContext context, GoRouterState state) => const LegalDocumentScreen(
+          document: LegalDocument.privacy,
+        ),
+      ),
+      GoRoute(
+        path: '/legal/terms',
+        builder: (BuildContext context, GoRouterState state) => const LegalDocumentScreen(
+          document: LegalDocument.terms,
+        ),
       ),
       GoRoute(
         path: '/search',

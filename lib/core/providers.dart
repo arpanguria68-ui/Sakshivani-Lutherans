@@ -182,7 +182,8 @@ final Provider<PurchaseService> purchaseServiceProvider =
 
 final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FutureProviderRef<void> ref) async {
   AppRuntime.firebaseEnabled = await FirebaseBootstrap.initialize();
-  if (AppRuntime.firebaseEnabled) {
+  const bool integrationTest = bool.fromEnvironment('INTEGRATION_TEST');
+  if (AppRuntime.firebaseEnabled && !integrationTest) {
     CrashlyticsBootstrap.wireErrorReporting();
   }
   final AppDatabase database = await AppDatabase.open();
@@ -199,7 +200,7 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
   await ref.read(authControllerProvider.notifier).initialize();
 
   final NotificationService notifications = ref.read(notificationServiceProvider);
-  await notifications.initialize();
+  await notifications.initialize(requestPermission: !integrationTest);
   final LocalStorageService storage = ref.read(localStorageServiceProvider);
   if (await storage.getReminderEnabled()) {
     final (int h, int m) = await storage.getReminderTime();
@@ -207,6 +208,8 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
   }
   await notifications.scheduleChurchCourtesyReminder();
 
-  await ref.read(purchaseServiceProvider).initialize();
-  await ref.read(adServiceProvider).initialize();
+  if (!integrationTest) {
+    await ref.read(purchaseServiceProvider).initialize();
+    await ref.read(adServiceProvider).initialize();
+  }
 });

@@ -121,6 +121,50 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 child: Center(child: CircularProgressIndicator()),
               ),
             const SizedBox(height: 16),
+            Text.rich(
+              TextSpan(
+                style: Theme.of(context).textTheme.bodySmall,
+                children: <InlineSpan>[
+                  const TextSpan(
+                    text:
+                        'By creating an account or signing in, you agree to our ',
+                  ),
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.baseline,
+                    baseline: TextBaseline.alphabetic,
+                    child: GestureDetector(
+                      onTap: () => context.push('/legal/terms'),
+                      child: Text(
+                        'Terms',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline,
+                            ),
+                      ),
+                    ),
+                  ),
+                  const TextSpan(text: ' and '),
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.baseline,
+                    baseline: TextBaseline.alphabetic,
+                    child: GestureDetector(
+                      onTap: () => context.push('/legal/privacy'),
+                      child: Text(
+                        'Privacy Policy',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline,
+                            ),
+                      ),
+                    ),
+                  ),
+                  const TextSpan(text: ' (EN / हिंदी · US · EU · India).'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
             const Text(
               'Free-tier note: This app uses Firebase Spark limits and keeps static content offline so costs remain \$0 in early stages.',
             ),

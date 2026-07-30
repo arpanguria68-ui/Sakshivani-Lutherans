@@ -137,13 +137,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _openPrivacyPolicy() async {
-    final Uri uri = Uri.parse(AppConstants.privacyPolicyUrl);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open the privacy policy.')),
-      );
-    }
+    if (!mounted) return;
+    context.push('/legal/privacy');
+  }
+
+  Future<void> _openTerms() async {
+    if (!mounted) return;
+    context.push('/legal/terms');
   }
 
   Future<void> _resetApp() async {
@@ -550,9 +550,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.privacy_tip_outlined),
                       title: const Text('Privacy policy'),
-                      subtitle: const Text('How we handle your data'),
-                      trailing: const Icon(Icons.open_in_new, size: 18),
+                      subtitle: const Text('EN / हिंदी · US · EU · India data rights'),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: _openPrivacyPolicy,
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.gavel_outlined),
+                      title: const Text('Terms & Conditions'),
+                      subtitle: const Text('EN / हिंदी · App use & regional terms'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: _openTerms,
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                      leading: const Icon(Icons.open_in_new, size: 20),
+                      title: const Text('Open on GitHub (Play Store links)'),
+                      subtitle: const Text('Public URLs for reviewers'),
+                      onTap: () async {
+                        final Uri uri = Uri.parse(AppConstants.privacyPolicyUrl);
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      },
                     ),
                     const SizedBox(height: 8),
                     Text('Danger zone', style: Theme.of(context).textTheme.titleMedium),

@@ -32,18 +32,9 @@ class CatechismScreen extends ConsumerWidget {
                         CircleAvatar(child: Text('${index + 1}')),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(chapter.title, style: Theme.of(context).textTheme.titleMedium),
-                              const SizedBox(height: 4),
-                              Text(
-                                chapter.content.replaceAll('\n', ' ').trim(),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
+                          child: Text(
+                            chapter.title,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
                         const Icon(Icons.chevron_right),

@@ -7,12 +7,16 @@ class NotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
 
-  Future<void> initialize() async {
+  Future<void> initialize({bool requestPermission = true}) async {
     tz_data.initializeTimeZones();
     const AndroidInitializationSettings android =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings settings = InitializationSettings(android: android);
     await _plugin.initialize(settings);
+
+    if (!requestPermission) {
+      return;
+    }
 
     // Android 13+ runtime notification permission.
     final AndroidFlutterLocalNotificationsPlugin? androidImpl = _plugin

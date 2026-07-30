@@ -43,6 +43,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
   sqflite_common_ffi: ^2.3.4+4
@@ -63,6 +65,10 @@ flutter:
     - assets/durang_puthi.json
     - catechism.json
     - quiz_data.json
+    - PRIVACY.md
+    - PRIVACY_HI.md
+    - TERMS.md
+    - TERMS_HI.md
     - assets/sounds/page_turn.wav
     - assets/sounds/page_flip.mp3
     - assets/3d-icons/musical_note.png

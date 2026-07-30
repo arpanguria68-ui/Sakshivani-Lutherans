@@ -93,7 +93,21 @@ class _CatechismChapterScreenState extends ConsumerState<CatechismChapterScreen>
       h3: body.copyWith(fontSize: s.fontSize * 1.2, fontWeight: FontWeight.w600),
       strong: body.copyWith(fontWeight: FontWeight.w700),
       em: body.copyWith(fontStyle: FontStyle.italic),
-      blockquote: body.copyWith(color: palette.subtle),
+      blockquote: body.copyWith(
+        color: palette.text.withValues(alpha: 0.88),
+        height: s.lineHeight * 1.05,
+      ),
+      blockquotePadding: const EdgeInsets.fromLTRB(14, 10, 12, 10),
+      blockquoteDecoration: BoxDecoration(
+        color: palette.highlight.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(10),
+        border: Border(
+          left: BorderSide(
+            color: const Color(0xFF93452B).withValues(alpha: 0.62),
+            width: 3,
+          ),
+        ),
+      ),
       a: body.copyWith(color: const Color(0xFF93452B), decoration: TextDecoration.underline),
       textAlign: switch (s.align) {
         ReaderAlign.center => WrapAlignment.center,

@@ -115,11 +115,46 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           dailyVerse.when(
             loading: () => const AspectRatio(
               aspectRatio: 21 / 12,
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(height: 12),
+                    Text('बाइबल डेटा डाउनलोड हो रहा है…'),
+                  ],
+                ),
+              ),
             ),
             error: (_, _) => const SizedBox.shrink(),
             data: (BibleVerse? verse) {
-              if (verse == null) return const SizedBox.shrink();
+              if (verse == null) {
+                return AspectRatio(
+                  aspectRatio: 21 / 12,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Icon(Icons.cloud_download_outlined, size: 36),
+                          const SizedBox(height: 12),
+                          Text(
+                            'आज का वचन लोड नहीं हो सका',
+                            textAlign: TextAlign.center,
+                            style: text.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () => context.go('/tab/bible'),
+                            child: const Text('बाइबल टैब में पुनः प्रयास करें'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
               return VersePlate(
                 eyebrow: 'आज का वचन',
                 quote: verse.text,
@@ -371,7 +406,9 @@ class _HomeTabState extends ConsumerState<HomeTab> {
 
 final FutureProvider<BibleVerse?> dailyVerseProvider =
     FutureProvider<BibleVerse?>((FutureProviderRef<BibleVerse?> ref) async {
-  if (!await ref.read(bibleAssetServiceProvider).isDownloaded()) {
+  try {
+    await ref.watch(bibleAssetReadyProvider.future);
+  } catch (_) {
     return null;
   }
   return ref.read(bibleRepositoryProvider).getDailyVerse(language: 'hi');
