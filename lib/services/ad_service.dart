@@ -53,7 +53,12 @@ class AdService {
         if (!done.isCompleted) done.complete();
       },
     );
-    await done.future;
+    await done.future.timeout(
+      const Duration(seconds: 6),
+      onTimeout: () {
+        if (!done.isCompleted) done.complete();
+      },
+    );
   }
 
   Future<void> _loadAndShowConsentFormIfRequired() async {
@@ -73,7 +78,12 @@ class AdService {
         if (!done.isCompleted) done.complete();
       },
     );
-    await done.future;
+    await done.future.timeout(
+      const Duration(seconds: 6),
+      onTimeout: () {
+        if (!done.isCompleted) done.complete();
+      },
+    );
   }
 
   Future<void> _preloadInterstitial() async {

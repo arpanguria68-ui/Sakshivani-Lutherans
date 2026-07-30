@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -210,6 +212,7 @@ final FutureProvider<void> appBootstrapProvider = FutureProvider<void>((FuturePr
 
   if (!integrationTest) {
     await ref.read(purchaseServiceProvider).initialize();
-    await ref.read(adServiceProvider).initialize();
+    // Ads/UMP must not block first frame — consent can hang on emulators.
+    unawaited(ref.read(adServiceProvider).initialize());
   }
 });
