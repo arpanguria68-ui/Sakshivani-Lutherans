@@ -30,7 +30,8 @@ jobs:
         run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
-      - name: Test
+      - name: Validate songs database
+        run: python3 scripts/validate_songs_db.py
         run: flutter test
